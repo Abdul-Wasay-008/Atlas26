@@ -1,65 +1,107 @@
-import Image from "next/image";
+"use client";
+
+import Scene from "./components/3d/Scene";
+import { orbitron, poppins } from "./fonts";
+import { motion } from "framer-motion";
+import { FaRocket } from "react-icons/fa";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <section className="relative h-screen w-full bg-black overflow-hidden">
+      {/* 🌌 3D Background */}
+      <Scene />
+
+      {/* 🔝 Top Title (refined) */}
+      <div className="absolute top-14 md:top-5 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2">
+        {/* Title: clean + soft outer glow */}
+        <h1
+          className={`text-5xl md:text-6xl 2xl:text-7xl font-bold tracking-wide text-white
+    [text-shadow:0_0_16px_rgba(255,255,255,0.35)]
+    ${orbitron.className}`}
+        >
+          ATLAS26
+        </h1>
+
+        {/* Tagline: minimal glass chip */}
+        <p
+          className={`text-xs md:text-sm text-gray-100/95
+      px-3.5 py-1.5 rounded-full
+      bg-white/6 backdrop-blur-sm ring-1 ring-white/15
+      shadow-[0_0_20px_rgba(16,120,255,0.15)]
+      ${poppins.className}`}
+        >
+          A Digital Window Into Our Living Cosmos
+        </p>
+      </div>
+
+      {/* Subtle top gradient wash so bright stars don’t clash with text */}
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 md:h-48
+  bg-linear-to-b from-black/40 via-black/20 to-transparent z-5" />
+
+
+
+      {/* 💠 Futuristic Animated Button */}
+      {/* 💠 Futuristic Animated Button */}
+      <div className="absolute bottom-24 md:bottom-16 left-1/2 -translate-x-1/2 z-10 text-center text-white">
+        <motion.button
+          className={`relative px-4 md:px-6 xl:px-8 py-4 rounded-full font-medium overflow-hidden cursor-pointer select-none ${poppins.className}`}
+          initial={{ scale: 1 }}
+          whileHover={{
+            scale: 1.04,
+            boxShadow: "0 0 35px rgba(63,169,245,0.5)",
+          }}
+          whileTap={{ scale: 0.96 }}
+          onTouchStart={(e) => {
+            e.currentTarget.style.boxShadow = "0 0 35px rgba(63,169,245,0.5)";
+          }}
+          onTouchEnd={(e) => {
+            e.currentTarget.style.boxShadow = "none";
+          }}
+        >
+          {/* 🔵 Animated Gradient Background */}
+          <motion.span
+            className="absolute inset-0 rounded-full bg-linear-to-r from-[#3fa9f5] via-[#00d4ff] to-[#3fa9f5] blur-sm opacity-70"
+            animate={{
+              backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+            style={{
+              backgroundSize: "300% 300%",
+              zIndex: -2,
+            }}
+          />
+
+          {/* 💎 Glow Ripple Effect on Hover or Touch */}
+          <motion.span
+            className="absolute inset-0 rounded-full bg-[#3fa9f5]/20 blur-lg"
+            whileHover={{
+              scale: 1.6,
+              opacity: 0.3,
+            }}
+            whileTap={{
+              scale: 1.6,
+              opacity: 0.3,
+            }}
+            transition={{
+              duration: 0.6,
+              ease: "easeOut",
+            }}
+            style={{ zIndex: -1 }}
+          />
+
+          <div className="flex items-center justify-center">
+            <span className="relative z-10 text-white drop-shadow-lg font-bold text-sm xl:text-base tracking-wide">
+              Launch Atlas
+            </span>
+            <FaRocket className="text-white text-base xl:text-xl animate-bounce ml-2" />
+          </div>
+        </motion.button>
+      </div>
+
+    </section>
   );
 }
