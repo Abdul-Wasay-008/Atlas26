@@ -5,6 +5,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Atlas26",
   description: "A Digital Window Into Our Living Cosmos",
+  icons: {
+    icon: "/icon.png",
+  },
 };
 
 export default function RootLayout({

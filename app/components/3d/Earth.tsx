@@ -15,6 +15,8 @@ export default function Earth() {
             const width = window.innerWidth;
             if (width < 480) setScale(0.65); // phones
             else if (width < 768) setScale(0.85); // tablets
+            else if (width < 1024) setScale(0.85); // small laptops
+            else if (width < 1440) setScale(0.8); // large laptops
             else setScale(1); // desktops
         };
 
