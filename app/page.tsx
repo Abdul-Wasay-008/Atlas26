@@ -38,9 +38,6 @@ export default function Home() {
       <div className="pointer-events-none absolute inset-x-0 top-0 h-40 md:h-48
   bg-linear-to-b from-black/40 via-black/20 to-transparent z-5" />
 
-
-
-      {/* 💠 Futuristic Animated Button */}
       {/* 💠 Futuristic Animated Button */}
       <div className="absolute bottom-24 md:bottom-16 left-1/2 -translate-x-1/2 z-10 text-center text-white">
         <motion.button
