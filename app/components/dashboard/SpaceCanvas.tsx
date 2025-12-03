@@ -5,6 +5,8 @@ import { OrbitControls, useTexture } from "@react-three/drei"
 import * as THREE from "three"
 import { useEffect, useState } from "react"
 import Earth from "../3d/Earth"
+import Moon from "../3d/Moon"
+import MoonOrbitPath from "../3d/MoonOrbitPath"
 
 function Starfield() {
     const texture = useTexture("/space/stars.jpg")
@@ -88,6 +90,12 @@ export default function SpaceCanvas() {
 
             {/* Earth */}
             <Earth />
+
+            {/* Moon orbiting the earth */}
+            <Moon />
+
+            {/* Moon orbit path around the earth */}
+            <MoonOrbitPath />
 
             {/* 🎮 Responsive Controls */}
             <OrbitControls
