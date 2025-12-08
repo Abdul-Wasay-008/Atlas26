@@ -64,17 +64,18 @@ import { spaceObjects } from "@/app/data/spaceObjects";
 export default function Moon() {
     const moonRef = useRef<THREE.Mesh>(null);
     const orbitRef = useRef<THREE.Group>(null);
+    const groupRef = useRef<THREE.Group>(null);
 
     const selectObject = useSelectionStore((state) => state.selectObject);
     const [hovered, setHovered] = useState(false);
 
     const { size } = useThree();
-    const [scale, setScale] = useState(1);
+    const [baseScale, setBaseScale] = useState(1);
 
-    // 📱 Responsive sizing
+    // 🌕 Responsive sizing
     useEffect(() => {
         const width = size.width;
-        setScale(
+        setBaseScale(
             width <= 480 ? 0.3 :
                 width <= 768 ? 0.45 :
                     width <= 1024 ? 0.52 :
@@ -82,10 +83,10 @@ export default function Moon() {
         );
     }, [size.width]);
 
-    // 🌕 Load texture
+    // 🌍 Texture loading
     const moonTexture = useLoader(THREE.TextureLoader, "/textures/moon.jpg");
 
-    // 🌍 Orbit + Tidal Locked Rotation
+    // 🌑 Orbit & rotation animation + smooth hover effect
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime();
         const orbitRadius = 2;
@@ -99,31 +100,43 @@ export default function Moon() {
 
         if (moonRef.current) {
             moonRef.current.rotation.y = t * 0.3;
-            moonRef.current.scale.set(
-                scale * (hovered ? 1.15 : 1),
-                scale * (hovered ? 1.15 : 1),
-                scale * (hovered ? 1.15 : 1)
+        }
+
+        // ✨ Smooth scale animation
+        if (groupRef.current) {
+            const targetScale = hovered ? baseScale * 1.12 : baseScale;
+            groupRef.current.scale.lerp(
+                new THREE.Vector3(targetScale, targetScale, targetScale),
+                0.12
             );
         }
     });
 
-    // 🎯 Selection Handler
+    // 🔍 Selection handler
     const handleClick = useCallback(() => {
-        const moonData = spaceObjects.find((obj) => obj.id === "moon");
-        if (moonData) selectObject(moonData.id);
+        selectObject("moon");
     }, [selectObject]);
 
     return (
         <group ref={orbitRef}>
-            <mesh
-                ref={moonRef}
-                onClick={handleClick}
-                onPointerOver={() => setHovered(true)}
-                onPointerOut={() => setHovered(false)}
-            >
-                <sphereGeometry args={[0.27, 64, 64]} />
-                <meshStandardMaterial map={moonTexture} />
-            </mesh>
+            <group ref={groupRef}>
+                <mesh
+                    ref={moonRef}
+                    onClick={handleClick}
+                    onPointerOver={() => {
+                        setHovered(true);
+                        document.body.style.cursor = "pointer";
+                    }}
+                    onPointerOut={() => {
+                        setHovered(false);
+                        document.body.style.cursor = "default";
+                    }}
+                >
+                    <sphereGeometry args={[0.27, 64, 64]} />
+                    <meshStandardMaterial map={moonTexture} />
+                </mesh>
+            </group>
         </group>
     );
 }
+

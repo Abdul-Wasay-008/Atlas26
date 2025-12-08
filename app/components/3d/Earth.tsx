@@ -126,26 +126,26 @@ import { useSelectionStore } from "@/app/store/selectionStore";
 export default function Earth() {
     const earthRef = useRef<THREE.Mesh>(null);
     const cloudsRef = useRef<THREE.Mesh>(null);
+    const groupRef = useRef<THREE.Group>(null);
 
-    // Zustand state action
     const selectObject = useSelectionStore((state) => state.selectObject);
 
-    const [scale, setScale] = useState(1);
+    const [baseScale, setBaseScale] = useState(1);
+    const [hovered, setHovered] = useState(false);
     const { size } = useThree();
 
-    // Responsive scale
+    // 📱 Responsive scale
     useEffect(() => {
         const width = size.width;
-        setScale(
+        setBaseScale(
             width <= 480 ? 0.7 :
                 width <= 768 ? 0.9 :
                     width <= 1024 ? 0.9 :
-                        width <= 1440 ? 0.95 :
-                            1
+                        width <= 1440 ? 0.95 : 1
         );
     }, [size.width]);
 
-    // Load textures
+    // 🌍 Load textures
     const [colorMap, normalMap, specularMap, cloudsMap, nightMap] = useLoader(
         THREE.TextureLoader,
         [
@@ -157,16 +157,25 @@ export default function Earth() {
         ]
     );
 
-    // Rotation animation
+    // 🌎 Rotation Animation + Hover Scale Animation
     useFrame(() => {
         if (earthRef.current) earthRef.current.rotation.y += 0.0008;
         if (cloudsRef.current) cloudsRef.current.rotation.y += 0.0006;
+
+        // 🎯 Apply smooth hover scaling
+        if (groupRef.current) {
+            const targetScale = hovered ? baseScale * 1.08 : baseScale;
+            groupRef.current.scale.lerp(
+                new THREE.Vector3(targetScale, targetScale, targetScale),
+                0.12 // smooth animation strength
+            );
+        }
     });
 
     return (
-        <group scale={[scale, scale, scale]}>
+        <group ref={groupRef} scale={[baseScale, baseScale, baseScale]}>
 
-            {/* Clouds */}
+            {/* ☁️ Clouds */}
             <mesh ref={cloudsRef}>
                 <sphereGeometry args={[0.81, 64, 64]} />
                 <meshPhongMaterial
@@ -178,12 +187,18 @@ export default function Earth() {
                 />
             </mesh>
 
-            {/* Earth Body - MAIN INTERACTIVE MESH */}
+            {/* 🌍 Interactive Earth layer */}
             <mesh
                 ref={earthRef}
                 onClick={() => selectObject("earth")}
-                onPointerOver={() => (document.body.style.cursor = "pointer")}
-                onPointerOut={() => (document.body.style.cursor = "default")}
+                onPointerOver={() => {
+                    setHovered(true);
+                    document.body.style.cursor = "pointer";
+                }}
+                onPointerOut={() => {
+                    setHovered(false);
+                    document.body.style.cursor = "default";
+                }}
             >
                 <sphereGeometry args={[0.8, 128, 128]} />
                 <meshPhongMaterial
@@ -194,16 +209,13 @@ export default function Earth() {
                 />
             </mesh>
 
-            {/* Night Lights */}
+            {/* 🌃 Night Lights */}
             <mesh>
                 <sphereGeometry args={[0.75, 64, 64]} />
-                <meshBasicMaterial
-                    map={nightMap}
-                    blending={THREE.AdditiveBlending}
-                />
+                <meshBasicMaterial map={nightMap} blending={THREE.AdditiveBlending} />
             </mesh>
 
-            {/* Atmosphere */}
+            {/* ✨ Atmosphere */}
             <mesh>
                 <sphereGeometry args={[0.88, 64, 64]} />
                 <shaderMaterial
@@ -212,18 +224,18 @@ export default function Earth() {
                     depthWrite={false}
                     side={THREE.BackSide}
                     vertexShader={`
-                      varying vec3 vNormal;
-                      void main() {
-                        vNormal = normalize(normalMatrix * normal);
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                      }
+                        varying vec3 vNormal;
+                        void main() {
+                            vNormal = normalize(normalMatrix * normal);
+                            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                        }
                     `}
                     fragmentShader={`
-                      varying vec3 vNormal;
-                      void main() {
-                        float intensity = pow(0.8 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 4.0);
-                        gl_FragColor = vec4(0.1, 0.4, 1.0, 0.25) * intensity;
-                      }
+                        varying vec3 vNormal;
+                        void main() {
+                            float intensity = pow(0.8 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 4.0);
+                            gl_FragColor = vec4(0.1, 0.4, 1.0, 0.25) * intensity;
+                        }
                     `}
                 />
             </mesh>
