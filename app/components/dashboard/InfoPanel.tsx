@@ -31,7 +31,7 @@ export default function InfoPanel() {
                 bg-black/40 backdrop-blur-2xl 
                 p-6 text-white
                 overflow-y-auto
-                flex flex-col pr-12
+                flex flex-col pr-16
                 ${poppins.className}
             `}
         >
