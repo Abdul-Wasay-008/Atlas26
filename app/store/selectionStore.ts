@@ -15,7 +15,6 @@
 // }));
 import { create } from "zustand";
 import { spaceObjects, SpaceObjectData } from "../data/spaceObjects";
-import { cameraController } from "@/app/core/cameraController";
 
 interface SelectionState {
     selectedId: string | null;
@@ -28,12 +27,8 @@ export const useSelectionStore = create<SelectionState>((set) => ({
     selectedId: null,
     selected: null,
 
-    selectObject: (id: string) => {
+    selectObject: (id) => {
         const obj = spaceObjects.find((o) => o.id === id) || null;
-
-        // 🔭 Camera intent
-        if (id === "earth") cameraController.setTarget("earth");
-        else if (id === "moon") cameraController.setTarget("moon");
 
         set({
             selectedId: id,
@@ -41,8 +36,10 @@ export const useSelectionStore = create<SelectionState>((set) => ({
         });
     },
 
-    clearSelection: () => {
-        cameraController.setTarget("system");
-        set({ selectedId: null, selected: null });
-    },
+    clearSelection: () =>
+        set({
+            selectedId: null,
+            selected: null,
+        }),
 }));
+

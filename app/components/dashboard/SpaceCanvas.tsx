@@ -103,23 +103,23 @@
 //         </Canvas>
 //     )
 // }
-"use client"
+"use client";
 
-import { Canvas, useFrame } from "@react-three/fiber"
-import { OrbitControls, useTexture } from "@react-three/drei"
-import * as THREE from "three"
-import { useEffect, useState } from "react"
-import CameraRig from "../3d/CameraRig"
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, useTexture } from "@react-three/drei";
+import * as THREE from "three";
+import { useEffect, useRef, useState } from "react";
 
-import Earth from "../3d/Earth"
-import Moon from "../3d/Moon"
-import MoonOrbitPath from "../3d/MoonOrbitPath"
+import CameraRig from "../3d/CameraRig";
+import Earth from "../3d/Earth";
+import Moon from "../3d/Moon";
+import MoonOrbitPath from "../3d/MoonOrbitPath";
 
-import { timeEngine } from "@/app/core/time"
+import { timeEngine } from "@/app/core/time";
 
 /* 🌌 Starfield Background */
 function Starfield() {
-    const texture = useTexture("/space/stars.jpg")
+    const texture = useTexture("/space/stars.jpg");
 
     return (
         <mesh scale={-1}>
@@ -130,73 +130,73 @@ function Starfield() {
                 depthWrite={false}
             />
         </mesh>
-    )
+    );
 }
 
 /* ⏱ Simulation Clock Ticker */
 function TimeTicker() {
     useFrame(() => {
-        timeEngine.update()
-    })
-    return null
+        timeEngine.update();
+    });
+    return null;
 }
 
 export default function SpaceCanvas() {
-    const [fov, setFov] = useState(45)
-    const [cameraPos, setCameraPos] = useState<[number, number, number]>([0, 0, 8])
+    const [fov, setFov] = useState(45);
+    const [cameraPos, setCameraPos] = useState<[number, number, number]>([0, 0, 8]);
+
+    // 🔑 ADD THIS
+    const controlsRef = useRef<any>(null);
 
     /* 📐 Responsive Camera */
     useEffect(() => {
-        if (typeof window === "undefined") return
+        if (typeof window === "undefined") return;
 
         function updateCamera() {
-            const w = window.innerWidth
+            const w = window.innerWidth;
 
             if (w < 480) {
-                setFov(65)
-                setCameraPos([0, 0, 9.5])
+                setFov(65);
+                setCameraPos([0, 0, 9.5]);
             } else if (w < 768) {
-                setFov(55)
-                setCameraPos([0, 0, 9])
+                setFov(55);
+                setCameraPos([0, 0, 9]);
             } else {
-                setFov(45)
-                setCameraPos([0, 0, 8])
+                setFov(45);
+                setCameraPos([0, 0, 8]);
             }
         }
 
-        updateCamera()
-        window.addEventListener("resize", updateCamera)
-        return () => window.removeEventListener("resize", updateCamera)
-    }, [])
+        updateCamera();
+        window.addEventListener("resize", updateCamera);
+        return () => window.removeEventListener("resize", updateCamera);
+    }, []);
 
     /* 🖱 Cursor Behavior */
     useEffect(() => {
-        const spaceArea = document.getElementById("space-area")
-        if (!spaceArea) return
+        const spaceArea = document.getElementById("space-area");
+        if (!spaceArea) return;
 
-        const onEnter = () => (spaceArea.style.cursor = "grab")
-        const onLeave = () => (spaceArea.style.cursor = "default")
-        const onDown = () => (spaceArea.style.cursor = "grabbing")
-        const onUp = () => (spaceArea.style.cursor = "grab")
+        const onEnter = () => (spaceArea.style.cursor = "grab");
+        const onLeave = () => (spaceArea.style.cursor = "default");
+        const onDown = () => (spaceArea.style.cursor = "grabbing");
+        const onUp = () => (spaceArea.style.cursor = "grab");
 
-        spaceArea.addEventListener("mouseenter", onEnter)
-        spaceArea.addEventListener("mouseleave", onLeave)
-        spaceArea.addEventListener("mousedown", onDown)
-        spaceArea.addEventListener("mouseup", onUp)
+        spaceArea.addEventListener("mouseenter", onEnter);
+        spaceArea.addEventListener("mouseleave", onLeave);
+        spaceArea.addEventListener("mousedown", onDown);
+        spaceArea.addEventListener("mouseup", onUp);
 
         return () => {
-            spaceArea.removeEventListener("mouseenter", onEnter)
-            spaceArea.removeEventListener("mouseleave", onLeave)
-            spaceArea.removeEventListener("mousedown", onDown)
-            spaceArea.removeEventListener("mouseup", onUp)
-        }
-    }, [])
+            spaceArea.removeEventListener("mouseenter", onEnter);
+            spaceArea.removeEventListener("mouseleave", onLeave);
+            spaceArea.removeEventListener("mousedown", onDown);
+            spaceArea.removeEventListener("mouseup", onUp);
+        };
+    }, []);
 
     return (
-        <Canvas
-            camera={{ position: cameraPos, fov }}
-            gl={{ antialias: true }}
-        >
+        <Canvas camera={{ position: cameraPos, fov }} gl={{ antialias: true }}>
             {/* ⏱ Global Simulation Clock */}
             <TimeTicker />
 
@@ -207,15 +207,17 @@ export default function SpaceCanvas() {
             <ambientLight intensity={3.5} />
             <directionalLight position={[5, 3, 5]} intensity={1.2} />
 
-            <CameraRig />
+            {/* 🔥 CAMERA RIG WITH CONTROLS REF */}
+            <CameraRig controlsRef={controlsRef} />
 
             {/* 🌍 Earth–Moon System */}
             <Earth />
             <Moon />
             <MoonOrbitPath />
 
-            {/* 🎮 Camera Controls */}
+            {/* 🎮 Orbit Controls (CONNECTED) */}
             <OrbitControls
+                ref={controlsRef}
                 enablePan={false}
                 minDistance={4}
                 maxDistance={14}
@@ -223,5 +225,5 @@ export default function SpaceCanvas() {
                 zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1}
             />
         </Canvas>
-    )
+    );
 }

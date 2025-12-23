@@ -49,7 +49,7 @@ export default function DashboardPage() {
                 <SpaceCanvas />
             </div>
 
-            <TimeControls />
+            <div className=""><TimeControls /></div>
 
             {/* 🔥 Futuristic Divider (between space view & info panel) */}
             <div className="w-px bg-linear-to-b from-transparent via-white/14 to-transparent" />

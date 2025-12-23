@@ -135,6 +135,7 @@ import { useRef, useEffect, useState } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { timeEngine } from "@/app/core/time";
+import { cameraController } from "@/app/core/cameraController";
 
 export default function Earth() {
     const earthRef = useRef<THREE.Mesh>(null);
