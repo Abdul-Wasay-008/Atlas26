@@ -111,11 +111,13 @@ import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
 
 import CameraRig from "../3d/CameraRig";
+import CameraSnapHandler from "../3d/CameraSnapHandler";
 import Earth from "../3d/Earth";
 import Moon from "../3d/Moon";
 import MoonOrbitPath from "../3d/MoonOrbitPath";
 
 import { timeEngine } from "@/app/core/time";
+import { cameraController } from "@/app/core/cameraController";
 
 /* 🌌 Starfield Background */
 function Starfield() {
@@ -142,8 +144,14 @@ function TimeTicker() {
 }
 
 export default function SpaceCanvas() {
+    // Use default system position from cameraController (slight top-right)
+    const defaultPos = cameraController.systemPos;
     const [fov, setFov] = useState(45);
-    const [cameraPos, setCameraPos] = useState<[number, number, number]>([0, 0, 8]);
+    const [cameraPos, setCameraPos] = useState<[number, number, number]>([
+        defaultPos.x,
+        defaultPos.y,
+        defaultPos.z,
+    ]);
 
     // 🔑 ADD THIS
     const controlsRef = useRef<any>(null);
@@ -154,16 +162,17 @@ export default function SpaceCanvas() {
 
         function updateCamera() {
             const w = window.innerWidth;
+            const basePos = cameraController.systemPos;
 
             if (w < 480) {
                 setFov(65);
-                setCameraPos([0, 0, 9.5]);
+                setCameraPos([basePos.x, basePos.y, basePos.z + 1.5]);
             } else if (w < 768) {
                 setFov(55);
-                setCameraPos([0, 0, 9]);
+                setCameraPos([basePos.x, basePos.y, basePos.z + 1]);
             } else {
                 setFov(45);
-                setCameraPos([0, 0, 8]);
+                setCameraPos([basePos.x, basePos.y, basePos.z]);
             }
         }
 
@@ -209,6 +218,7 @@ export default function SpaceCanvas() {
 
             {/* 🔥 CAMERA RIG WITH CONTROLS REF */}
             <CameraRig controlsRef={controlsRef} />
+            <CameraSnapHandler />
 
             {/* 🌍 Earth–Moon System */}
             <Earth />

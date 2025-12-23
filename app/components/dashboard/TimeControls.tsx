@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Play, Pause } from "lucide-react";
+import { Play, Pause, RotateCcw } from "lucide-react";
 import { timeEngine } from "@/app/core/time";
+import { cameraController } from "@/app/core/cameraController";
+import { useSelectionStore } from "@/app/store/selectionStore";
 import { orbitron, poppins } from "@/app/fonts";
 
 const SPEEDS = [1, 50, 200, 1000];
@@ -10,6 +12,7 @@ const SPEEDS = [1, 50, 200, 1000];
 export default function TimeControls() {
     const [running, setRunning] = useState(timeEngine.isRunning());
     const [speed, setSpeed] = useState(timeEngine.getTimeScale());
+    const clearSelection = useSelectionStore((state) => state.clearSelection);
 
     const togglePlay = () => {
         if (running) {
@@ -23,6 +26,13 @@ export default function TimeControls() {
     const changeSpeed = (value: number) => {
         timeEngine.setTimeScale(value);
         setSpeed(value);
+    };
+
+    const handleReset = () => {
+        // Clear selection
+        clearSelection();
+        // Reset camera to default system view
+        cameraController.snapToSystem();
     };
 
     return (
@@ -99,6 +109,24 @@ export default function TimeControls() {
             <span className="hidden sm:inline text-white/60">
                 Time: <span className="text-white">×{speed}</span>
             </span>
+
+            {/* Divider */}
+            <div className="hidden sm:block h-6 w-px bg-white/20" />
+
+            {/* 🔄 Reset Button */}
+            <button
+                onClick={handleReset}
+                aria-label="Reset camera to default view"
+                className={`
+          flex items-center justify-center
+          w-9 h-9 sm:w-10 sm:h-10
+          rounded-full transition cursor-pointer
+          bg-white/10 hover:bg-white/20
+          hover:shadow-[0_0_14px_rgba(255,255,255,0.35)]
+        `}
+            >
+                <RotateCcw size={18} strokeWidth={2} className="text-white/90" />
+            </button>
         </div>
     );
 }
