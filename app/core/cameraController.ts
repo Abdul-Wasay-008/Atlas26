@@ -4,7 +4,7 @@ class CameraController {
     target: "system" | "earth" | "moon" = "system";
     snapping = false;
 
-    systemPos = new THREE.Vector3(0, 0, 8);
+    systemPos = new THREE.Vector3(9, 0, 8);
     earthOffset = new THREE.Vector3(0, 0, 3);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
 
