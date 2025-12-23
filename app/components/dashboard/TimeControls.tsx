@@ -82,7 +82,7 @@ export default function TimeControls() {
                         className={`
               px-2.5 py-1.5 rounded-lg transition whitespace-nowrap cursor-pointer
               ${speed === s
-                                ? "bg-white/25 text-white shadow-[0_0_12px_rgba(255,255,255,0.25)]"
+                                ? "bg-white/25 text-white "
                                 : "text-white/60 hover:text-white hover:bg-white/10"
                             }
             `}
