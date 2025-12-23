@@ -213,6 +213,7 @@ export default function Earth() {
             {/* 🌍 Interactive Earth layer */}
             <mesh
                 ref={earthRef}
+                name="earth"
                 onClick={() => selectObject("earth")}
                 onPointerOver={() => {
                     setHovered(true);

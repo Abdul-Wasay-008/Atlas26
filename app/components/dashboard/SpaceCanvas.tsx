@@ -109,6 +109,7 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, useTexture } from "@react-three/drei"
 import * as THREE from "three"
 import { useEffect, useState } from "react"
+import CameraRig from "../3d/CameraRig"
 
 import Earth from "../3d/Earth"
 import Moon from "../3d/Moon"
@@ -205,6 +206,8 @@ export default function SpaceCanvas() {
             {/* 💡 Lighting */}
             <ambientLight intensity={3.5} />
             <directionalLight position={[5, 3, 5]} intensity={1.2} />
+
+            <CameraRig />
 
             {/* 🌍 Earth–Moon System */}
             <Earth />

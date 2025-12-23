@@ -167,6 +167,7 @@ export default function Moon() {
             <group ref={groupRef}>
                 <mesh
                     ref={moonRef}
+                    name="moon"
                     onClick={handleClick}
                     onPointerOver={() => {
                         setHovered(true);
