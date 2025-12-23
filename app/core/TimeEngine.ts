@@ -7,7 +7,7 @@ export class TimeEngine {
     constructor(startTime?: number) {
         this.simulationTime = startTime ?? 0
         this.lastRealTime = performance.now()
-        this.timeScale = 1
+        this.timeScale = 200
         this.running = true
     }
 
