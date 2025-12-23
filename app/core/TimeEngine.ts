@@ -4,10 +4,10 @@ export class TimeEngine {
     private timeScale: number
     private running: boolean
 
-    constructor(startTime?: number) {
-        this.simulationTime = startTime ?? 0
+    constructor(startTime = 0) {
+        this.simulationTime = startTime
         this.lastRealTime = performance.now()
-        this.timeScale = 200
+        this.timeScale = 200 // sensible default
         this.running = true
     }
 
@@ -25,8 +25,13 @@ export class TimeEngine {
         return this.simulationTime
     }
 
+    getTimeScale() {
+        return this.timeScale
+    }
+
     setTimeScale(scale: number) {
-        this.timeScale = scale
+        // 🛡️ Safety cap to protect hardware & simulation
+        this.timeScale = Math.min(scale, 5000)
     }
 
     pause() {
@@ -36,6 +41,10 @@ export class TimeEngine {
     resume() {
         this.running = true
         this.lastRealTime = performance.now()
+    }
+
+    isRunning() {
+        return this.running
     }
 
     reset(time = 0) {
