@@ -39,7 +39,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense } from "react";
-import Earth from "./Earth";
+import LandingEarth from "./LandingEarth";
 import StarBackground from "./StarBackground";
 
 export default function Scene() {
@@ -61,7 +61,7 @@ export default function Scene() {
                 {/* 🌌 3D scene */}
                 <Suspense fallback={null}>
                     <StarBackground />
-                    <Earth enableOrbit={false} />
+                    <LandingEarth />
                 </Suspense>
             </Canvas>
         </div>

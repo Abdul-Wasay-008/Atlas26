@@ -131,17 +131,14 @@
 "use client";
 
 import * as THREE from "three";
-import { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState, useMemo } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { timeEngine } from "@/app/core/time";
 import { cameraController } from "@/app/core/cameraController";
+import { createPlanetDayNightMaterial } from "./PlanetDayNightMaterial";
 
-interface EarthProps {
-    enableOrbit?: boolean; // If false, Earth stays at origin (for landing page)
-}
-
-export default function Earth({ enableOrbit = true }: EarthProps) {
+export default function Earth() {
     const earthRef = useRef<THREE.Mesh>(null);
     const cloudsRef = useRef<THREE.Mesh>(null);
     const groupRef = useRef<THREE.Group>(null);
@@ -176,6 +173,19 @@ export default function Earth({ enableOrbit = true }: EarthProps) {
         ]
     );
 
+    // 🌍 Create day/night terminator material
+    const dayNightMaterial = useMemo(
+        () =>
+            createPlanetDayNightMaterial({
+                dayTexture: colorMap,
+                nightTexture: nightMap,
+                normalTexture: normalMap,
+                specularTexture: specularMap,
+                shininess: 25,
+            }),
+        [colorMap, nightMap, normalMap, specularMap]
+    );
+
     const EARTH_DAY = 24 * 60 * 60; // seconds
     const EARTH_ORBITAL_PERIOD = 365.25 * 24 * 60 * 60; // seconds
     const ORBIT_RADIUS = 4.5; // Distance from Sun
@@ -183,8 +193,8 @@ export default function Earth({ enableOrbit = true }: EarthProps) {
     useFrame(() => {
         const t = timeEngine.getTime();
 
-        // 🌍 Earth orbital position around Sun (only if orbit is enabled)
-        if (enableOrbit && orbitRef.current) {
+        // 🌍 Earth orbital position around Sun
+        if (orbitRef.current) {
             const orbitAngle =
                 ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
 
@@ -193,9 +203,6 @@ export default function Earth({ enableOrbit = true }: EarthProps) {
                 0,
                 Math.sin(orbitAngle) * ORBIT_RADIUS
             );
-        } else if (!enableOrbit && orbitRef.current) {
-            // Keep Earth at origin for landing page
-            orbitRef.current.position.set(0, 0, 0);
         }
 
         // 🌍 Earth rotation (absolute, time-based)
@@ -215,6 +222,21 @@ export default function Earth({ enableOrbit = true }: EarthProps) {
                 new THREE.Vector3(targetScale, targetScale, targetScale),
                 0.12
             );
+        }
+
+        // 🌅 Update day/night terminator based on Sun position
+        if (earthRef.current && dayNightMaterial) {
+            const sunPosition = new THREE.Vector3(0, 0, 0); // Sun is at origin
+            const planetWorldPos = new THREE.Vector3();
+            earthRef.current.getWorldPosition(planetWorldPos);
+
+            // Calculate direction from planet to Sun
+            const sunDirection = new THREE.Vector3()
+                .subVectors(sunPosition, planetWorldPos)
+                .normalize();
+
+            // Update shader uniform
+            dayNightMaterial.uniforms.uSunDirection.value.copy(sunDirection);
         }
     });
 
@@ -249,18 +271,7 @@ export default function Earth({ enableOrbit = true }: EarthProps) {
                     }}
                 >
                     <sphereGeometry args={[0.8, 128, 128]} />
-                    <meshPhongMaterial
-                        map={colorMap}
-                        normalMap={normalMap}
-                        specularMap={specularMap}
-                        shininess={25}
-                    />
-                </mesh>
-
-                {/* 🌃 Night Lights */}
-                <mesh>
-                    <sphereGeometry args={[0.75, 64, 64]} />
-                    <meshBasicMaterial map={nightMap} blending={THREE.AdditiveBlending} />
+                    <primitive object={dayNightMaterial} attach="material" />
                 </mesh>
 
             </group>
