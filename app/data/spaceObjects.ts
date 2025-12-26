@@ -10,6 +10,15 @@ export interface SpaceObjectData {
 
 export const spaceObjects: SpaceObjectData[] = [
     {
+        id: "sun",
+        name: "Sun",
+        type: "star",
+        radius: "696,340 km",
+        orbitalPeriod: "N/A",
+        description: "The Sun is the star at the center of our solar system. It's a nearly perfect sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core.",
+        distanceFromEarth: "~149.6 million km (1 AU)"
+    },
+    {
         id: "earth",
         name: "Earth",
         type: "planet",

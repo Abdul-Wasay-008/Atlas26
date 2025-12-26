@@ -122,20 +122,31 @@ export default function Moon() {
 
     const MOON_ORBITAL_PERIOD = 27.3 * 24 * 60 * 60; // seconds
     const MOON_ROTATION_PERIOD = MOON_ORBITAL_PERIOD; // tidally locked
-    const ORBIT_RADIUS = 2;
+    const ORBIT_RADIUS = 2; // Moon's orbit radius around Earth
+    
+    // Earth's orbital parameters (same as in Earth.tsx)
+    const EARTH_ORBITAL_PERIOD = 365.25 * 24 * 60 * 60; // seconds
+    const EARTH_ORBIT_RADIUS = 4.5; // Distance from Sun
 
     useFrame(() => {
         const t = timeEngine.getTime();
 
-        // 🌕 Orbital position (absolute, time-based)
-        const orbitAngle =
+        // Calculate Earth's position around Sun
+        const earthOrbitAngle =
+            ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
+        const earthX = Math.cos(earthOrbitAngle) * EARTH_ORBIT_RADIUS;
+        const earthZ = Math.sin(earthOrbitAngle) * EARTH_ORBIT_RADIUS;
+
+        // 🌕 Moon's orbital position around Earth (absolute, time-based)
+        const moonOrbitAngle =
             ((t % MOON_ORBITAL_PERIOD) / MOON_ORBITAL_PERIOD) * Math.PI * 2;
 
         if (orbitRef.current) {
+            // Moon's position = Earth's position + Moon's relative orbit
             orbitRef.current.position.set(
-                Math.cos(orbitAngle) * ORBIT_RADIUS,
+                earthX + Math.cos(moonOrbitAngle) * ORBIT_RADIUS,
                 0,
-                Math.sin(orbitAngle) * ORBIT_RADIUS
+                earthZ + Math.sin(moonOrbitAngle) * ORBIT_RADIUS
             );
         }
 

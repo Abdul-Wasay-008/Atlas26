@@ -112,7 +112,9 @@ import { useEffect, useRef, useState } from "react";
 
 import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
+import Sun from "../3d/Sun";
 import Earth from "../3d/Earth";
+import EarthOrbitPath from "../3d/EarthOrbitPath";
 import Moon from "../3d/Moon";
 import MoonOrbitPath from "../3d/MoonOrbitPath";
 
@@ -219,6 +221,12 @@ export default function SpaceCanvas() {
             {/* 🔥 CAMERA RIG WITH CONTROLS REF */}
             <CameraRig controlsRef={controlsRef} />
             <CameraSnapHandler />
+
+            {/* ☀️ Sun (center of solar system) */}
+            <Sun />
+
+            {/* 🌍 Earth Orbit Path */}
+            <EarthOrbitPath />
 
             {/* 🌍 Earth–Moon System */}
             <Earth />

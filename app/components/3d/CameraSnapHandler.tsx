@@ -76,7 +76,7 @@ export default function CameraSnapHandler() {
                 
                 // Trigger camera snap - startSnap will check if user is interacting
                 cameraController.startSnap(
-                    selectedId as "earth" | "moon",
+                    selectedId as "sun" | "earth" | "moon",
                     worldPos
                 );
             } else {
