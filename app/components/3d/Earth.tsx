@@ -138,10 +138,14 @@ import { timeEngine } from "@/app/core/time";
 import { cameraController } from "@/app/core/cameraController";
 import { createPlanetDayNightMaterial } from "./PlanetDayNightMaterial";
 
+// Earth's axial tilt: 23.44° relative to orbital plane (fixed in space)
+const EARTH_AXIAL_TILT = (23.44 * Math.PI) / 180; // Convert to radians
+
 export default function Earth() {
     const earthRef = useRef<THREE.Mesh>(null);
     const cloudsRef = useRef<THREE.Mesh>(null);
     const groupRef = useRef<THREE.Group>(null);
+    const tiltRef = useRef<THREE.Group>(null);
     const orbitRef = useRef<THREE.Group>(null);
 
     const selectObject = useSelectionStore((state) => state.selectObject);
@@ -189,6 +193,15 @@ export default function Earth() {
     const EARTH_DAY = 24 * 60 * 60; // seconds
     const EARTH_ORBITAL_PERIOD = 365.25 * 24 * 60 * 60; // seconds
     const ORBIT_RADIUS = 4.5; // Distance from Sun
+
+    // 🌍 Apply axial tilt (fixed in space, doesn't rotate with Earth)
+    useEffect(() => {
+        if (tiltRef.current) {
+            // Rotate around X-axis to tilt Earth's axis relative to orbital plane
+            // This tilts Earth's North Pole towards the positive Z direction
+            tiltRef.current.rotation.x = EARTH_AXIAL_TILT;
+        }
+    }, []);
 
     useFrame(() => {
         const t = timeEngine.getTime();
@@ -242,38 +255,41 @@ export default function Earth() {
 
     return (
         <group ref={orbitRef}>
-            <group ref={groupRef} scale={[baseScale, baseScale, baseScale]}>
+            {/* 🌍 Axial Tilt Group: Fixed 23.44° tilt relative to orbital plane */}
+            <group ref={tiltRef}>
+                <group ref={groupRef} scale={[baseScale, baseScale, baseScale]}>
 
-                {/* ☁️ Clouds */}
-                <mesh ref={cloudsRef}>
-                    <sphereGeometry args={[0.81, 64, 64]} />
-                    <meshPhongMaterial
-                        map={cloudsMap}
-                        opacity={0.4}
-                        depthWrite={false}
-                        transparent
-                        side={THREE.DoubleSide}
-                    />
-                </mesh>
+                    {/* ☁️ Clouds */}
+                    <mesh ref={cloudsRef}>
+                        <sphereGeometry args={[0.81, 64, 64]} />
+                        <meshPhongMaterial
+                            map={cloudsMap}
+                            opacity={0.4}
+                            depthWrite={false}
+                            transparent
+                            side={THREE.DoubleSide}
+                        />
+                    </mesh>
 
-                {/* 🌍 Interactive Earth layer */}
-                <mesh
-                    ref={earthRef}
-                    name="earth"
-                    onClick={() => selectObject("earth")}
-                    onPointerOver={() => {
-                        setHovered(true);
-                        document.body.style.cursor = "pointer";
-                    }}
-                    onPointerOut={() => {
-                        setHovered(false);
-                        document.body.style.cursor = "default";
-                    }}
-                >
-                    <sphereGeometry args={[0.8, 128, 128]} />
-                    <primitive object={dayNightMaterial} attach="material" />
-                </mesh>
+                    {/* 🌍 Interactive Earth layer */}
+                    <mesh
+                        ref={earthRef}
+                        name="earth"
+                        onClick={() => selectObject("earth")}
+                        onPointerOver={() => {
+                            setHovered(true);
+                            document.body.style.cursor = "pointer";
+                        }}
+                        onPointerOut={() => {
+                            setHovered(false);
+                            document.body.style.cursor = "default";
+                        }}
+                    >
+                        <sphereGeometry args={[0.8, 128, 128]} />
+                        <primitive object={dayNightMaterial} attach="material" />
+                    </mesh>
 
+                </group>
             </group>
         </group>
     );

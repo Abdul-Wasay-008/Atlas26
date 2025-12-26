@@ -89,11 +89,11 @@
 "use client";
 
 import * as THREE from "three";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState, useCallback, useMemo } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
-import { spaceObjects } from "@/app/data/spaceObjects";
 import { timeEngine } from "@/app/core/time";
+import { createMoonPhaseMaterial } from "./MoonPhaseMaterial";
 
 export default function Moon() {
     const moonRef = useRef<THREE.Mesh>(null);
@@ -117,8 +117,14 @@ export default function Moon() {
         );
     }, [size.width]);
 
-    // 🌍 Texture loading
+    // 🌕 Texture loading
     const moonTexture = useLoader(THREE.TextureLoader, "/textures/moon.jpg");
+
+    // 🌑 Create Moon phase material (physically correct lighting from Sun only)
+    const moonPhaseMaterial = useMemo(
+        () => createMoonPhaseMaterial({ moonTexture }),
+        [moonTexture]
+    );
 
     const MOON_ORBITAL_PERIOD = 27.3 * 24 * 60 * 60; // seconds
     const MOON_ROTATION_PERIOD = MOON_ORBITAL_PERIOD; // tidally locked
@@ -166,6 +172,21 @@ export default function Moon() {
                 0.12
             );
         }
+
+        // 🌑 Update Moon phase based on Sun direction (physically correct lighting)
+        if (moonRef.current && moonPhaseMaterial) {
+            const sunPosition = new THREE.Vector3(0, 0, 0); // Sun is at origin
+            const moonWorldPos = new THREE.Vector3();
+            moonRef.current.getWorldPosition(moonWorldPos);
+
+            // Calculate direction from Moon to Sun (for lighting calculation)
+            const sunDirection = new THREE.Vector3()
+                .subVectors(sunPosition, moonWorldPos)
+                .normalize();
+
+            // Update shader uniform for Moon phase calculation
+            moonPhaseMaterial.uniforms.uSunDirection.value.copy(sunDirection);
+        }
     });
 
     // 🔍 Selection handler
@@ -190,7 +211,7 @@ export default function Moon() {
                     }}
                 >
                     <sphereGeometry args={[0.27, 64, 64]} />
-                    <meshStandardMaterial map={moonTexture} />
+                    <primitive object={moonPhaseMaterial} attach="material" />
                 </mesh>
             </group>
         </group>
