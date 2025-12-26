@@ -61,7 +61,7 @@ export default function Scene() {
                 {/* 🌌 3D scene */}
                 <Suspense fallback={null}>
                     <StarBackground />
-                    <Earth />
+                    <Earth enableOrbit={false} />
                 </Suspense>
             </Canvas>
         </div>

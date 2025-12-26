@@ -137,7 +137,11 @@ import { useSelectionStore } from "@/app/store/selectionStore";
 import { timeEngine } from "@/app/core/time";
 import { cameraController } from "@/app/core/cameraController";
 
-export default function Earth() {
+interface EarthProps {
+    enableOrbit?: boolean; // If false, Earth stays at origin (for landing page)
+}
+
+export default function Earth({ enableOrbit = true }: EarthProps) {
     const earthRef = useRef<THREE.Mesh>(null);
     const cloudsRef = useRef<THREE.Mesh>(null);
     const groupRef = useRef<THREE.Group>(null);
@@ -179,16 +183,19 @@ export default function Earth() {
     useFrame(() => {
         const t = timeEngine.getTime();
 
-        // 🌍 Earth orbital position around Sun (absolute, time-based)
-        const orbitAngle =
-            ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
+        // 🌍 Earth orbital position around Sun (only if orbit is enabled)
+        if (enableOrbit && orbitRef.current) {
+            const orbitAngle =
+                ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
 
-        if (orbitRef.current) {
             orbitRef.current.position.set(
                 Math.cos(orbitAngle) * ORBIT_RADIUS,
                 0,
                 Math.sin(orbitAngle) * ORBIT_RADIUS
             );
+        } else if (!enableOrbit && orbitRef.current) {
+            // Keep Earth at origin for landing page
+            orbitRef.current.position.set(0, 0, 0);
         }
 
         // 🌍 Earth rotation (absolute, time-based)
