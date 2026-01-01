@@ -13,7 +13,7 @@ class CameraController {
     targetPosition = new THREE.Vector3();
     lookAtPosition = new THREE.Vector3();
 
-    systemPos = new THREE.Vector3(2, 2, 8); // Slight top-right position
+    systemPos = new THREE.Vector3(0, 2.5, 10); // Centered position showing all objects
     sunOffset = new THREE.Vector3(0, 0, 6.5); // Increased offset to prevent Sun from being cropped
     earthOffset = new THREE.Vector3(0, 0, 3);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
