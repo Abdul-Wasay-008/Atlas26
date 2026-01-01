@@ -118,7 +118,7 @@ import EarthOrbitPath from "../3d/EarthOrbitPath";
 import Moon from "../3d/Moon";
 import MoonOrbitPath from "../3d/MoonOrbitPath";
 
-import { timeEngine } from "@/app/core/time";
+import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
 
 /* 🌌 Starfield Background */
@@ -140,7 +140,7 @@ function Starfield() {
 /* ⏱ Simulation Clock Ticker */
 function TimeTicker() {
     useFrame(() => {
-        timeEngine.update();
+        timeManager.update();
     });
     return null;
 }

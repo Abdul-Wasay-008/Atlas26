@@ -71,14 +71,14 @@ export default function LandingEarth() {
             {/* 🌍 Interactive Earth layer */}
             <mesh
                 ref={earthRef}
-                onClick={() => selectObject("earth")}
+                // onClick={() => selectObject("earth")}
                 onPointerOver={() => {
                     setHovered(true);
-                    document.body.style.cursor = "pointer";
+                    // document.body.style.cursor = "pointer";
                 }}
                 onPointerOut={() => {
                     setHovered(false);
-                    document.body.style.cursor = "default";
+                    // document.body.style.cursor = "default";
                 }}
             >
                 <sphereGeometry args={[0.8, 128, 128]} />
@@ -123,4 +123,6 @@ export default function LandingEarth() {
         </group>
     );
 }
+
+
 
