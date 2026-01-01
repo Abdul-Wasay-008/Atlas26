@@ -115,6 +115,7 @@ import CameraSnapHandler from "../3d/CameraSnapHandler";
 import Sun from "../3d/Sun";
 import Earth from "../3d/Earth";
 import Moon from "../3d/Moon";
+import ISS from "../3d/ISS";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -253,6 +254,9 @@ export default function SpaceCanvas() {
             {/* 🌍 Earth–Moon System */}
             <Earth />
             <Moon />
+
+            {/* 🚀 ISS (International Space Station) */}
+            <ISS />
 
             {/* 🎮 Orbit Controls (CONNECTED) */}
             <OrbitControls
