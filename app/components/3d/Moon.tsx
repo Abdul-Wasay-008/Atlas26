@@ -99,6 +99,7 @@ import {
     getMoonPhaseName,
     getMoonIllumination,
 } from "@/app/astronomy/lunar";
+import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
 
 export default function Moon() {
     const moonRef = useRef<THREE.Mesh>(null);
@@ -131,23 +132,14 @@ export default function Moon() {
         [moonTexture]
     );
 
-    // Earth's orbital parameters (same as in Earth.tsx)
-    const EARTH_ORBITAL_PERIOD = 365.25 * 24 * 60 * 60; // seconds
     const EARTH_ORBIT_RADIUS = 4.5; // Distance from Sun
 
     useFrame(() => {
         // Get current date from TimeManager (single source of truth)
         const currentDate = timeManager.getCurrentDate();
 
-        // Calculate Earth's position around Sun (same calculation as Earth.tsx)
-        const t = currentDate.getTime() / 1000; // Convert to seconds
-        const earthOrbitAngle =
-            ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
-        const earthPosition = new THREE.Vector3(
-            Math.cos(earthOrbitAngle) * EARTH_ORBIT_RADIUS,
-            0,
-            Math.sin(earthOrbitAngle) * EARTH_ORBIT_RADIUS
-        );
+        // Get Earth's position around Sun (using same astronomy module as Earth)
+        const earthPosition = getEarthOrbitPosition(currentDate, EARTH_ORBIT_RADIUS);
 
         // 🌕 Get astronomically accurate Moon position
         const moonWorldPos = getMoonWorldPosition(currentDate, earthPosition);

@@ -134,12 +134,14 @@ import * as THREE from "three";
 import { useRef, useEffect, useState, useMemo } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
-import { timeEngine } from "@/app/core/time";
+import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
 import { createPlanetDayNightMaterial } from "./PlanetDayNightMaterial";
-
-// Earth's axial tilt: 23.44° relative to orbital plane (fixed in space)
-const EARTH_AXIAL_TILT = (23.44 * Math.PI) / 180; // Convert to radians
+import {
+    getEarthOrbitPosition,
+    getEarthToSunDirection,
+    EARTH_AXIAL_TILT_RADIANS,
+} from "@/app/astronomy/earthOrbit";
 
 export default function Earth() {
     const earthRef = useRef<THREE.Mesh>(null);
@@ -191,34 +193,33 @@ export default function Earth() {
     );
 
     const EARTH_DAY = 24 * 60 * 60; // seconds
-    const EARTH_ORBITAL_PERIOD = 365.25 * 24 * 60 * 60; // seconds
     const ORBIT_RADIUS = 4.5; // Distance from Sun
 
-    // 🌍 Apply axial tilt (fixed in space, doesn't rotate with Earth)
+    // 🌍 Apply axial tilt (FIXED in inertial space, does NOT rotate with orbit)
+    // The tilt is applied as a rotation around the X-axis
+    // This is applied in local space, but since we want it fixed in world space,
+    // we'll set it once and it will remain correct as orbitRef moves
     useEffect(() => {
         if (tiltRef.current) {
-            // Rotate around X-axis to tilt Earth's axis relative to orbital plane
-            // This tilts Earth's North Pole towards the positive Z direction
-            tiltRef.current.rotation.x = EARTH_AXIAL_TILT;
+            // Apply tilt as rotation around X-axis
+            // This tilts Earth's axis (north pole) relative to the orbital plane
+            // The tilt direction is fixed in space - it doesn't rotate with the orbit
+            tiltRef.current.rotation.x = EARTH_AXIAL_TILT_RADIANS;
         }
     }, []);
 
     useFrame(() => {
-        const t = timeEngine.getTime();
+        // Get current date from TimeManager (single source of truth)
+        const currentDate = timeManager.getCurrentDate();
+        const t = currentDate.getTime() / 1000; // Convert to seconds for rotation
 
-        // 🌍 Earth orbital position around Sun
+        // 🌍 Earth orbital position around Sun (astronomically accurate)
         if (orbitRef.current) {
-            const orbitAngle =
-                ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
-
-            orbitRef.current.position.set(
-                Math.cos(orbitAngle) * ORBIT_RADIUS,
-                0,
-                Math.sin(orbitAngle) * ORBIT_RADIUS
-            );
+            const earthPosition = getEarthOrbitPosition(currentDate, ORBIT_RADIUS);
+            orbitRef.current.position.copy(earthPosition);
         }
 
-        // 🌍 Earth rotation (absolute, time-based)
+        // 🌍 Earth rotation (24-hour day, absolute time-based)
         if (earthRef.current) {
             earthRef.current.rotation.y = (t / EARTH_DAY) * Math.PI * 2;
         }
@@ -238,18 +239,24 @@ export default function Earth() {
         }
 
         // 🌅 Update day/night terminator based on Sun position
+        // Sun direction changes as Earth orbits, creating seasonal lighting
         if (earthRef.current && dayNightMaterial) {
-            const sunPosition = new THREE.Vector3(0, 0, 0); // Sun is at origin
-            const planetWorldPos = new THREE.Vector3();
-            earthRef.current.getWorldPosition(planetWorldPos);
-
-            // Calculate direction from planet to Sun
-            const sunDirection = new THREE.Vector3()
-                .subVectors(sunPosition, planetWorldPos)
-                .normalize();
-
-            // Update shader uniform
+            const sunDirection = getEarthToSunDirection(currentDate, ORBIT_RADIUS);
             dayNightMaterial.uniforms.uSunDirection.value.copy(sunDirection);
+        }
+
+        // 🔍 Debug logging (dev mode only, throttled)
+        if (process.env.NODE_ENV === "development") {
+            const debugInterval = 5000; // Log once per 5 seconds
+            const now = Date.now();
+            if (!(window as any).__earthDebugLastLog || now - (window as any).__earthDebugLastLog > debugInterval) {
+                const { getSeason } = require("@/app/astronomy/earthOrbit");
+                const season = getSeason(currentDate);
+                console.log(
+                    `🌍 Earth Debug: ${season} | UTC: ${currentDate.toISOString()}`
+                );
+                (window as any).__earthDebugLastLog = now;
+            }
         }
     });
 

@@ -114,9 +114,7 @@ import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
 import Sun from "../3d/Sun";
 import Earth from "../3d/Earth";
-import EarthOrbitPath from "../3d/EarthOrbitPath";
 import Moon from "../3d/Moon";
-import MoonOrbitPath from "../3d/MoonOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -225,13 +223,9 @@ export default function SpaceCanvas() {
             {/* ☀️ Sun (center of solar system) */}
             <Sun />
 
-            {/* 🌍 Earth Orbit Path */}
-            <EarthOrbitPath />
-
             {/* 🌍 Earth–Moon System */}
             <Earth />
             <Moon />
-            <MoonOrbitPath />
 
             {/* 🎮 Orbit Controls (CONNECTED) */}
             <OrbitControls
