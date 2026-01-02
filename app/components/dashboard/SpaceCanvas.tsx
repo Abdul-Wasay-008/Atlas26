@@ -113,6 +113,7 @@ import { useEffect, useRef, useState } from "react";
 import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
 import Sun from "../3d/Sun";
+import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
 import Moon from "../3d/Moon";
 import ISS from "../3d/ISS";
@@ -242,7 +243,8 @@ export default function SpaceCanvas() {
 
             {/* 💡 Lighting */}
             <ambientLight intensity={3.5} />
-            <directionalLight position={[5, 3, 5]} intensity={1.2} />
+            {/* Dynamic Sun light - updates based on Earth-Sun geometry, world-space */}
+            <SunLight />
 
             {/* 🔥 CAMERA RIG WITH CONTROLS REF */}
             <CameraRig controlsRef={controlsRef} />

@@ -264,37 +264,37 @@ export default function Earth() {
         <group ref={orbitRef}>
             {/* 🌍 Axial Tilt Group: Fixed 23.44° tilt relative to orbital plane */}
             <group ref={tiltRef}>
-                <group ref={groupRef} scale={[baseScale, baseScale, baseScale]}>
+        <group ref={groupRef} scale={[baseScale, baseScale, baseScale]}>
 
-                    {/* ☁️ Clouds */}
-                    <mesh ref={cloudsRef}>
-                        <sphereGeometry args={[0.81, 64, 64]} />
-                        <meshPhongMaterial
-                            map={cloudsMap}
-                            opacity={0.4}
-                            depthWrite={false}
-                            transparent
-                            side={THREE.DoubleSide}
-                        />
-                    </mesh>
+            {/* ☁️ Clouds */}
+            <mesh ref={cloudsRef}>
+                <sphereGeometry args={[0.81, 64, 64]} />
+                <meshPhongMaterial
+                    map={cloudsMap}
+                    opacity={0.4}
+                    depthWrite={false}
+                    transparent
+                    side={THREE.DoubleSide}
+                />
+            </mesh>
 
-                    {/* 🌍 Interactive Earth layer */}
-                    <mesh
-                        ref={earthRef}
-                        name="earth"
-                        onClick={() => selectObject("earth")}
-                        onPointerOver={() => {
-                            setHovered(true);
-                            document.body.style.cursor = "pointer";
-                        }}
-                        onPointerOut={() => {
-                            setHovered(false);
-                            document.body.style.cursor = "default";
-                        }}
-                    >
-                        <sphereGeometry args={[0.8, 128, 128]} />
+            {/* 🌍 Interactive Earth layer */}
+            <mesh
+                ref={earthRef}
+                name="earth"
+                onClick={() => selectObject("earth")}
+                onPointerOver={() => {
+                    setHovered(true);
+                    document.body.style.cursor = "pointer";
+                }}
+                onPointerOut={() => {
+                    setHovered(false);
+                    document.body.style.cursor = "default";
+                }}
+            >
+                <sphereGeometry args={[0.8, 128, 128]} />
                         <primitive object={dayNightMaterial} attach="material" />
-                    </mesh>
+            </mesh>
 
                 </group>
             </group>

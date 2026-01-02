@@ -49,7 +49,20 @@ export function createPlanetDayNightMaterial({
                 vWorldPosition = worldPosition.xyz;
                 
                 vNormal = normal;
-                vWorldNormal = normalize(normalMatrix * normal);
+                
+                // Calculate TRUE world-space normal (not view-space)
+                // normalMatrix is view-space (includes camera transform)
+                // We need world-space: inverse transpose of modelMatrix only (no view matrix)
+                // Extract upper-left 3x3 of modelMatrix
+                mat3 modelMat3 = mat3(
+                    modelMatrix[0].xyz,
+                    modelMatrix[1].xyz,
+                    modelMatrix[2].xyz
+                );
+                // For normals, we need inverse transpose
+                // Calculate inverse transpose properly for world-space normals
+                mat3 worldNormalMatrix = transpose(inverse(modelMat3));
+                vWorldNormal = normalize(worldNormalMatrix * normal);
                 
                 gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
             }

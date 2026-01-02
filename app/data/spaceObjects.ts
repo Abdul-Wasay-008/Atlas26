@@ -35,5 +35,14 @@ export const spaceObjects: SpaceObjectData[] = [
         orbitalPeriod: "27.3 days",
         description: "The Moon is Earth's only natural satellite and is tidally locked.",
         distanceFromEarth: "~384,400 km"
+    },
+    {
+        id: "iss",
+        name: "ISS",
+        type: "satellite",
+        radius: "~109 m",
+        orbitalPeriod: "~93 minutes",
+        description: "The International Space Station (ISS) is a modular space station in low Earth orbit. It serves as a microgravity and space environment research laboratory.",
+        distanceFromEarth: "~400 km"
     }
 ];

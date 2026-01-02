@@ -39,22 +39,29 @@ export function isISSEclipsed(params: EclipseParams): boolean {
     // Vector from Earth to ISS
     const earthToISS = new THREE.Vector3().subVectors(issPosition, earthPosition);
     
+    // Ensure sunDirection is normalized
+    const normalizedSunDirection = sunDirection.clone().normalize();
+    
     // Check if ISS is behind Earth relative to the Sun
-    // If dot product is negative, ISS is on the opposite side of Earth from the Sun
-    const dotProduct = earthToISS.dot(sunDirection);
+    // sunDirection points FROM Earth TO Sun
+    // If dot product is negative, ISS is on the opposite side of Earth from the Sun (behind Earth)
+    // If dot product is positive, ISS is on the same side as the Sun (in sunlight)
+    const dotProduct = earthToISS.dot(normalizedSunDirection);
     
     if (dotProduct >= 0) {
         // ISS is not behind Earth (it's on the sunlit side)
+        // Definitely not eclipsed
         return false;
     }
     
-    // ISS is behind Earth, now check if it's within the shadow cylinder
+    // ISS is behind Earth (dotProduct < 0), now check if it's within the shadow cylinder
     
     // Project ISS position onto the Earth-Sun axis
     // The projection gives us the point on the axis closest to ISS
-    const projectionLength = dotProduct; // Already negative, but we need the magnitude
+    // projectionLength is negative because ISS is behind Earth
+    const projectionLength = dotProduct; // Negative value
     const projectionPoint = new THREE.Vector3()
-        .copy(sunDirection)
+        .copy(normalizedSunDirection)
         .multiplyScalar(projectionLength)
         .add(earthPosition);
     
@@ -62,7 +69,9 @@ export function isISSEclipsed(params: EclipseParams): boolean {
     const perpendicularVector = new THREE.Vector3().subVectors(issPosition, projectionPoint);
     const perpendicularDistance = perpendicularVector.length();
     
-    // ISS is eclipsed if perpendicular distance is less than Earth's radius
+    // ISS is eclipsed if:
+    // 1. It's behind Earth (dotProduct < 0) - already checked
+    // 2. AND its perpendicular distance from the Earth-Sun axis is less than Earth's radius
     return perpendicularDistance < earthRadius;
 }
 

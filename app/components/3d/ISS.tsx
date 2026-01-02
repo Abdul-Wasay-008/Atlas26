@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo, useState } from "react";
+import { useRef, useMemo, useState, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
@@ -8,6 +8,7 @@ import { timeManager } from "@/app/core/TimeManager";
 import { getEarthOrbitPosition, getEarthToSunDirection } from "@/app/astronomy/earthOrbit";
 import { getISSWorldPosition } from "@/app/astronomy/issOrbit";
 import { isISSEclipsed } from "@/app/astronomy/eclipse";
+import { useSelectionStore } from "@/app/store/selectionStore";
 
 /**
  * ISS Component
@@ -20,6 +21,8 @@ import { isISSEclipsed } from "@/app/astronomy/eclipse";
 export default function ISS() {
     const groupRef = useRef<THREE.Group>(null);
     const previousEclipsedState = useRef(false);
+    const selectObject = useSelectionStore((state) => state.selectObject);
+    const [hovered, setHovered] = useState(false);
 
     // 🚀 Load ISS GLB model
     const { scene } = useGLTF("/models/iss.glb");
@@ -43,9 +46,13 @@ export default function ISS() {
                 // Clone materials and store original colors
                 const clonedMaterials = materials.map((mat) => {
                     const clonedMat = mat.clone();
-                    // Store original color
+                    // Store original color (ensure we have a color to work with)
                     if (clonedMat.color) {
                         colorMap.set(clonedMat, clonedMat.color.clone());
+                    } else {
+                        // If material doesn't have a color, set a default white and store it
+                        clonedMat.color = new THREE.Color(1, 1, 1);
+                        colorMap.set(clonedMat, new THREE.Color(1, 1, 1));
                     }
                     return clonedMat;
                 });
@@ -105,6 +112,16 @@ export default function ISS() {
                 }
                 previousEclipsedState.current = eclipsed;
             }
+            
+            // Debug: Log eclipse state periodically to verify detection
+            const debugInterval = 5000; // Every 5 seconds
+            const now = Date.now();
+            if (!(window as any).__issEclipseDebugLastLog || now - (window as any).__issEclipseDebugLastLog > debugInterval) {
+                const earthToISS = new THREE.Vector3().subVectors(issWorldPos, earthPosition);
+                const dotProduct = earthToISS.dot(sunDirection);
+                console.log(`ISS Eclipse Debug: eclipsed=${eclipsed}, dotProduct=${dotProduct.toFixed(3)}, distanceFromEarth=${earthToISS.length().toFixed(3)}`);
+                (window as any).__issEclipseDebugLastLog = now;
+            }
         }
 
         // Update ISS position in world coordinates
@@ -120,31 +137,28 @@ export default function ISS() {
                     : [child.material];
                 
                 materials.forEach((mat) => {
-                    if (mat instanceof THREE.MeshStandardMaterial || 
-                        mat instanceof THREE.MeshPhysicalMaterial ||
-                        mat instanceof THREE.MeshPhongMaterial ||
-                        mat instanceof THREE.MeshBasicMaterial) {
-                        // Get original color
+                    // Handle all material types that have color property
+                    if (mat && 'color' in mat && mat.color instanceof THREE.Color) {
+                        // Get original color (must exist since we stored it during clone)
                         const originalColor = materialOriginalColors.current.get(mat);
                         
-                        // Always restore from original first to prevent color accumulation
                         if (originalColor) {
-                            mat.color.copy(originalColor);
-                        }
-                        
-                        if (eclipsed) {
-                            // Dim the ISS significantly when in shadow
-                            mat.emissive.setScalar(0);
-                            if ('emissiveIntensity' in mat) {
-                                mat.emissiveIntensity = 0;
+                            if (eclipsed) {
+                                // Dim the ISS slightly when in Earth's shadow (night region)
+                                // Not too dark - just enough to show it's in shadow
+                                // Restore from original first, then dim moderately
+                                mat.color.copy(originalColor).multiplyScalar(0.65); // Slightly darker, but still visible
+                            } else {
+                                // Fully restore to original brightness when in sunlight
+                                mat.color.copy(originalColor);
                             }
-                            // Reduce overall brightness (multiply from restored original)
-                            mat.color.multiplyScalar(0.15); // Very dark, but still visible
-                        } else {
-                            // Normal lighting (already restored above)
-                            mat.emissive.setScalar(0);
+                            
+                            // Reset emissive properties
+                            if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
+                                mat.emissive.setScalar(0);
+                            }
                             if ('emissiveIntensity' in mat) {
-                                mat.emissiveIntensity = 0;
+                                (mat as any).emissiveIntensity = 0;
                             }
                         }
                     }
@@ -153,8 +167,25 @@ export default function ISS() {
         });
     });
 
+    // 🔍 Selection handler
+    const handleClick = useCallback(() => {
+        selectObject("iss");
+    }, [selectObject]);
+
     return (
-        <group ref={groupRef} scale={[ISS_SCALE, ISS_SCALE, ISS_SCALE]}>
+        <group 
+            ref={groupRef} 
+            scale={[ISS_SCALE, ISS_SCALE, ISS_SCALE]}
+            onClick={handleClick}
+            onPointerOver={() => {
+                setHovered(true);
+                document.body.style.cursor = "pointer";
+            }}
+            onPointerOut={() => {
+                setHovered(false);
+                document.body.style.cursor = "default";
+            }}
+        >
             <primitive object={clonedScene} />
         </group>
     );
