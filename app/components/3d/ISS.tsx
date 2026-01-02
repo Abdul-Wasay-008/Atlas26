@@ -1,15 +1,19 @@
 "use client";
 
 import { useRef, useMemo } from "react";
+import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+import { timeManager } from "@/app/core/TimeManager";
+import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
+import { getISSWorldPosition } from "@/app/astronomy/issOrbit";
 
 /**
  * ISS Component
  * 
  * Loads and renders the International Space Station 3D model.
- * Position is TEMPORARY for visual validation only.
- * No orbital mechanics or time-based logic yet.
+ * Position is calculated using real TLE data and SGP4 propagation.
+ * Fully driven by TimeManager for time-based orbital motion.
  */
 export default function ISS() {
     const groupRef = useRef<THREE.Group>(null);
@@ -28,18 +32,28 @@ export default function ISS() {
     // TEMPORARY: Using 0.01 for testing visibility (will be adjusted to realistic size later)
     const ISS_SCALE = 0.01;
 
-    // 🚀 TEMPORARY position: Place ISS near Earth for visual validation
-    // This will be replaced with orbital calculations later
-    // Earth orbits at radius 4.5 from Sun (at origin)
-    // Earth radius in scene: ~0.8 units
-    // ISS should be ~1.0-1.2 units away from Earth's center (above Earth's surface)
-    // Position: Offset from Earth's typical position to place ISS above Earth
-    // Using a position that's clearly outside Earth (Earth is ~4.5 units from origin)
-    // ISS at ~5.7 units puts it ~1.2 units from Earth's center, above Earth's surface
-    const TEMP_POSITION = new THREE.Vector3(5.7, 0.5, 0);
+    // 🌍 Earth's orbital radius (same as in Earth.tsx)
+    const EARTH_ORBIT_RADIUS = 4.5;
+
+    // 🚀 Update ISS position each frame based on TimeManager
+    useFrame(() => {
+        // Get current date from TimeManager (single source of truth)
+        const currentDate = timeManager.getCurrentDate();
+
+        // Get Earth's position around Sun (using same astronomy module as Earth)
+        const earthPosition = getEarthOrbitPosition(currentDate, EARTH_ORBIT_RADIUS);
+
+        // 🚀 Get astronomically accurate ISS position (using TLE + SGP4)
+        const issWorldPos = getISSWorldPosition(currentDate, earthPosition);
+
+        // Update ISS position in world coordinates
+        if (groupRef.current) {
+            groupRef.current.position.copy(issWorldPos);
+        }
+    });
 
     return (
-        <group ref={groupRef} position={TEMP_POSITION} scale={[ISS_SCALE, ISS_SCALE, ISS_SCALE]}>
+        <group ref={groupRef} scale={[ISS_SCALE, ISS_SCALE, ISS_SCALE]}>
             <primitive object={clonedScene} />
         </group>
     );
