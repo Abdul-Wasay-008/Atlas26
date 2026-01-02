@@ -3,6 +3,7 @@
  * 
  * Current TLE for International Space Station (NORAD ID: 25544)
  * This TLE is a snapshot and sufficient for orbital calculations.
+ * Used as fallback when Celestrak fetch fails.
  * 
  * TLE format:
  * Line 1: Satellite catalog number, classification, launch year, etc.
