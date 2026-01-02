@@ -33,10 +33,13 @@ import Sidebar from "../components/dashboard/Sidebar"
 import SpaceCanvas from "../components/dashboard/SpaceCanvas"
 import InfoPanel from "../components/dashboard/InfoPanel"
 import TimeControls from "../components/dashboard/TimeControls"
+import TLEInitializer from "../components/dashboard/TLEInitializer"
 
 export default function DashboardPage() {
     return (
         <div className="w-screen h-screen flex bg-black overflow-hidden">
+            {/* Initialize TLE data at app startup */}
+            <TLEInitializer />
 
             {/* Sidebar */}
             <Sidebar />

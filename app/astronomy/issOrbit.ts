@@ -9,7 +9,7 @@
 
 import * as THREE from "three";
 import * as satellite from "satellite.js";
-import { ISS_TLE } from "@/app/data/issTLE";
+import { getCurrentISSTLE } from "@/app/services/tleService";
 
 /**
  * Earth radius in kilometers
@@ -28,13 +28,22 @@ const KM_TO_SCENE = EARTH_RADIUS_SCENE / EARTH_RADIUS_KM;
 
 /**
  * Parse TLE and create satellite record (cached for performance)
+ * Recreates satrec when TLE is updated
  */
 let satrec: satellite.SatRec | null = null;
+let lastTLEHash: string | null = null;
 
 function getSatRec(): satellite.SatRec {
-    if (!satrec) {
-        satrec = satellite.twoline2satrec(ISS_TLE.line1, ISS_TLE.line2);
+    // Get current TLE (may be fetched or fallback)
+    const currentTLE = getCurrentISSTLE();
+    const tleHash = `${currentTLE.line1}|${currentTLE.line2}`;
+    
+    // Recreate satrec if TLE has changed
+    if (!satrec || lastTLEHash !== tleHash) {
+        satrec = satellite.twoline2satrec(currentTLE.line1, currentTLE.line2);
+        lastTLEHash = tleHash;
     }
+    
     return satrec;
 }
 
