@@ -24,13 +24,14 @@ export default function ISS() {
     // 🚀 Clone the scene once (useMemo to avoid recreating on every render)
     const clonedScene = useMemo(() => scene.clone(), [scene]);
 
-    // 🚀 ISS scale factor (TEMPORARILY LARGE for visibility testing)
+    // 🚀 ISS scale factor
     // Earth radius in scene: ~0.8 units
     // Real ISS size: ~109m (0.109 km)
     // Real Earth radius: 6371 km
     // Physically accurate scale: (0.109 / 6371) * 0.8 ≈ 0.0000137
-    // TEMPORARY: Using 0.01 for testing visibility (will be adjusted to realistic size later)
-    const ISS_SCALE = 0.01;
+    // For visual appeal while maintaining realism, using a scale that makes
+    // the ISS clearly visible but still appropriately small relative to Earth
+    const ISS_SCALE = 0.005;
 
     // 🌍 Earth's orbital radius (same as in Earth.tsx)
     const EARTH_ORBIT_RADIUS = 4.5;

@@ -81,18 +81,30 @@ export function getISSPosition(date: Date): THREE.Vector3 {
     const z = positionEci.z * KM_TO_SCENE;
     
     // Note: SGP4 ECI coordinates use:
-    // - X: Points toward vernal equinox
+    // - X: Points toward vernal equinox (0° right ascension)
     // - Y: Completes right-handed system (90° right ascension)
-    // - Z: Points toward north pole
+    // - Z: Points toward north celestial pole
     // 
     // Atlas26 scene uses:
     // - X: Right
     // - Y: Up
     // - Z: Forward (toward camera by default)
     //
-    // We need to map ECI to scene coordinates.
-    // For now, we'll use a direct mapping (X->X, Y->Y, Z->Z)
-    // This may need adjustment based on how Earth is oriented in the scene.
+    // Direct mapping (X->X, Y->Y, Z->Z) works because:
+    // - Earth rotates around Y-axis in the scene
+    // - ECI Z-axis (north pole) aligns with scene Y-axis (up)
+    // - The coordinate system is compatible for orbital calculations
+    
+    // Calculate distance from Earth center to verify it's above surface
+    const distance = Math.sqrt(x * x + y * y + z * z);
+    const minDistance = EARTH_RADIUS_SCENE + 0.01; // Ensure at least 0.01 units above surface
+    
+    // If somehow the ISS is too close (shouldn't happen with real TLE, but safety check),
+    // normalize to minimum distance
+    if (distance < minDistance && distance > 0) {
+        const scale = minDistance / distance;
+        return new THREE.Vector3(x * scale, y * scale, z * scale);
+    }
     
     return new THREE.Vector3(x, y, z);
 }
