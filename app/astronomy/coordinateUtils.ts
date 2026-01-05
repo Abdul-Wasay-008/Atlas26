@@ -94,7 +94,7 @@ export function eciToLatLong(
 export function latLongToSurfacePosition(
     latitude: number,
     longitude: number,
-    altitudeOffset: number = 0.001
+    altitudeOffset: number = EARTH_RADIUS_SCENE * 0.01
 ): THREE.Vector3 {
     const radius = EARTH_RADIUS_SCENE + altitudeOffset;
     
