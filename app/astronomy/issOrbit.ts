@@ -10,6 +10,7 @@
 import * as THREE from "three";
 import * as satellite from "satellite.js";
 import { getCurrentISSTLE } from "@/app/services/tleService";
+import { getGreenwichSiderealTime } from "@/app/astronomy/siderealTime";
 
 /**
  * Earth radius in kilometers
@@ -48,18 +49,19 @@ function getSatRec(): satellite.SatRec {
 }
 
 /**
- * Get ISS position in Earth-centered coordinates (scene units)
+ * Get ISS position in Earth-centered ECEF coordinates (scene units)
  * 
  * The ISS position is calculated using SGP4 propagation from TLE data.
- * Position is returned relative to Earth's center (Earth is at origin in this reference frame).
+ * SGP4 outputs ECI (Earth-Centered Inertial) coordinates, which are then
+ * converted to ECEF (Earth-Centered, Earth-Fixed) coordinates using Greenwich
+ * Sidereal Time. This ensures the ISS position rotates with Earth and matches
+ * N2YO and other Earth-fixed reference systems.
  * 
- * Coordinate system:
- * - X: Points toward vernal equinox (0° right ascension)
- * - Y: Completes right-handed system
- * - Z: Points toward north celestial pole
+ * Pipeline:
+ * TLE → SGP4 → ECI (km) → ECEF (km) → Scene units
  * 
  * @param date UTC date
- * @returns ISS position as Vector3 (relative to Earth center, in scene units)
+ * @returns ISS position as Vector3 (relative to Earth center, in ECEF coordinates, scene units)
  */
 export function getISSPosition(date: Date): THREE.Vector3 {
     const satrec = getSatRec();
@@ -76,36 +78,35 @@ export function getISSPosition(date: Date): THREE.Vector3 {
     
     // Get position in ECI (Earth-Centered Inertial) coordinates
     // Position is in kilometers
-    const positionEci = positionAndVelocity.position;
+    const positionEciKm = positionAndVelocity.position;
     
-    if (!positionEci) {
+    if (!positionEciKm) {
         console.warn("SGP4 returned null position");
         return new THREE.Vector3(0.85, 0, 0);
     }
     
-    // Convert ECI position from kilometers to scene units
-    // ECI coordinates: X, Y, Z in kilometers
-    const x = positionEci.x * KM_TO_SCENE;
-    const y = positionEci.y * KM_TO_SCENE;
-    const z = positionEci.z * KM_TO_SCENE;
+    // Get Greenwich Mean Sidereal Time (GMST) for ECI → ECEF conversion
+    // Use our existing GST function (returns radians)
+    const gmst = getGreenwichSiderealTime(date);
     
-    // Note: SGP4 ECI coordinates use:
-    // - X: Points toward vernal equinox (0° right ascension)
-    // - Y: Completes right-handed system (90° right ascension)
-    // - Z: Points toward north celestial pole
-    // 
-    // Atlas26 scene uses:
-    // - X: Right
-    // - Y: Up
-    // - Z: Forward (toward camera by default)
-    //
-    // Direct mapping (X->X, Y->Y, Z->Z) works because:
-    // - Earth rotates around Y-axis in the scene
-    // - ECI Z-axis (north pole) aligns with scene Y-axis (up)
-    // - The coordinate system is compatible for orbital calculations
+    // Convert ECI to ECEF using satellite.js built-in function
+    // This ensures correct coordinate system handling
+    const positionEcefKm = satellite.eciToEcf(positionEciKm, gmst);
+    
+    // Convert ECEF position from kilometers to scene units
+    // ECEF coordinates are Earth-fixed (rotate with Earth)
+    const ecefX = positionEcefKm.x * KM_TO_SCENE;
+    const ecefY = positionEcefKm.y * KM_TO_SCENE;
+    const ecefZ = positionEcefKm.z * KM_TO_SCENE;
+    
+    // Create ECEF position vector in scene coordinates
+    // satellite.js ECEF: X toward Greenwich, Y toward 90°E, Z toward north pole
+    // Atlas26 scene: X is right, Y is up (north pole), Z is forward
+    // Mapping: ECEF (X, Y, Z) -> Scene (X, Z, Y)
+    const ecefPosition = new THREE.Vector3(ecefX, ecefZ, ecefY);
     
     // Calculate distance from Earth center to verify it's above surface
-    const distance = Math.sqrt(x * x + y * y + z * z);
+    const distance = ecefPosition.length();
     // ISS typically orbits at ~400km altitude
     // In scene units: 400km * (0.8 / 6371km) ≈ 0.05 units above Earth radius
     // Add larger safety margin to ensure visual spacing (doesn't affect physics)
@@ -115,10 +116,10 @@ export function getISSPosition(date: Date): THREE.Vector3 {
     // normalize to minimum distance to prevent visual clipping
     if (distance < minDistance && distance > 0) {
         const scale = minDistance / distance;
-        return new THREE.Vector3(x * scale, y * scale, z * scale);
+        return ecefPosition.multiplyScalar(scale);
     }
     
-    return new THREE.Vector3(x, y, z);
+    return ecefPosition;
 }
 
 /**

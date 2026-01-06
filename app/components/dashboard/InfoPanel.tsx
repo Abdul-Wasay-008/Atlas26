@@ -19,9 +19,12 @@
 
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { poppins } from "@/app/fonts";
+import { useISSTelemetry } from "@/app/hooks/useISSTelemetry";
 
 export default function InfoPanel() {
     const selected = useSelectionStore((state) => state.selected);
+    // Always call hook (React rules), but only use data when ISS is selected
+    const issTelemetry = useISSTelemetry();
 
     return (
         <div
@@ -67,11 +70,44 @@ export default function InfoPanel() {
                         {selected.orbitalPeriod}
                     </p>
 
-                    {selected.distanceFromEarth && (
-                        <p className="text-sm">
-                            <span className="font-semibold text-white">Distance:</span>{" "}
-                            {selected.distanceFromEarth}
-                        </p>
+                    {/* Live telemetry for ISS */}
+                    {selected.id === "iss" ? (
+                        <>
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Altitude:</span>{" "}
+                                <span className="text-cyan-400">{issTelemetry.altitudeKm.toFixed(1)} km</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Latitude:</span>{" "}
+                                <span className="text-cyan-400">{issTelemetry.latitude.toFixed(2)}°</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Longitude:</span>{" "}
+                                <span className="text-cyan-400">{issTelemetry.longitude.toFixed(2)}°</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Speed:</span>{" "}
+                                <span className="text-cyan-400">{issTelemetry.speedKmS.toFixed(2)} km/s</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Lighting:</span>{" "}
+                                <span className={issTelemetry.lightingState === "SUNLIGHT" ? "text-yellow-400" : "text-gray-400"}>
+                                    {issTelemetry.lightingState}
+                                </span>
+                            </p>
+                        </>
+                    ) : (
+                        /* Static distance for other objects */
+                        selected.distanceFromEarth && (
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Distance:</span>{" "}
+                                {selected.distanceFromEarth}
+                            </p>
+                        )
                     )}
 
                     <p className="text-sm text-white/75 leading-relaxed wrap-break-words">
