@@ -255,14 +255,14 @@ export default function SpaceCanvas() {
             <Sun />
 
             {/* 🌍 Earth–Moon System */}
-            <Earth />
+            <Earth>
+                {/* 🛰️ ISS Ground Track (projected on Earth surface) - Earth-fixed coordinate space */}
+                <ISSGroundTrack />
+            </Earth>
             <Moon />
 
             {/* 🚀 ISS (International Space Station) */}
             <ISS />
-
-            {/* 🛰️ ISS Ground Track (projected on Earth surface) */}
-            <ISSGroundTrack />
 
             {/* 🎮 Orbit Controls (CONNECTED) */}
             <OrbitControls

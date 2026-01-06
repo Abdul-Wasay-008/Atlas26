@@ -5,7 +5,6 @@ import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { timeManager } from "@/app/core/TimeManager";
 import { getISSPosition } from "@/app/astronomy/issOrbit";
-import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
 import { eciToLatLong, latLongToSurfacePosition } from "@/app/astronomy/coordinateUtils";
 
 /**
@@ -138,11 +137,9 @@ export default function ISSGroundTrack() {
         const currentTime = currentDate.getTime();
         const currentSpeed = timeManager.getSpeedMultiplier();
 
-        // Position the ground track at Earth's location
-        if (groupRef.current) {
-            const earthPosition = getEarthOrbitPosition(currentDate);
-            groupRef.current.position.copy(earthPosition);
-        }
+        // Ground track does NOT rotate manually - it inherits Earth's rotation
+        // from the parent groupRef in Earth.tsx. This ensures perfect alignment
+        // with Earth's surface and the ISS position.
 
         // Check if we need to recompute
         const timeDelta = Math.abs(currentTime - lastComputedTimeRef.current);
@@ -188,23 +185,23 @@ export default function ISSGroundTrack() {
     });
 
     return (
-        <group ref={groupRef}>
-            {/* Past track (cyan) */}
+        <group ref={groupRef} position={[0, 0, 0]}>
+            {/* Past track (cyan) - Earth-fixed coordinates, inherits Earth's rotation */}
             <line ref={pastLineRef}>
                 <bufferGeometry ref={pastGeometryRef} attach="geometry" />
                 <lineBasicMaterial
                     color={PAST_TRACK_COLOR}
-                    depthTest={false}
+                    depthTest={true}
                     depthWrite={false}
                 />
             </line>
 
-            {/* Future track (magenta) */}
+            {/* Future track (magenta) - Earth-fixed coordinates, inherits Earth's rotation */}
             <line ref={futureLineRef}>
                 <bufferGeometry ref={futureGeometryRef} attach="geometry" />
                 <lineBasicMaterial
                     color={FUTURE_TRACK_COLOR}
-                    depthTest={false}
+                    depthTest={true}
                     depthWrite={false}
                 />
             </line>

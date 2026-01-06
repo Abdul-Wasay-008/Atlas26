@@ -131,7 +131,7 @@
 "use client";
 
 import * as THREE from "three";
-import { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { timeManager } from "@/app/core/TimeManager";
@@ -143,7 +143,7 @@ import {
     EARTH_AXIAL_TILT_RADIANS,
 } from "@/app/astronomy/earthOrbit";
 
-export default function Earth() {
+export default function Earth({ children }: { children?: React.ReactNode }) {
     const earthRef = useRef<THREE.Mesh>(null);
     const cloudsRef = useRef<THREE.Mesh>(null);
     const groupRef = useRef<THREE.Group>(null);
@@ -220,11 +220,12 @@ export default function Earth() {
         }
 
         // 🌍 Earth rotation (24-hour day, absolute time-based)
-        if (earthRef.current) {
-            earthRef.current.rotation.y = (t / EARTH_DAY) * Math.PI * 2;
+        // Apply rotation to groupRef so both Earth mesh and ground track rotate together
+        if (groupRef.current) {
+            groupRef.current.rotation.y = (t / EARTH_DAY) * Math.PI * 2;
         }
 
-        // ☁️ Clouds rotate slightly faster
+        // ☁️ Clouds rotate slightly faster (relative to Earth)
         if (cloudsRef.current) {
             cloudsRef.current.rotation.y = (t / (EARTH_DAY * 0.9)) * Math.PI * 2;
         }
@@ -295,6 +296,9 @@ export default function Earth() {
                 <sphereGeometry args={[0.8, 128, 128]} />
                         <primitive object={dayNightMaterial} attach="material" />
             </mesh>
+
+            {/* Children (e.g., ISS Ground Track) - Earth-fixed coordinate space, rotates with Earth */}
+            {children}
 
                 </group>
             </group>
