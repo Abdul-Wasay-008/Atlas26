@@ -117,7 +117,6 @@ import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
 import Moon from "../3d/Moon";
 import ISS from "../3d/ISS";
-import ISSGroundTrack from "../3d/ISSGroundTrack";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -255,10 +254,7 @@ export default function SpaceCanvas() {
             <Sun />
 
             {/* 🌍 Earth–Moon System */}
-            <Earth>
-                {/* 🛰️ ISS Ground Track (projected on Earth surface) - Earth-fixed coordinate space */}
-                <ISSGroundTrack />
-            </Earth>
+            <Earth />
             <Moon />
 
             {/* 🚀 ISS (International Space Station) */}
