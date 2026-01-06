@@ -147,6 +147,20 @@ export default function ISS() {
             }
         }
 
+        // 🎯 Smooth hover scaling (similar to Earth, Moon, Sun)
+        if (groupRef.current) {
+            // Initialize scale if not set
+            if (groupRef.current.scale.x === 1 && groupRef.current.scale.y === 1 && groupRef.current.scale.z === 1) {
+                groupRef.current.scale.set(ISS_SCALE, ISS_SCALE, ISS_SCALE);
+            }
+            
+            const targetScale = hovered ? ISS_SCALE * 1.08 : ISS_SCALE;
+            groupRef.current.scale.lerp(
+                new THREE.Vector3(targetScale, targetScale, targetScale),
+                0.12
+            );
+        }
+
         // 🌑 Apply visual dimming when eclipsed
         clonedScene.traverse((child) => {
             if (child instanceof THREE.Mesh && child.material) {
@@ -193,7 +207,6 @@ export default function ISS() {
     return (
         <group 
             ref={groupRef} 
-            scale={[ISS_SCALE, ISS_SCALE, ISS_SCALE]}
             onClick={handleClick}
             onPointerOver={() => {
                 setHovered(true);
