@@ -106,10 +106,13 @@ export function getISSPosition(date: Date): THREE.Vector3 {
     
     // Calculate distance from Earth center to verify it's above surface
     const distance = Math.sqrt(x * x + y * y + z * z);
-    const minDistance = EARTH_RADIUS_SCENE + 0.01; // Ensure at least 0.01 units above surface
+    // ISS typically orbits at ~400km altitude
+    // In scene units: 400km * (0.8 / 6371km) ≈ 0.05 units above Earth radius
+    // Add larger safety margin to ensure visual spacing (doesn't affect physics)
+    const minDistance = EARTH_RADIUS_SCENE + 0.08; // Ensure at least 0.08 units above surface (~640km visual spacing)
     
     // If somehow the ISS is too close (shouldn't happen with real TLE, but safety check),
-    // normalize to minimum distance
+    // normalize to minimum distance to prevent visual clipping
     if (distance < minDistance && distance > 0) {
         const scale = minDistance / distance;
         return new THREE.Vector3(x * scale, y * scale, z * scale);

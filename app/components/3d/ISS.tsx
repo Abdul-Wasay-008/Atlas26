@@ -6,7 +6,7 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 import { timeManager } from "@/app/core/TimeManager";
 import { getEarthOrbitPosition, getEarthToSunDirection } from "@/app/astronomy/earthOrbit";
-import { getISSWorldPosition } from "@/app/astronomy/issOrbit";
+import { getISSWorldPosition, getISSPosition } from "@/app/astronomy/issOrbit";
 import { isISSEclipsed } from "@/app/astronomy/eclipse";
 import { useSelectionStore } from "@/app/store/selectionStore";
 
@@ -125,8 +125,26 @@ export default function ISS() {
         }
 
         // Update ISS position in world coordinates
+        // Add visual offset to ensure ISS doesn't appear stuck in Earth
+        // This is purely visual and doesn't affect orbital physics calculations
         if (groupRef.current) {
-            groupRef.current.position.copy(issWorldPos);
+            const issRelativeToEarth = getISSPosition(currentDate);
+            const distanceFromEarthCenter = issRelativeToEarth.length();
+            const earthRadius = EARTH_RADIUS_SCENE;
+            
+            // Always apply a visual offset to ensure ISS is clearly above Earth's surface
+            // The ISS model geometry might extend inward, so we push it outward visually
+            if (distanceFromEarthCenter > 0) {
+                const direction = issRelativeToEarth.clone().normalize();
+                // Apply larger visual offset (~400km) to ensure clear separation
+                // This compensates for model geometry and ensures visual clarity
+                const visualOffset = direction.multiplyScalar(0.05); // ~400km visual spacing
+                // Add the Earth-relative offset to the world position
+                const adjustedPosition = new THREE.Vector3().addVectors(issWorldPos, visualOffset);
+                groupRef.current.position.copy(adjustedPosition);
+            } else {
+                groupRef.current.position.copy(issWorldPos);
+            }
         }
 
         // 🌑 Apply visual dimming when eclipsed
