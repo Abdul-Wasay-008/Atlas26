@@ -2,7 +2,7 @@
 
 
 ![Stars](https://img.shields.io/github/stars/Abdul-Wasay-008/Atlas26?style=flat-square)
-![License](https://img.shields.io/github/license/Abdul-Wasay-008/Atlas26?style=flat-square)
+![License](https://img.shields.io/github/license/Abdul-Wasay-008/Atlas26?style=flat-square&cacheSeconds=10)
 ![Last Commit](https://img.shields.io/github/last-commit/Abdul-Wasay-008/Atlas26?style=flat-square)
 
 
