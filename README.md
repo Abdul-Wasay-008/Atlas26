@@ -1,5 +1,11 @@
 <img width="1792" height="926" alt="Hero" src="https://github.com/user-attachments/assets/63fc95a3-3336-4808-8722-9c72ea136aa0" /> 
 
+
+![Stars](https://img.shields.io/github/stars/Abdul-Wasay-008/Atlas26?style=flat-square)
+![License](https://img.shields.io/github/license/Abdul-Wasay-008/Atlas26?style=flat-square)
+![Last Commit](https://img.shields.io/github/last-commit/Abdul-Wasay-008/Atlas26?style=flat-square)
+
+
 # 🌌 Atlas26  
 
 ### A Digital Window Into Our Living Cosmos
@@ -98,6 +104,52 @@ Atlas is actively evolving. Planned directions include:
 - **Build & Tooling:** Vite / Next tooling  
 - **Deployment:** Vercel  
 
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run Atlas26 locally on your machine.
+
+### 🧩 Prerequisites
+
+Make sure you have the following installed:
+
+- ✅ Node.js 18+
+- ✅ npm (comes with Node.js)
+- ✅ Git
+
+You can verify your setup by running:
+
+```bash
+node -v
+npm -v
+git --version
+```
+
+### 📦 Clone the Repository
+
+```bash
+git clone https://github.com/Abdul-Wasay-008/Atlas26.git
+cd Atlas26
+```
+
+### 📥 Install Dependencies
+
+```bash
+npm install
+```
+
+### ▶️ Run the Development Server
+
+``` bash
+npm run dev
+```
+
+Open your browser and navigate to:
+
+```bash
+http://localhost:3000
+```
 ---
 
 ## 🖼️ Preview
