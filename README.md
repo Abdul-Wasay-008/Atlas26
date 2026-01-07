@@ -1,4 +1,7 @@
+<img width="1792" height="926" alt="Hero" src="https://github.com/user-attachments/assets/63fc95a3-3336-4808-8722-9c72ea136aa0" /> 
+
 # 🌌 Atlas26  
+
 ### A Digital Window Into Our Living Cosmos
 
 Atlas26 is a real-time, interactive 3D space visualization platform designed to help humans explore, understand, and emotionally connect with the living universe.
@@ -99,7 +102,11 @@ Atlas is actively evolving. Planned directions include:
 
 ## 🖼️ Preview
 
-> _(Add screenshots and GIFs here for visual showcase)_
+<img width="1792" height="926" alt="Hero" src="https://github.com/user-attachments/assets/3666359c-ccb6-42a2-a50f-32fed7219358" />
 
-```txt
-Coming soon — screenshots and demo visuals will be added.
+<img width="1792" height="926" alt="Dash3" src="https://github.com/user-attachments/assets/e84de34c-9443-4d3e-a5aa-7891ae4d87c8" />
+
+<img width="1792" height="926" alt="Dash2" src="https://github.com/user-attachments/assets/7f6b493a-b364-463e-b5dc-15431e0a25de" />
+
+<img width="1792" height="926" alt="Dash1" src="https://github.com/user-attachments/assets/650eb066-c697-405a-8ea7-d55974f3a342" />
+
