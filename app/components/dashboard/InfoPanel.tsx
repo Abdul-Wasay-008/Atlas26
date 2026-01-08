@@ -92,13 +92,6 @@ export default function InfoPanel() {
                                 <span className="font-semibold text-white">Speed:</span>{" "}
                                 <span className="text-cyan-400">{issTelemetry.speedKmS.toFixed(2)} km/s</span>
                             </p>
-
-                            <p className="text-sm">
-                                <span className="font-semibold text-white">Lighting:</span>{" "}
-                                <span className={issTelemetry.lightingState === "SUNLIGHT" ? "text-yellow-400" : "text-gray-400"}>
-                                    {issTelemetry.lightingState}
-                                </span>
-                            </p>
                         </>
                     ) : (
                         /* Static distance for other objects */
