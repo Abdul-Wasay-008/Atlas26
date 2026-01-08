@@ -178,13 +178,16 @@ export default function Moon() {
         if (moonRef.current && moonPhaseMaterial) {
             const sunPosition = new THREE.Vector3(0, 0, 0); // Sun is at origin
 
-            // Calculate direction from Moon to Sun (for lighting calculation)
-            const sunDirection = new THREE.Vector3()
+            // Calculate direction from Moon to Sun
+            const moonToSunDir = new THREE.Vector3()
                 .subVectors(sunPosition, moonWorldPos)
                 .normalize();
+            
+            // Shader expects direction FROM Sun TO Moon (direction light is coming from)
+            const sunToMoonDir = moonToSunDir.clone().negate();
 
             // Update shader uniform for Moon phase calculation
-            moonPhaseMaterial.uniforms.uSunDirection.value.copy(sunDirection);
+            moonPhaseMaterial.uniforms.uSunDirection.value.copy(sunToMoonDir);
         }
 
         // 🔍 Debug logging (dev mode only, throttled)

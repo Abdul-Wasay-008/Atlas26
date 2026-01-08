@@ -58,11 +58,12 @@ export function createMoonPhaseMaterial({
                 vec4 moonColor = texture2D(uMoonTexture, uv);
                 
                 // Calculate angle between surface normal and Sun direction
+                // uSunDirection should point FROM Sun TO Moon (direction light is coming from)
                 // vWorldNormal is the world-space normal (accounts for all transformations)
                 float dotProduct = dot(vWorldNormal, normalize(uSunDirection));
                 
                 // Only show Moon texture where it's lit by the Sun
-                // dotProduct > 0 means facing Sun, dotProduct < 0 means facing away
+                // dotProduct > 0 means facing Sun (lit), dotProduct < 0 means facing away (dark)
                 // Use smoothstep for a slightly soft edge (more physically accurate)
                 float lightFactor = smoothstep(-uTerminatorSharpness, uTerminatorSharpness, dotProduct);
                 

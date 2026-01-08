@@ -242,8 +242,12 @@ export default function Earth({ children }: { children?: React.ReactNode }) {
         // 🌅 Update day/night terminator based on Sun position
         // Sun direction changes as Earth orbits, creating seasonal lighting
         if (earthRef.current && dayNightMaterial) {
-            const sunDirection = getEarthToSunDirection(currentDate, ORBIT_RADIUS);
-            dayNightMaterial.uniforms.uSunDirection.value.copy(sunDirection);
+            // getEarthToSunDirection returns vector FROM Earth TO Sun
+            // But for lighting calculations, shader expects direction FROM Sun TO Earth
+            // (direction the light is coming from)
+            const earthToSunDir = getEarthToSunDirection(currentDate, ORBIT_RADIUS);
+            const sunToEarthDir = earthToSunDir.clone().negate(); // Flip for lighting
+            dayNightMaterial.uniforms.uSunDirection.value.copy(sunToEarthDir);
         }
 
         // 🔍 Debug logging (dev mode only, throttled)

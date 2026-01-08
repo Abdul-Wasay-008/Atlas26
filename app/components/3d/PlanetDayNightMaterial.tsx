@@ -93,10 +93,13 @@ export function createPlanetDayNightMaterial({
                 vec4 nightColor = texture2D(uNightTexture, uv);
                 
                 // Calculate the angle between surface normal and Sun direction
+                // uSunDirection should point FROM Sun TO Earth (direction light is coming from)
+                // When surface normal points toward Sun: dotProduct > 0 → day
+                // When surface normal points away from Sun: dotProduct < 0 → night
                 float dotProduct = dot(vWorldNormal, normalize(uSunDirection));
                 
                 // Smooth transition between day and night
-                // dotProduct = 1 means facing Sun, -1 means facing away
+                // dotProduct = 1 means facing Sun (bright), -1 means facing away (dark)
                 float dayFactor = smoothstep(-uTerminatorSmoothness, uTerminatorSmoothness, dotProduct);
                 
                 // Blend between day and night textures

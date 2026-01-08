@@ -34,13 +34,14 @@ export default function SunLight() {
         // Get Earth's position around Sun
         const earthPosition = getEarthOrbitPosition(currentDate, EARTH_ORBIT_RADIUS);
 
-        // Get Sun direction (Earth → Sun, normalized)
-        const sunDirection = getEarthToSunDirection(currentDate, EARTH_ORBIT_RADIUS);
+        // Get Sun direction: FROM Earth TO Sun (in ECEF coordinates)
+        const earthToSunDir = getEarthToSunDirection(currentDate, EARTH_ORBIT_RADIUS);
 
         // For DirectionalLight, the direction is calculated as: target - position
-        // We want light coming FROM Sun TO Earth
-        // Since sunDirection points FROM Earth TO Sun, we negate it
-        const lightDirection = sunDirection.clone().negate();
+        // We want light coming FROM Sun TO Earth (direction light is coming from)
+        // Convert earthToSunDir to sunToEarthDir by negating
+        const sunToEarthDir = earthToSunDir.clone().negate();
+        const lightDirection = sunToEarthDir;
 
         // Position the light far along the direction (doesn't matter where, as long as it's far)
         // DirectionalLight direction is independent of position, but we set it for consistency

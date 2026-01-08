@@ -249,10 +249,15 @@ function getSunPositionECI(
  * which accounts for Earth's rotation. This ensures that the Sun direction is correct
  * relative to Earth's surface at the given UTC time.
  * 
+ * IMPORTANT DIRECTION CONVENTION:
+ * - This function returns: earthToSunDir = normalized vector FROM Earth center TO Sun
+ * - For lighting calculations (shaders, directional lights), you typically need:
+ *   sunToEarthDir = -earthToSunDir (direction FROM Sun TO Earth, i.e., direction light is coming from)
+ * 
  * The Sun direction in ECEF is used for:
- * - Earth day/night lighting
- * - ISS shadow detection
- * - All lighting calculations that need to match real-world orientation
+ * - ISS shadow detection (uses earthToSunDir directly)
+ * - Earth day/night lighting (needs sunToEarthDir = -earthToSunDir)
+ * - Directional light positioning (needs sunToEarthDir = -earthToSunDir)
  * 
  * @param date UTC date
  * @param orbitRadius Distance from Sun (in scene units, default 4.5)

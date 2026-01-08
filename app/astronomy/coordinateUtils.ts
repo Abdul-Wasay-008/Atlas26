@@ -153,8 +153,18 @@ export function ecefToLatLong(
 /**
  * Convert latitude and longitude to Earth surface position (3D coordinates)
  * 
- * @param latitude Latitude in radians
- * @param longitude Longitude in radians
+ * IMPORTANT COORDINATE CONVENTION:
+ * - Scene X axis: Points toward Greenwich meridian (0° longitude) at reference time
+ * - Scene Y axis: Points toward north pole
+ * - Scene Z axis: Points toward 90°E meridian at reference time
+ * - Longitude: Positive = east, Negative = west (standard convention)
+ * - Latitude: Positive = north, Negative = south (standard convention)
+ * 
+ * This function converts geographic coordinates to scene coordinates that match
+ * the ECEF coordinate system used by getISSPosition().
+ * 
+ * @param latitude Latitude in radians (positive = north, negative = south)
+ * @param longitude Longitude in radians (positive = east, negative = west)
  * @param altitudeOffset Small offset above Earth surface to avoid z-fighting (in scene units)
  * @returns 3D position on Earth surface (relative to Earth center, in scene units)
  */
@@ -166,14 +176,15 @@ export function latLongToSurfacePosition(
     const radius = EARTH_RADIUS_SCENE + altitudeOffset;
     
     // Convert spherical coordinates to Cartesian
-    // X: east (right)
-    // Y: up (north pole)
-    // Z: forward
+    // Scene coordinate system:
+    // - X: Points toward Greenwich meridian (0° longitude)
+    // - Y: Points toward north pole
+    // - Z: Points toward 90°E meridian
     // 
-    // Standard spherical to Cartesian:
-    // x = r * cos(lat) * cos(lon)
-    // y = r * sin(lat)  (north pole is up)
-    // z = r * cos(lat) * sin(lon)
+    // Standard spherical to Cartesian mapping:
+    // x = r * cos(lat) * cos(lon)  (component along Greenwich axis)
+    // y = r * sin(lat)             (component along north pole axis)
+    // z = r * cos(lat) * sin(lon)  (component along 90°E axis)
     
     const cosLat = Math.cos(latitude);
     const sinLat = Math.sin(latitude);

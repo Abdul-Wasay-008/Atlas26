@@ -101,9 +101,41 @@ export function getISSPosition(date: Date): THREE.Vector3 {
     
     // Create ECEF position vector in scene coordinates
     // satellite.js ECEF: X toward Greenwich, Y toward 90°E, Z toward north pole
-    // Atlas26 scene: X is right, Y is up (north pole), Z is forward
+    // Atlas26 scene: X is right (Greenwich at reference), Y is up (north pole), Z is forward (90°E at reference)
     // Mapping: ECEF (X, Y, Z) -> Scene (X, Z, Y)
-    const ecefPosition = new THREE.Vector3(ecefX, ecefZ, ecefY);
+    // 
+    // IMPORTANT: This mapping aligns with the Earth texture where:
+    // - Scene X = Greenwich meridian (0° longitude)
+    // - Scene Y = North pole
+    // - Scene Z = 90°E meridian
+    //
+    // Apply longitude offset to align with Earth texture orientation
+    // Many Earth textures have the prime meridian (0° longitude) at a different position
+    // relative to the mesh axes. This offset rotates the ECEF coordinates to match the texture.
+    // 
+    // After mapping ECEF (X, Y, Z) -> Scene (X, Z, Y):
+    // - Scene X = ECEF X (points toward Greenwich at reference time)
+    // - Scene Y = ECEF Z (points toward north pole)
+    // - Scene Z = ECEF Y (points toward 90°E at reference time)
+    //
+    // To align with texture, we rotate around Y-axis (north pole) in the XZ plane.
+    // Adjust this offset if ISS visual placement doesn't match geographic reality.
+    // Common values: 0 (no offset), -π/2 (-90°), π/2 (+90°), π (180°)
+    const LONGITUDE_OFFSET = -Math.PI / 2; // Rotate -90° to align with typical Earth texture
+    
+    // Rotate ECEF coordinates around Y-axis (north pole) by longitude offset
+    // This rotates in the equatorial plane (XZ plane in scene coordinates)
+    const cosOffset = Math.cos(LONGITUDE_OFFSET);
+    const sinOffset = Math.sin(LONGITUDE_OFFSET);
+    
+    // After mapping: Scene (X, Y, Z) = ECEF (X, Z, Y)
+    // So scene X = ecefX, scene Y = ecefZ, scene Z = ecefY
+    // Rotate scene X and scene Z around scene Y (north pole):
+    const rotatedX = ecefX * cosOffset - ecefY * sinOffset; // Rotated scene X
+    const rotatedZ = ecefX * sinOffset + ecefY * cosOffset; // Rotated scene Z
+    const rotatedY = ecefZ; // Scene Y (north pole, unchanged)
+    
+    const ecefPosition = new THREE.Vector3(rotatedX, rotatedY, rotatedZ);
     
     // Calculate distance from Earth center to verify it's above surface
     const distance = ecefPosition.length();
