@@ -135,13 +135,12 @@ import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { timeManager } from "@/app/core/TimeManager";
-import { cameraController } from "@/app/core/cameraController";
-import { createPlanetDayNightMaterial } from "./PlanetDayNightMaterial";
 import {
     getEarthOrbitPosition,
     getEarthToSunDirection,
     EARTH_AXIAL_TILT_RADIANS,
 } from "@/app/astronomy/earthOrbit";
+import { createPlanetDayNightMaterial } from "./PlanetDayNightMaterial";
 
 export default function Earth({ children }: { children?: React.ReactNode }) {
     const earthRef = useRef<THREE.Mesh>(null);
@@ -178,6 +177,28 @@ export default function Earth({ children }: { children?: React.ReactNode }) {
             "/textures/earth_nightmap.jpg",
         ]
     );
+
+    // Configure texture color spaces
+    useEffect(() => {
+        // Color textures should use sRGB color space
+        colorMap.colorSpace = THREE.SRGBColorSpace;
+        nightMap.colorSpace = THREE.SRGBColorSpace;
+        cloudsMap.colorSpace = THREE.SRGBColorSpace;
+        
+        // Normal and specular maps are linear (no color space conversion needed)
+        normalMap.minFilter = THREE.LinearMipmapLinearFilter;
+        normalMap.magFilter = THREE.LinearFilter;
+        specularMap.minFilter = THREE.LinearMipmapLinearFilter;
+        specularMap.magFilter = THREE.LinearFilter;
+        
+        // Enable mipmaps and set filtering for color textures
+        colorMap.minFilter = THREE.LinearMipmapLinearFilter;
+        colorMap.magFilter = THREE.LinearFilter;
+        nightMap.minFilter = THREE.LinearMipmapLinearFilter;
+        nightMap.magFilter = THREE.LinearFilter;
+        cloudsMap.minFilter = THREE.LinearMipmapLinearFilter;
+        cloudsMap.magFilter = THREE.LinearFilter;
+    }, [colorMap, normalMap, specularMap, cloudsMap, nightMap]);
 
     // 🌍 Create day/night terminator material
     const dayNightMaterial = useMemo(
@@ -240,14 +261,23 @@ export default function Earth({ children }: { children?: React.ReactNode }) {
         }
 
         // 🌅 Update day/night terminator based on Sun position
-        // Sun direction changes as Earth orbits, creating seasonal lighting
+        // Pass Earth → Sun direction in WORLD space to shader
         if (earthRef.current && dayNightMaterial) {
-            // getEarthToSunDirection returns vector FROM Earth TO Sun
-            // But for lighting calculations, shader expects direction FROM Sun TO Earth
-            // (direction the light is coming from)
-            const earthToSunDir = getEarthToSunDirection(currentDate, ORBIT_RADIUS);
-            const sunToEarthDir = earthToSunDir.clone().negate(); // Flip for lighting
-            dayNightMaterial.uniforms.uSunDirection.value.copy(sunToEarthDir);
+            // Sun is at world origin [0, 0, 0]
+            const sunWorldPos = new THREE.Vector3(0, 0, 0);
+            
+            // Get Earth's world position (accounting for all transforms: orbit, tilt, rotation)
+            earthRef.current.updateMatrixWorld();
+            const earthWorldPos = new THREE.Vector3();
+            earthRef.current.getWorldPosition(earthWorldPos);
+            
+            // Compute Earth → Sun direction in WORLD space
+            const earthToSunDir = new THREE.Vector3()
+                .subVectors(sunWorldPos, earthWorldPos)
+                .normalize();
+            
+            // Pass Earth → Sun direction in WORLD space
+            dayNightMaterial.uniforms.uSunDirection.value.copy(earthToSunDir);
         }
 
         // 🔍 Debug logging (dev mode only, throttled)
@@ -298,7 +328,7 @@ export default function Earth({ children }: { children?: React.ReactNode }) {
                 }}
             >
                 <sphereGeometry args={[0.8, 128, 128]} />
-                        <primitive object={dayNightMaterial} attach="material" />
+                <primitive object={dayNightMaterial} attach="material" />
             </mesh>
 
             {/* Children (e.g., ISS Ground Track) - Earth-fixed coordinate space, rotates with Earth */}
