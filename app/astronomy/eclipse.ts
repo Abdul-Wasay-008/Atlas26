@@ -38,18 +38,48 @@ export interface EclipseParams {
 export function isISSEclipsed(params: EclipseParams): boolean {
     const { earthPosition, issPosition, sunDirection, earthRadius } = params;
     
-    // Sun is at origin (0, 0, 0) in world coordinates
-    const sunPosition = new THREE.Vector3(0, 0, 0);
+    // sunDirection is in ECEF coordinates (relative to Earth center)
+    // It points from Earth center toward Sun
+    // We need to convert this to world coordinates for the ray-sphere intersection
+    
+    // Sun position in world coordinates = Earth position + (Sun direction * large distance)
+    // For ray-sphere intersection, we only need the direction, not the exact position
+    // The Sun direction in world coordinates is the same as in ECEF (since it's a direction vector)
+    // But we need to make sure it's relative to the ISS position, not Earth center
     
     // Ray from ISS toward Sun
-    // Ray origin = ISS position
+    // Ray origin = ISS position (in world coordinates)
     const rayOrigin = issPosition.clone();
     
-    // Ray direction = normalize(Sun position - ISS position)
-    // Since Sun is at origin, this is simply -issPosition normalized
-    const rayDirection = new THREE.Vector3()
-        .subVectors(sunPosition, issPosition)
-        .normalize();
+    // Ray direction: from ISS toward Sun
+    // sunDirection points from Earth center toward Sun (in ECEF/world coordinates)
+    // To get direction from ISS to Sun, we can use sunDirection directly
+    // (since both are in the same coordinate system after accounting for Earth's position)
+    // Actually, we need to calculate: direction = normalize(Sun position - ISS position)
+    // Sun position in world = Earth position + sunDirection * largeDistance
+    // But for direction, we can use sunDirection directly since it's already normalized
+    
+    // However, we need to account for the fact that sunDirection is relative to Earth center
+    // In world coordinates, the Sun direction from Earth center is sunDirection
+    // The Sun position in world coordinates would be: earthPosition + sunDirection * sunDistance
+    // But we don't know the exact Sun distance, and we don't need it for the direction
+    
+    // For the ray direction, we want: normalize(SunWorldPos - issPosition)
+    // SunWorldPos ≈ earthPosition + sunDirection * (very large distance)
+    // So: rayDirection ≈ normalize((earthPosition + sunDirection * largeDist) - issPosition)
+    //    ≈ normalize(earthPosition - issPosition + sunDirection * largeDist)
+    // For large distances, this approximates to sunDirection
+    
+    // More accurately, we calculate the actual direction:
+    // Vector from Earth center to Sun (in world coords) = sunDirection (normalized, but we need to scale it)
+    // Actually, sunDirection is already normalized and points from Earth center toward Sun
+    // So Sun position in world = earthPosition + sunDirection * (some large distance)
+    // Direction from ISS to Sun = normalize(SunWorldPos - issPosition)
+    
+    // For simplicity and accuracy, we'll use the Sun direction directly
+    // This works because the Sun is very far away, so the direction from ISS to Sun
+    // is approximately the same as the direction from Earth center to Sun
+    const rayDirection = sunDirection.clone().normalize();
     
     // Earth sphere: center = earthPosition, radius = earthRadius
     const sphereCenter = earthPosition.clone();
@@ -105,14 +135,17 @@ export function isISSEclipsed(params: EclipseParams): boolean {
         return distanceFromEarthCenter < sphereRadius;
     }
     
-    // Calculate distance from ISS to Sun
-    const distanceToSun = issPosition.length();
+    // Calculate approximate distance from ISS to Sun
+    // Since Sun is very far away, we use a large distance value
+    // The exact distance doesn't matter for the intersection test,
+    // we just need to check if the intersection occurs before reaching the Sun
+    const APPROX_SUN_DISTANCE = 1000.0; // Large distance in scene units (Sun is far away)
     
-    // If intersection distance (t) is less than distance to Sun,
+    // If intersection distance (t) is less than approximate distance to Sun,
     // then Earth blocks the Sun → ISS is in shadow
     // We also need to ensure the intersection is in front of ISS (t > 0, already checked)
     // Add a small epsilon to handle floating-point precision issues
     const EPSILON = 1e-6;
-    return t < distanceToSun - EPSILON;
+    return t < APPROX_SUN_DISTANCE - EPSILON;
 }
 

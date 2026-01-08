@@ -8,6 +8,7 @@
  */
 
 import * as THREE from "three";
+import { getGreenwichSiderealTime } from "./siderealTime";
 
 /**
  * Convert JavaScript Date to Julian Date
@@ -132,19 +133,165 @@ export function getSeason(date: Date): string {
 }
 
 /**
- * Get Earth-Sun vector (direction from Earth to Sun)
- * Used for calculating lighting direction
+ * Calculate the Sun's position in Earth-Centered Inertial (ECI) coordinates
+ * 
+ * In heliocentric coordinates, Sun is at origin and Earth is at earthPos.
+ * In Earth-centered ECI, Sun is at -earthPos (negated Earth position).
+ * 
+ * Coordinate system mapping:
+ * - Heliocentric: X points to vernal equinox, Y is up (north pole), Z completes right-hand
+ * - ECI: X points to vernal equinox, Y points to 90° RA, Z points to north pole
+ * - Scene: X is right, Y is up (north pole), Z is forward
  * 
  * @param date UTC date
- * @param orbitRadius Distance from Sun
- * @returns Normalized vector pointing from Earth toward Sun
+ * @param orbitRadius Distance from Sun (in scene units)
+ * @returns Sun position in ECI coordinates (relative to Earth center, in scene units)
+ */
+function getSunPositionECI(
+    date: Date,
+    orbitRadius: number = 4.5
+): THREE.Vector3 {
+    // Get Earth's position in heliocentric coordinates
+    const earthPosHelio = getEarthOrbitPosition(date, orbitRadius);
+    
+    // In heliocentric: Earth is at earthPosHelio, Sun is at (0,0,0)
+    // In Earth-centered: Sun is at -earthPosHelio
+    
+    // Heliocentric coordinates: Earth orbits in XZ plane (ecliptic)
+    // earthPosHelio = (x, 0, z) where x = cos(angle) * radius, z = sin(angle) * radius
+    
+    // ECI coordinates use the same orientation as heliocentric for X and Z
+    // But we need to account for Earth's axial tilt (23.44°) relative to ecliptic
+    // The ecliptic plane is tilted relative to the equatorial plane
+    
+    // For now, we'll use a simplified model:
+    // The Sun's position in ECI is the negated Earth position, rotated to account
+    // for the coordinate system differences
+    
+    // In heliocentric: X points to vernal equinox, Y is up, Z completes right-hand
+    // In ECI: X points to vernal equinox, Y points to 90° RA, Z points to north pole
+    // The mapping depends on the coordinate system conventions
+    
+    // For the scene coordinate system:
+    // - Heliocentric X -> ECI X (scene X)
+    // - Heliocentric Y -> ECI Z (scene Z) 
+    // - Heliocentric Z -> ECI Y (scene Y, but we need to account for tilt)
+    
+    // Actually, let's use a more direct approach:
+    // The Sun's ecliptic longitude can be calculated from the date
+    // Then convert ecliptic to equatorial coordinates
+    
+    const JD = dateToJulianDate(date);
+    const daysSinceJ2000 = JD - 2451545.0;
+    
+    // Mean anomaly of the Sun (in ecliptic plane)
+    const meanAnomaly = (daysSinceJ2000 / EARTH_ORBITAL_PERIOD_DAYS) * Math.PI * 2;
+    
+    // Sun's ecliptic longitude (approximately equal to mean anomaly for circular orbit)
+    // More accurately: L = 280.4665° + 36000.7698° * T + 0.0003032° * T^2
+    // where T is centuries since J2000.0
+    const T = daysSinceJ2000 / 36525.0;
+    const L_deg = 280.4665 + 36000.7698 * T + 0.0003032 * T * T;
+    const L_rad = (L_deg * Math.PI / 180) % (2 * Math.PI);
+    
+    // Ecliptic latitude of Sun is approximately 0 (Sun stays in ecliptic plane)
+    const beta = 0;
+    
+    // Convert ecliptic to equatorial coordinates
+    // Right Ascension (RA) and Declination (Dec)
+    const epsilon = EARTH_AXIAL_TILT_RADIANS; // Obliquity of the ecliptic
+    
+    const sinL = Math.sin(L_rad);
+    const cosL = Math.cos(L_rad);
+    const sinEpsilon = Math.sin(epsilon);
+    const cosEpsilon = Math.cos(epsilon);
+    
+    // Right Ascension
+    const RA = Math.atan2(
+        cosEpsilon * sinL,
+        cosL
+    );
+    
+    // Declination
+    const Dec = Math.asin(sinEpsilon * sinL);
+    
+    // Convert RA/Dec to Cartesian (ECI coordinates)
+    // In ECI: X points to vernal equinox (RA=0), Y points to 90° RA, Z points to north pole
+    // Scene mapping: X is right (vernal equinox), Y is up (north pole), Z is forward
+    const cosRA = Math.cos(RA);
+    const sinRA = Math.sin(RA);
+    const cosDec = Math.cos(Dec);
+    const sinDec = Math.sin(Dec);
+    
+    // ECI coordinates (unit vector, we'll scale by orbitRadius)
+    // X = cos(Dec) * cos(RA)  -> points to vernal equinox
+    // Y = cos(Dec) * sin(RA)  -> points to 90° RA
+    // Z = sin(Dec)            -> points to north pole
+    
+    // Scene coordinate mapping:
+    // ECI X -> Scene X
+    // ECI Y -> Scene Z
+    // ECI Z -> Scene Y
+    
+    const sunECI = new THREE.Vector3(
+        cosDec * cosRA * orbitRadius,  // Scene X (ECI X)
+        sinDec * orbitRadius,           // Scene Y (ECI Z, north pole)
+        cosDec * sinRA * orbitRadius   // Scene Z (ECI Y)
+    );
+    
+    return sunECI;
+}
+
+/**
+ * Get Earth-Sun vector (direction from Earth to Sun) in ECEF coordinates
+ * 
+ * This function calculates the Sun's position in Earth-Centered Earth-Fixed (ECEF) coordinates,
+ * which accounts for Earth's rotation. This ensures that the Sun direction is correct
+ * relative to Earth's surface at the given UTC time.
+ * 
+ * The Sun direction in ECEF is used for:
+ * - Earth day/night lighting
+ * - ISS shadow detection
+ * - All lighting calculations that need to match real-world orientation
+ * 
+ * @param date UTC date
+ * @param orbitRadius Distance from Sun (in scene units, default 4.5)
+ * @returns Normalized vector pointing from Earth toward Sun in ECEF coordinates
  */
 export function getEarthToSunDirection(
     date: Date,
     orbitRadius: number = 4.5
 ): THREE.Vector3 {
-    const earthPos = getEarthOrbitPosition(date, orbitRadius);
-    // Sun is at origin, so direction from Earth to Sun is -earthPos normalized
-    return new THREE.Vector3().subVectors(new THREE.Vector3(0, 0, 0), earthPos).normalize();
+    // Get Sun position in ECI (Earth-Centered Inertial) coordinates
+    const sunECI = getSunPositionECI(date, orbitRadius);
+    
+    // Convert ECI to ECEF using Greenwich Sidereal Time (GST)
+    // ECEF rotates with Earth, so we rotate ECI by GST around the north pole (Y-axis)
+    const gst = getGreenwichSiderealTime(date);
+    
+    // Rotate around Y-axis (north pole) by -GST
+    // (Earth rotates eastward, so we rotate coordinates westward)
+    const cosGST = Math.cos(-gst);
+    const sinGST = Math.sin(-gst);
+    
+    // ECEF coordinates:
+    // ecefX = eciX * cos(GST) - eciZ * sin(GST)  (in equatorial plane)
+    // ecefY = eciY                                (north pole, unchanged)
+    // ecefZ = eciX * sin(GST) + eciZ * cos(GST)  (in equatorial plane)
+    //
+    // In scene coordinates:
+    // sunECI = (x, y, z) where x=ECI X, y=ECI Z (north), z=ECI Y
+    // So: ecefX = x * cos(GST) - z * sin(GST)
+    //     ecefY = y (north pole)
+    //     ecefZ = x * sin(GST) + z * cos(GST)
+    
+    const ecefX = sunECI.x * cosGST - sunECI.z * sinGST;
+    const ecefY = sunECI.y;  // North pole component (unchanged)
+    const ecefZ = sunECI.x * sinGST + sunECI.z * cosGST;
+    
+    const sunECEF = new THREE.Vector3(ecefX, ecefY, ecefZ);
+    
+    // Return normalized direction vector
+    return sunECEF.normalize();
 }
 
