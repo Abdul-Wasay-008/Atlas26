@@ -72,7 +72,7 @@ export default function Hubble() {
     // Physically accurate scale: (0.0132 / 6371) * 0.8 ≈ 0.00000166
     // Adjusted to match ISS visual size (Hubble GLB model is larger in native scale than ISS model)
     // Reduced scale to match ISS visual appearance
-    const HUBBLE_SCALE = 0.0005;
+    const HUBBLE_SCALE = 0.0004;
 
     // 🌍 Earth's orbital radius (same as in Earth.tsx)
     const EARTH_ORBIT_RADIUS = 4.5;
