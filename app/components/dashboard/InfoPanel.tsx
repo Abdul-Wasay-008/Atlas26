@@ -20,11 +20,13 @@
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { poppins } from "@/app/fonts";
 import { useISSTelemetry } from "@/app/hooks/useISSTelemetry";
+import { useHubbleTelemetry } from "@/app/hooks/useHubbleTelemetry";
 
 export default function InfoPanel() {
     const selected = useSelectionStore((state) => state.selected);
-    // Always call hook (React rules), but only use data when ISS is selected
+    // Always call hooks (React rules), but only use data when respective satellite is selected
     const issTelemetry = useISSTelemetry();
+    const hubbleTelemetry = useHubbleTelemetry();
 
     return (
         <div
@@ -91,6 +93,28 @@ export default function InfoPanel() {
                             <p className="text-sm">
                                 <span className="font-semibold text-white">Speed:</span>{" "}
                                 <span className="text-cyan-400">{issTelemetry.speedKmS.toFixed(2)} km/s</span>
+                            </p>
+                        </>
+                    ) : selected.id === "hubble" ? (
+                        <>
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Altitude:</span>{" "}
+                                <span className="text-cyan-400">{hubbleTelemetry.altitudeKm.toFixed(1)} km</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Latitude:</span>{" "}
+                                <span className="text-cyan-400">{hubbleTelemetry.latitude.toFixed(2)}°</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Longitude:</span>{" "}
+                                <span className="text-cyan-400">{hubbleTelemetry.longitude.toFixed(2)}°</span>
+                            </p>
+
+                            <p className="text-sm">
+                                <span className="font-semibold text-white">Speed:</span>{" "}
+                                <span className="text-cyan-400">{hubbleTelemetry.speedKmS.toFixed(2)} km/s</span>
                             </p>
                         </>
                     ) : (

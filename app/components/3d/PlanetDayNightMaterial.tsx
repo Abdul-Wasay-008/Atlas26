@@ -82,9 +82,12 @@ export function createPlanetDayNightMaterial({
                 float dayMask = smoothstep(-terminatorWidth, terminatorWidth, ndotl);
                 float nightMask = 1.0 - dayMask;
                 
-                // Lighting: ambient + diffuse
+                // Sun-aware ambient: fades out on night side to eliminate artificial glow
+                float ambient = mix(0.02, 0.10, dayMask);
                 float diffuse = max(ndotl, 0.0);
-                vec3 litDay = dayTex * (0.08 + diffuse);  // ambient + diffuse (reduced ambient for darker nights)
+                
+                // Lighting: sun-aware ambient + diffuse
+                vec3 litDay = dayTex * (ambient + diffuse);
                 
                 // City lights: boost night texture intensity and contrast
                 vec3 city = nightTex * 2.5;
