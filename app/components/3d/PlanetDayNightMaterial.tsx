@@ -75,26 +75,25 @@ export function createPlanetDayNightMaterial({
                 // Lambert lighting: dot product between normal and Sun direction
                 float ndotl = dot(N, L);
                 
-                // Stable terminator mask
-                float terminatorWidth = 0.05;
+                // Clamp ndotl strictly to prevent negative values from affecting lighting
+                float lit = clamp(ndotl, 0.0, 1.0);
                 
-                // day = 1, night = 0
-                float dayMask = smoothstep(-terminatorWidth, terminatorWidth, ndotl);
+                // Stable terminator mask - strictly driven by lit (starting from 0.0)
+                float terminatorWidth = 0.04;
+                float dayMask = smoothstep(0.0, terminatorWidth, lit);
                 float nightMask = 1.0 - dayMask;
                 
-                // Sun-aware ambient: fades out on night side to eliminate artificial glow
-                float ambient = mix(0.02, 0.10, dayMask);
-                float diffuse = max(ndotl, 0.0);
+                // Lighting: ambient + diffuse, but ONLY applied within dayMask
+                // This prevents any ambient light from leaking onto the night side
+                vec3 litDay = dayTex * (0.12 + lit * 1.0);
+                litDay *= dayMask;  // Strictly zero on night side
                 
-                // Lighting: sun-aware ambient + diffuse
-                vec3 litDay = dayTex * (ambient + diffuse);
+                // City lights: isolated to night side only
+                vec3 city = nightTex * 1.4;
+                city *= nightMask;  // Strictly zero on day side
                 
-                // City lights: boost night texture intensity and contrast
-                vec3 city = nightTex * 2.5;
-                city = pow(city, vec3(0.7));  // Increase contrast - boosts highlights without blowing blacks
-                
-                // Final blend: day mask shows lit day, night mask shows city lights
-                vec3 finalColor = litDay * dayMask + city * nightMask;
+                // Final blend: strictly separated (additive, no mixing)
+                vec3 finalColor = litDay + city;
                 
                 gl_FragColor = vec4(finalColor, 1.0);
             }
