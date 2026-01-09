@@ -44,5 +44,14 @@ export const spaceObjects: SpaceObjectData[] = [
         orbitalPeriod: "~93 minutes",
         description: "The International Space Station (ISS) is a modular space station in low Earth orbit. It serves as a microgravity and space environment research laboratory.",
         distanceFromEarth: "~400 km"
+    },
+    {
+        id: "hubble",
+        name: "Hubble Space Telescope",
+        type: "satellite",
+        radius: "~13.2 m",
+        orbitalPeriod: "~96 minutes",
+        description: "The Hubble Space Telescope is a space telescope that has been observing the universe from low Earth orbit since 1990. It has revolutionized astronomy with its high-resolution images.",
+        distanceFromEarth: "~547 km"
     }
 ];

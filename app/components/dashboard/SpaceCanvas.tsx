@@ -117,6 +117,7 @@ import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
 import Moon from "../3d/Moon";
 import ISS from "../3d/ISS";
+import Hubble from "../3d/Hubble";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -259,6 +260,9 @@ export default function SpaceCanvas() {
 
             {/* 🚀 ISS (International Space Station) */}
             <ISS />
+
+            {/* 🔭 Hubble Space Telescope */}
+            <Hubble />
 
             {/* 🎮 Orbit Controls (CONNECTED) */}
             <OrbitControls
