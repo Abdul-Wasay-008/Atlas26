@@ -76,7 +76,7 @@ export default function CameraSnapHandler() {
                 
                 // Trigger camera snap - startSnap will check if user is interacting
                 cameraController.startSnap(
-                    selectedId as "sun" | "earth" | "moon",
+                    selectedId as "sun" | "earth" | "moon" | "iss" | "hubble",
                     worldPos
                 );
             } else {
@@ -95,7 +95,7 @@ export default function CameraSnapHandler() {
                         const worldPos = new THREE.Vector3();
                         retryObject.getWorldPosition(worldPos);
                         cameraController.startSnap(
-                            selectedId as "earth" | "moon",
+                            selectedId as "sun" | "earth" | "moon" | "iss" | "hubble",
                             worldPos
                         );
                     }

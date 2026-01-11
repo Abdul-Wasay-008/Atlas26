@@ -3,11 +3,16 @@
 import { useState } from "react"
 import { orbitron, poppins } from "@/app/fonts"
 import { FaBars, FaTimes } from "react-icons/fa"
-import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon } from "lucide-react"
+import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon, ChevronDown, ChevronRight } from "lucide-react"
+import { useSelectionStore } from "@/app/store/selectionStore"
+import { spaceObjects } from "@/app/data/spaceObjects"
 
 export default function Sidebar() {
     const [open, setOpen] = useState(false)
     const [active, setActive] = useState("Planets")
+    const [satellitesExpanded, setSatellitesExpanded] = useState(false)
+    const selectObject = useSelectionStore((state) => state.selectObject)
+    const selectedId = useSelectionStore((state) => state.selectedId)
 
     const menu = [
         { name: "All", icon: LoaderPinwheelIcon },
@@ -17,38 +22,86 @@ export default function Sidebar() {
         { name: "Interstellar", icon: Stars },
     ]
 
+    // Get satellites for the expandable list
+    const satellites = spaceObjects.filter(obj => obj.type === "satellite" && obj.id !== "moon")
+    
+    const handleSatelliteClick = (satelliteId: string) => {
+        selectObject(satelliteId)
+        setActive("Satellites")
+    }
+
     const renderMenu = () => (
         <div className="space-y-3 text-sm md:text-base text-white/60">
-            {menu.map(({ name, icon: Icon }) => (
-                <button
-                    key={name}
-                    onClick={() => setActive(name)}
-                    className={`
-                        group flex items-center gap-3 w-full px-3 py-2
-                        rounded-lg font-medium transition-all duration-300 cursor-pointer
-                        ${poppins.className}
-                        ${active === name
-                            ? "text-white bg-white/10 backdrop-blur-lg border border-white/20 shadow-[0_0_18px_rgba(255,255,255,0.06)]"
-                            : "hover:text-white hover:bg-white/5 hover:border-white/10 border border-transparent"
-                        }
-                    `}
-                >
-                    <Icon
-                        size={20}
-                        strokeWidth={1.5}
-                        className={`
-                            transition-all duration-300
-                            ${active === name
-                                ? "text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.45)]"
-                                : "group-hover:text-white"
-                            }
-                        `}
-                    />
-                    <span>
-                        {name}
-                    </span>
-                </button>
-            ))}
+            {menu.map(({ name, icon: Icon }) => {
+                const isSatellites = name === "Satellites"
+                const isActive = active === name
+                
+                return (
+                    <div key={name}>
+                        <button
+                            onClick={() => {
+                                setActive(name)
+                                if (isSatellites) {
+                                    setSatellitesExpanded(!satellitesExpanded)
+                                }
+                            }}
+                            className={`
+                                group flex items-center gap-3 w-full px-3 py-2
+                                rounded-lg font-medium transition-all duration-300 cursor-pointer
+                                ${poppins.className}
+                                ${isActive
+                                    ? "text-white bg-white/10 backdrop-blur-lg border border-white/20 shadow-[0_0_18px_rgba(255,255,255,0.06)]"
+                                    : "hover:text-white hover:bg-white/5 hover:border-white/10 border border-transparent"
+                                }
+                            `}
+                        >
+                            <Icon
+                                size={20}
+                                strokeWidth={1.5}
+                                className={`
+                                    transition-all duration-300
+                                    ${isActive
+                                        ? "text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.45)]"
+                                        : "group-hover:text-white"
+                                    }
+                                `}
+                            />
+                            <span className="flex-1 text-left">
+                                {name}
+                            </span>
+                            {isSatellites && (
+                                satellitesExpanded ? (
+                                    <ChevronDown size={16} className="text-white/60" />
+                                ) : (
+                                    <ChevronRight size={16} className="text-white/60" />
+                                )
+                            )}
+                        </button>
+                        
+                        {/* Expandable satellite list */}
+                        {isSatellites && satellitesExpanded && (
+                            <div className="ml-8 mt-1 space-y-1">
+                                {satellites.map((satellite) => (
+                                    <button
+                                        key={satellite.id}
+                                        onClick={() => handleSatelliteClick(satellite.id)}
+                                        className={`
+                                            w-full px-3 py-1.5 text-left rounded-md
+                                            transition-all duration-200 text-sm
+                                            ${selectedId === satellite.id
+                                                ? "text-cyan-400 bg-cyan-400/10 border border-cyan-400/30"
+                                                : "text-white/70 hover:text-white hover:bg-white/5"
+                                            }
+                                        `}
+                                    >
+                                        {satellite.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                )
+            })}
         </div>
     )
 

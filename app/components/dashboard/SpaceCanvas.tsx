@@ -112,6 +112,7 @@ import { useEffect, useRef, useState } from "react";
 
 import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
+import KeyboardShortcuts from "./KeyboardShortcuts";
 import Sun from "../3d/Sun";
 import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
@@ -235,7 +236,9 @@ export default function SpaceCanvas() {
     }, []);
 
     return (
-        <Canvas camera={{ position: cameraPos, fov }} gl={{ antialias: true }}>
+        <>
+            <KeyboardShortcuts />
+            <Canvas camera={{ position: cameraPos, fov }} gl={{ antialias: true }}>
             {/* ⏱ Global Simulation Clock */}
             <TimeTicker />
 
@@ -274,5 +277,6 @@ export default function SpaceCanvas() {
                 zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1}
             />
         </Canvas>
+        </>
     );
 }

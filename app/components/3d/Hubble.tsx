@@ -2,13 +2,14 @@
 
 import { useRef, useMemo, useState, useCallback } from "react";
 import { useFrame } from "@react-three/fiber";
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { timeManager } from "@/app/core/TimeManager";
 import { getEarthOrbitPosition, getEarthToSunDirection } from "@/app/astronomy/earthOrbit";
 import { getHubbleWorldPosition, getHubblePosition } from "@/app/astronomy/hubbleOrbit";
 import { isISSEclipsed } from "@/app/astronomy/eclipse";
 import { useSelectionStore } from "@/app/store/selectionStore";
+import { useHubbleTelemetry } from "@/app/hooks/useHubbleTelemetry";
 
 /**
  * Hubble Space Telescope Component
@@ -22,7 +23,10 @@ export default function Hubble() {
     const groupRef = useRef<THREE.Group>(null);
     const previousEclipsedState = useRef(false);
     const selectObject = useSelectionStore((state) => state.selectObject);
+    const selectedId = useSelectionStore((state) => state.selectedId);
     const [hovered, setHovered] = useState(false);
+    const isSelected = selectedId === "hubble";
+    const telemetry = useHubbleTelemetry();
 
     // 🔭 Load Hubble GLB model
     const { scene } = useGLTF("/models/hubble.glb");
@@ -142,21 +146,25 @@ export default function Hubble() {
             }
         }
 
-        // 🎯 Smooth hover scaling
+        // 🎯 Smooth hover and selection scaling
         if (groupRef.current) {
             // Initialize scale if not set
             if (groupRef.current.scale.x === 1 && groupRef.current.scale.y === 1 && groupRef.current.scale.z === 1) {
                 groupRef.current.scale.set(HUBBLE_SCALE, HUBBLE_SCALE, HUBBLE_SCALE);
             }
 
-            const targetScale = hovered ? HUBBLE_SCALE * 1.08 : HUBBLE_SCALE;
+            // Selection highlight: 1.05x scale, hover: 1.08x scale
+            const baseScale = HUBBLE_SCALE;
+            const selectionScale = isSelected ? baseScale * 1.05 : baseScale;
+            const targetScale = hovered ? selectionScale * 1.08 : selectionScale;
+
             groupRef.current.scale.lerp(
                 new THREE.Vector3(targetScale, targetScale, targetScale),
                 0.12
             );
         }
 
-        // 🌑 Apply visual dimming when eclipsed
+        // 🌑 Apply visual dimming when eclipsed and selection highlight
         clonedScene.traverse((child) => {
             if (child instanceof THREE.Mesh && child.material) {
                 const materials = Array.isArray(child.material)
@@ -178,12 +186,18 @@ export default function Hubble() {
                                 mat.color.copy(originalColor);
                             }
 
-                            // Reset emissive properties
+                            // Selection highlight: subtle emissive glow
                             if ('emissive' in mat && mat.emissive instanceof THREE.Color) {
-                                mat.emissive.setScalar(0);
+                                if (isSelected && !eclipsed) {
+                                    // Subtle cyan glow when selected
+                                    mat.emissive.copy(originalColor).multiplyScalar(0.15);
+                                    mat.emissive.lerp(new THREE.Color(0x00ffff), 0.3);
+                                } else {
+                                    mat.emissive.setScalar(0);
+                                }
                             }
                             if ('emissiveIntensity' in mat) {
-                                (mat as any).emissiveIntensity = 0;
+                                (mat as any).emissiveIntensity = isSelected && !eclipsed ? 0.2 : 0;
                             }
                         }
                     }
@@ -200,6 +214,7 @@ export default function Hubble() {
     return (
         <group
             ref={groupRef}
+            name="hubble"
             onClick={handleClick}
             onPointerOver={() => {
                 setHovered(true);
@@ -211,6 +226,30 @@ export default function Hubble() {
             }}
         >
             <primitive object={clonedScene} />
+            {hovered && !isSelected && (
+                <Html
+                    distanceFactor={10}
+                    position={[0, 0.1, 0]}
+                    center
+                    style={{
+                        pointerEvents: "none",
+                        userSelect: "none",
+                    }}
+                >
+                    <div
+                        className="bg-black/80 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/20 shadow-lg text-sm whitespace-nowrap"
+                        style={{
+                            fontFamily: "system-ui, -apple-system, sans-serif",
+                        }}
+                    >
+                        <div className="font-semibold text-cyan-400 mb-1">Hubble</div>
+                        <div className="text-xs text-white/80">
+                            <div>Altitude: {telemetry.altitudeKm.toFixed(1)} km</div>
+                            <div>Speed: {telemetry.speedKmS.toFixed(2)} km/s</div>
+                        </div>
+                    </div>
+                </Html>
+            )}
         </group>
     );
 }

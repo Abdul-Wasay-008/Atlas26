@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "earth" | "moon";
+type CameraTarget = "system" | "sun" | "earth" | "moon" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -17,6 +17,8 @@ class CameraController {
     sunOffset = new THREE.Vector3(0, 0, 6.5); // Increased offset to prevent Sun from being cropped
     earthOffset = new THREE.Vector3(0, 0, 3);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
+    issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
+    hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
     startSnap(target: CameraTarget, worldPos: THREE.Vector3) {
         // If snapping is disabled (user interacted), completely block all snaps
@@ -50,7 +52,9 @@ class CameraController {
             target === "sun" ? this.sunOffset :
                 target === "earth" ? this.earthOffset :
                     target === "moon" ? this.moonOffset :
-                        new THREE.Vector3();
+                        target === "iss" ? this.issOffset :
+                            target === "hubble" ? this.hubbleOffset :
+                                new THREE.Vector3();
 
         this.targetPosition.copy(worldPos).add(offset);
     }
