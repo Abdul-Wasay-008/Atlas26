@@ -271,7 +271,7 @@ export default function SpaceCanvas() {
             <OrbitControls
                 ref={controlsRef}
                 enablePan={false}
-                minDistance={4}
+                minDistance={0.1}
                 maxDistance={14}
                 rotateSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.6 : 1}
                 zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1}

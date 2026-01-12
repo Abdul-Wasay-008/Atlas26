@@ -133,13 +133,17 @@ export default function CameraRig({ controlsRef }: { controlsRef: any }) {
         camera.position.lerp(cameraController.targetPosition, easedSpeed);
 
         // Update OrbitControls target for smooth look-at
+        // This ensures the camera rotates to face the satellite during movement
         if (controlsRef?.current) {
+            // Lerp the target position (where camera looks at)
             controlsRef.current.target.lerp(
                 cameraController.lookAtPosition,
                 easedSpeed
             );
+            // Update OrbitControls to apply the changes
             controlsRef.current.update();
         } else {
+            // Fallback if OrbitControls is not available
             camera.lookAt(cameraController.lookAtPosition);
         }
     });
