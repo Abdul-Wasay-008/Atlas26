@@ -78,9 +78,6 @@ export default function CameraSnapHandler() {
                 const worldPos = new THREE.Vector3();
                 object.getWorldPosition(worldPos);
                 
-                // Debug logging
-                console.log(`[CameraSnap] Selected: ${selectedId}, Object name: ${object.name}, Position:`, worldPos);
-                
                 // For satellites, compute proper framing using bounding box
                 const isSatellite = selectedId === "iss" || selectedId === "hubble";
                 
@@ -92,15 +89,24 @@ export default function CameraSnapHandler() {
                     
                     if (selectedId === "hubble") {
                         // Hubble is very small (scale ~0.0004)
-                        distance = 0.5;
+                        // Increased for better context view
+                        distance = 0.8;
                     } else {
                         // ISS scale is 0.005
-                        distance = 0.4;
+                        // Increased for better context view
+                        distance = 0.7;
                     }
                     
                     // Compute camera direction relative to satellite position
                     // Strategy: Position camera AWAY from Earth, beyond the satellite, looking back at it
-                    const earthCenter = new THREE.Vector3(0, 0, 0);
+                    
+                    // Get Earth's actual position (Earth orbits the Sun, which is at origin)
+                    const earthObject = sceneRef.current.getObjectByName("earth");
+                    const earthCenter = new THREE.Vector3();
+                    if (earthObject) {
+                        earthObject.getWorldPosition(earthCenter);
+                    }
+                    
                     const earthToSatellite = worldPos.clone().sub(earthCenter).normalize();
                     
                     // Primary direction: Continue in the Earth-to-Satellite direction (away from Earth)
@@ -166,9 +172,6 @@ export default function CameraSnapHandler() {
                         const worldPos = new THREE.Vector3();
                         retryObject.getWorldPosition(worldPos);
                         
-                        // Debug logging
-                        console.log(`[CameraSnap Retry] Selected: ${selectedId}, Object name: ${retryObject.name}, Position:`, worldPos);
-                        
                         // For satellites, compute proper framing using bounding box
                         const isSatellite = selectedId === "iss" || selectedId === "hubble";
                         
@@ -180,15 +183,24 @@ export default function CameraSnapHandler() {
                             
                             if (selectedId === "hubble") {
                                 // Hubble is very small (scale ~0.0004)
-                                distance = 0.5;
+                                // Increased for better context view
+                                distance = 0.8;
                             } else {
                                 // ISS scale is 0.005
-                                distance = 0.4;
+                                // Increased for better context view
+                                distance = 0.7;
                             }
                             
                             // Compute camera direction relative to satellite position
                             // Strategy: Position camera AWAY from Earth, beyond the satellite, looking back at it
-                            const earthCenter = new THREE.Vector3(0, 0, 0);
+                            
+                            // Get Earth's actual position (Earth orbits the Sun, which is at origin)
+                            const earthObject = sceneRef.current.getObjectByName("earth");
+                            const earthCenter = new THREE.Vector3();
+                            if (earthObject) {
+                                earthObject.getWorldPosition(earthCenter);
+                            }
+                            
                             const earthToSatellite = worldPos.clone().sub(earthCenter).normalize();
                             
                             // Primary direction: Continue in the Earth-to-Satellite direction (away from Earth)
