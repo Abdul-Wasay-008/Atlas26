@@ -10,6 +10,7 @@ import { getISSWorldPosition, getISSPosition } from "@/app/astronomy/issOrbit";
 import { isISSEclipsed } from "@/app/astronomy/eclipse";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { useISSTelemetry } from "@/app/hooks/useISSTelemetry";
+import { useReverseGeocode } from "@/app/hooks/useReverseGeocode";
 
 /**
  * ISS Component
@@ -27,6 +28,10 @@ export default function ISS() {
     const [hovered, setHovered] = useState(false);
     const isSelected = selectedId === "iss";
     const telemetry = useISSTelemetry();
+    const { location, loading: locationLoading } = useReverseGeocode(
+        telemetry.latitude,
+        telemetry.longitude
+    );
 
     // 🚀 Load ISS GLB model
     const { scene } = useGLTF("/models/iss.glb");
@@ -248,9 +253,8 @@ export default function ISS() {
                         }}
                     >
                         <div className="font-semibold text-cyan-400 mb-1">ISS</div>
-                        <div className="text-xs text-white/80">
-                            <div>Altitude: {telemetry.altitudeKm.toFixed(1)} km</div>
-                            <div>Speed: {telemetry.speedKmS.toFixed(2)} km/s</div>
+                        <div className="text-xs text-white/70">
+                            Over: {locationLoading ? "Locating..." : location || "Location unavailable"}
                         </div>
                     </div>
                 </Html>
