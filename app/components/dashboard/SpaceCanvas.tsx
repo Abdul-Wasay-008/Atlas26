@@ -119,6 +119,7 @@ import Earth from "../3d/Earth";
 import Moon from "../3d/Moon";
 import ISS from "../3d/ISS";
 import Hubble from "../3d/Hubble";
+import SatelliteOrbitPath from "../3d/SatelliteOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -266,6 +267,9 @@ export default function SpaceCanvas() {
 
             {/* 🔭 Hubble Space Telescope */}
             <Hubble />
+
+            {/* 🛰️ Satellite Orbit Path (shows orbit for selected satellite) */}
+            <SatelliteOrbitPath />
 
             {/* 🎮 Orbit Controls (CONNECTED) */}
             <OrbitControls
