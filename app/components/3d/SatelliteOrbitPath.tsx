@@ -12,6 +12,7 @@ import {
     satelliteLatLonAltToWorld,
 } from "@/app/astronomy/satellitePosition";
 import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
+import { getSatelliteOrbitColor } from "@/app/data/satelliteOrbitColors";
 
 /**
  * Satellite Orbit Path Visualizer
@@ -38,14 +39,20 @@ export default function SatelliteOrbitPath() {
     const isSatellite = selectedId === "iss" || selectedId === "hubble";
 
     /**
-     * Compute orbit path points
+     * Compute smooth orbit path points
      * 
      * Strategy:
      * 1. Get satellite's TLE
-     * 2. Sample positions for ~1 full orbit (~90-100 minutes)
-     * 3. Sample every 45 seconds (120-140 points total)
+     * 2. Sample positions for ~1 full orbit (~90-100 minutes) at high resolution
+     * 3. Sample every 10 seconds (~540-600 points for raw samples)
      * 4. Convert each position to world coordinates using the same pipeline as satellite rendering
-     * 5. Return array of Vector3 points for Line rendering
+     * 5. Create a smooth Catmull-Rom curve from the sampled points
+     * 6. Generate dense interpolated points (1000 points) from the curve for smooth rendering
+     * 
+     * This approach eliminates visible kinks by:
+     * - Higher sampling resolution (more accurate representation)
+     * - Curve interpolation (smooth transitions between samples)
+     * - Dense final point set (visually continuous line)
      * 
      * Memoization:
      * - Recalculates when selectedId changes
@@ -68,11 +75,15 @@ export default function SatelliteOrbitPath() {
             // ISS: ~93 minutes, Hubble: ~96 minutes
             const orbitalPeriodMinutes = selectedId === "iss" ? 93 : 96;
 
-            // Sample interval in seconds (45 seconds gives ~124 points for ISS, ~128 for Hubble)
-            const sampleIntervalSeconds = 45;
+            // Convert orbital period to seconds
+            const orbitalPeriodSeconds = orbitalPeriodMinutes * 60;
+
+            // Increased sampling resolution: sample every 10 seconds
+            // This gives ~540-600 raw samples per orbit (much higher than before)
+            const sampleIntervalSeconds = 10;
 
             // Total number of samples for one complete orbit
-            const numSamples = Math.ceil((orbitalPeriodMinutes * 60) / sampleIntervalSeconds);
+            const numSamples = Math.ceil(orbitalPeriodSeconds / sampleIntervalSeconds);
 
             // Cache key for satellite position calculation
             const cacheKey = selectedId;
@@ -80,12 +91,18 @@ export default function SatelliteOrbitPath() {
             // Earth orbit radius (matches the value used in satellite rendering)
             const EARTH_ORBIT_RADIUS = 4.5;
 
-            // Generate orbit points
-            const points: THREE.Vector3[] = [];
+            // Sample symmetrically around current time to avoid seam near satellite
+            // Sampling window: [-halfPeriod, +halfPeriod]
+            // This places the loop closure on the opposite side of the orbit
+            const halfPeriod = orbitalPeriodSeconds / 2;
+
+            // Generate raw sampled orbit points
+            const rawPoints: THREE.Vector3[] = [];
 
             for (let i = 0; i < numSamples; i++) {
-                // Calculate time offset from current time
-                const timeOffsetSeconds = i * sampleIntervalSeconds;
+                // Calculate time offset from current time, centered symmetrically
+                // Maps i from [0, numSamples-1] to [-halfPeriod, +halfPeriod]
+                const timeOffsetSeconds = -halfPeriod + (i * orbitalPeriodSeconds) / numSamples;
                 const sampleDate = new Date(currentDate.getTime() + timeOffsetSeconds * 1000);
 
                 // Compute satellite position in ECEF coordinates (relative to Earth)
@@ -97,15 +114,30 @@ export default function SatelliteOrbitPath() {
                 // Convert to world coordinates (relative to Sun at origin)
                 const worldPosition = satelliteLatLonAltToWorld(satelliteEcef, earthPosition);
 
-                points.push(worldPosition);
+                rawPoints.push(worldPosition);
             }
 
-            // Close the orbit loop by adding the first point at the end
-            if (points.length > 0) {
-                points.push(points[0].clone());
+            // Need at least 4 points for Catmull-Rom curve
+            if (rawPoints.length < 4) {
+                return [];
             }
 
-            return points;
+            // Create a smooth Catmull-Rom spline curve from the sampled points
+            // Catmull-Rom creates smooth curves that pass through all control points
+            // 
+            // Parameters:
+            // - rawPoints: control points (no duplication needed)
+            // - true: closed curve (handles loop closure automatically)
+            // - "centripetal": prevents overshoot and sharp curvature at joins
+            // 
+            // Using centripetal mode eliminates tangent discontinuity at the loop closure
+            const curve = new THREE.CatmullRomCurve3(rawPoints, true, "centripetal");
+
+            // Generate dense interpolated points from the curve for smooth rendering
+            // 1000 points provides excellent visual smoothness
+            const smoothPoints = curve.getPoints(1000);
+
+            return smoothPoints;
         } catch (error) {
             // Fail silently - if TLE is invalid or sampling fails, return empty array
             if (process.env.NODE_ENV === "development") {
@@ -125,18 +157,21 @@ export default function SatelliteOrbitPath() {
         return null;
     }
 
+    // Get satellite-specific orbit color from centralized config
+    const orbitColor = getSatelliteOrbitColor(selectedId);
+
     return (
         <Line
             points={orbitPoints}
-            color="#00ffff" // Soft cyan color
+            color={orbitColor}
             lineWidth={1.5}
             transparent
             opacity={0.6}
             // Disable depth test to ensure orbit is always visible
             depthTest={true}
             depthWrite={false}
-            // Add slight emissive glow
-            emissive="#00ffff"
+            // Add slight emissive glow using the same color
+            emissive={orbitColor}
             emissiveIntensity={0.3}
         />
     );
