@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useMemo, useState, useCallback } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useGLTF, Html } from "@react-three/drei";
 import * as THREE from "three";
 import { timeManager } from "@/app/core/TimeManager";
@@ -26,7 +26,10 @@ export default function ISS() {
     const selectObject = useSelectionStore((state) => state.selectObject);
     const selectedId = useSelectionStore((state) => state.selectedId);
     const [hovered, setHovered] = useState(false);
+    const [tooltipDistanceFactor, setTooltipDistanceFactor] = useState(10);
+    const tooltipFactorRef = useRef(10);
     const isSelected = selectedId === "iss";
+    const { camera } = useThree();
     const telemetry = useISSTelemetry();
     const { location, loading: locationLoading } = useReverseGeocode(
         telemetry.latitude,
@@ -216,6 +219,17 @@ export default function ISS() {
                 });
             }
         });
+
+        // 📌 Keep tooltip at constant screen size: distanceFactor ∝ camera distance
+        if (hovered && !isSelected && groupRef.current) {
+            const worldPos = new THREE.Vector3().setFromMatrixPosition(groupRef.current.matrixWorld);
+            const distance = camera.position.distanceTo(worldPos);
+            const newFactor = Math.max(1, distance * 1.5);
+            if (Math.abs(newFactor - tooltipFactorRef.current) > tooltipFactorRef.current * 0.01) {
+                tooltipFactorRef.current = newFactor;
+                setTooltipDistanceFactor(newFactor);
+            }
+        }
     });
 
     // 🔍 Selection handler
@@ -240,7 +254,7 @@ export default function ISS() {
             <primitive object={clonedScene} />
             {hovered && !isSelected && (
                 <Html
-                    distanceFactor={10}
+                    distanceFactor={tooltipDistanceFactor}
                     position={[0, 0.1, 0]}
                     center
                     style={{
