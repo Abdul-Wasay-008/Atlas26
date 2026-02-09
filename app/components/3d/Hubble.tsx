@@ -30,7 +30,8 @@ export default function Hubble() {
     const telemetry = useHubbleTelemetry();
     const { location, loading: locationLoading } = useReverseGeocode(
         telemetry.latitude,
-        telemetry.longitude
+        telemetry.longitude,
+        hovered && !isSelected // Only fetch when hovering
     );
 
     // 🔭 Load Hubble GLB model

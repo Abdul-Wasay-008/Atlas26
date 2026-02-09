@@ -66,7 +66,7 @@ function extractLocationLabel(address: NominatimAddress | undefined): string {
 }
 
 /**
- * Performs reverse geocoding using Nominatim API
+ * Performs reverse geocoding using Next.js API route (proxies to Nominatim)
  * 
  * @param lat - Latitude in degrees (-90 to 90)
  * @param lon - Longitude in degrees (-180 to 180)
@@ -82,31 +82,39 @@ export async function reverseGeocode(lat: number, lon: number): Promise<string> 
         throw new Error(`Invalid longitude: ${lon}`);
     }
 
-    // Build API URL
+    // Use Next.js API route to avoid CORS issues
     const params = new URLSearchParams({
-        format: "json",
         lat: lat.toFixed(6),
         lon: lon.toFixed(6),
-        zoom: "10", // City-level detail
     });
 
-    const url = `https://nominatim.openstreetmap.org/reverse?${params.toString()}`;
+    const url = `/api/geocode?${params.toString()}`;
 
     try {
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+
         const response = await fetch(url, {
-            headers: {
-                "User-Agent": "Atlas26 (contact: atlas26.local)",
-            },
+            signal: controller.signal,
         });
 
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(
+                errorData.error || `HTTP ${response.status}: ${response.statusText}`
+            );
         }
 
-        const data: NominatimResponse = await response.json();
-        return extractLocationLabel(data.address);
+        const data = await response.json();
+        return data.location || "Unknown location";
     } catch (error) {
-        console.error("[reverseGeocode] Request failed:", error);
+        // Don't log AbortErrors - they're expected when requests are cancelled
+        if (error instanceof Error && error.name !== "AbortError") {
+            console.error("[reverseGeocode] Request failed:", error);
+        }
         throw error;
     }
 }
@@ -128,9 +136,9 @@ export function getDistanceKm(
     const a =
         Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos((lat1 * Math.PI) / 180) *
-            Math.cos((lat2 * Math.PI) / 180) *
-            Math.sin(dLon / 2) *
-            Math.sin(dLon / 2);
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;

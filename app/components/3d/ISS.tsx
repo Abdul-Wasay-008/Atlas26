@@ -30,8 +30,10 @@ export default function ISS() {
     const telemetry = useISSTelemetry();
     const { location, loading: locationLoading } = useReverseGeocode(
         telemetry.latitude,
-        telemetry.longitude
+        telemetry.longitude,
+        hovered && !isSelected // Only fetch when hovering
     );
+    
 
     // 🚀 Load ISS GLB model
     const { scene } = useGLTF("/models/iss.glb");
