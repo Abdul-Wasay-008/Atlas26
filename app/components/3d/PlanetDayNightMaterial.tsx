@@ -9,6 +9,8 @@ interface PlanetDayNightMaterialParams {
     normalTexture?: THREE.Texture;
     specularTexture?: THREE.Texture;
     shininess?: number;
+    /** Width of day-night transition (0–1). Larger = softer terminator (default 0.04) */
+    terminatorWidth?: number;
 }
 
 /**
@@ -27,12 +29,14 @@ export function createPlanetDayNightMaterial({
     normalTexture,
     specularTexture,
     shininess = 25,
+    terminatorWidth = 0.04,
 }: PlanetDayNightMaterialParams): THREE.ShaderMaterial {
     const nightTex = nightTexture ?? dayTexture;
     const uniforms = {
         uDayTexture: { value: dayTexture },
         uNightTexture: { value: nightTex },
         uSunDirection: { value: new THREE.Vector3(1, 0, 0) }, // Earth → Sun direction in WORLD space
+        uTerminatorWidth: { value: terminatorWidth },
     };
 
     return new THREE.ShaderMaterial({
@@ -59,6 +63,7 @@ export function createPlanetDayNightMaterial({
             uniform sampler2D uDayTexture;
             uniform sampler2D uNightTexture;
             uniform vec3 uSunDirection;  // Earth → Sun direction in WORLD space
+            uniform float uTerminatorWidth;
             
             varying vec3 vNormalW;
             varying vec2 vUv;
@@ -80,9 +85,8 @@ export function createPlanetDayNightMaterial({
                 // Clamp ndotl strictly to prevent negative values from affecting lighting
                 float lit = clamp(ndotl, 0.0, 1.0);
                 
-                // Stable terminator mask - strictly driven by lit (starting from 0.0)
-                float terminatorWidth = 0.04;
-                float dayMask = smoothstep(0.0, terminatorWidth, lit);
+                // Terminator mask: wider uTerminatorWidth = softer day-night transition
+                float dayMask = smoothstep(0.0, uTerminatorWidth, lit);
                 float nightMask = 1.0 - dayMask;
                 
                 // Lighting: ambient + diffuse, but ONLY applied within dayMask

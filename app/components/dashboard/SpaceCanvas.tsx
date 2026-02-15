@@ -267,7 +267,7 @@ export default function SpaceCanvas() {
             <Earth />
             <Moon />
 
-            {/* 🔴 Mars */}
+            {/* 🔴 Mars (softer terminator for a smoother day-night transition) */}
             <Planet
                 id="mars"
                 orbit={{ type: "planet", params: MARS_ORBIT_PARAMS }}
@@ -282,6 +282,7 @@ export default function SpaceCanvas() {
                     "/textures/mars.jpg",
                 ]}
                 hasClouds={false}
+                terminatorWidth={0.22}
             />
 
             {/* 🚀 ISS (International Space Station) */}

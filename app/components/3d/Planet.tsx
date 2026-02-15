@@ -28,6 +28,8 @@ export interface PlanetConfig {
     hasClouds: boolean;
     /** Cloud layer radius scale relative to planet (default 1.0125) */
     cloudScale?: number;
+    /** Day-night terminator softness (default 0.04). Larger = softer transition. */
+    terminatorWidth?: number;
     children?: React.ReactNode;
 }
 
@@ -40,6 +42,7 @@ export default function Planet({
     textureUrls,
     hasClouds,
     cloudScale = 1.0125,
+    terminatorWidth = 0.04,
     children,
 }: PlanetConfig) {
     const planetRef = useRef<THREE.Mesh>(null);
@@ -92,8 +95,9 @@ export default function Planet({
                 normalTexture: normalMap,
                 specularTexture: specularMap,
                 shininess: 25,
+                terminatorWidth,
             }),
-        [colorMap, nightMap, normalMap, specularMap]
+        [colorMap, nightMap, normalMap, specularMap, terminatorWidth]
     );
 
     useEffect(() => {
