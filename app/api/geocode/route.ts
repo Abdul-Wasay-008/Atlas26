@@ -198,7 +198,6 @@ export async function GET(request: NextRequest) {
                 ) {
                     // Network error - use fallback location provider
                     const fallbackLocation = getFallbackLocation(latRounded, lonRounded);
-
                     // Cache the fallback result
                     requestCache.set(cacheKey, { location: fallbackLocation, timestamp: Date.now() });
 
@@ -229,9 +228,10 @@ export async function GET(request: NextRequest) {
         const data: NominatimResponse = await response.json();
         let location = extractLocationLabel(data.address);
 
-        // If Nominatim returned "Unknown location", use fallback instead
+        // If our extraction gave "Unknown location", use Nominatim's display_name when present, else code fallback
         if (location === "Unknown location") {
-            location = getFallbackLocation(latRounded, lonRounded);
+            const displayName = (data.display_name && String(data.display_name).trim()) || undefined;
+            location = displayName || getFallbackLocation(latRounded, lonRounded);
         }
 
         // Cache the result
