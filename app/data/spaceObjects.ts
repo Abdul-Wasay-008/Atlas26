@@ -28,6 +28,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "0 km"
     },
     {
+        id: "mars",
+        name: "Mars",
+        type: "planet",
+        radius: "3,389 km",
+        orbitalPeriod: "687 days",
+        description: "Mars is the fourth planet from the Sun, a terrestrial world with polar ice caps, seasons, and a history of water.",
+        distanceFromEarth: "~78 million km at closest"
+    },
+    {
         id: "moon",
         name: "Moon",
         type: "satellite",

@@ -116,7 +116,12 @@ import KeyboardShortcuts from "./KeyboardShortcuts";
 import Sun from "../3d/Sun";
 import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
+import Planet from "../3d/Planet";
 import Moon from "../3d/Moon";
+import {
+    MARS_ORBIT_PARAMS,
+    MARS_AXIAL_TILT_RADIANS,
+} from "@/app/astronomy/planetOrbit";
 import ISS from "../3d/ISS";
 import Hubble from "../3d/Hubble";
 import SatelliteOrbitPath from "../3d/SatelliteOrbitPath";
@@ -261,6 +266,23 @@ export default function SpaceCanvas() {
             {/* 🌍 Earth–Moon System */}
             <Earth />
             <Moon />
+
+            {/* 🔴 Mars */}
+            <Planet
+                id="mars"
+                orbit={{ type: "planet", params: MARS_ORBIT_PARAMS }}
+                rotationPeriodSeconds={24.6 * 60 * 60}
+                axialTiltRadians={MARS_AXIAL_TILT_RADIANS}
+                radiusScale={0.8 * 0.53}
+                textureUrls={[
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                ]}
+                hasClouds={false}
+            />
 
             {/* 🚀 ISS (International Space Station) */}
             <ISS />

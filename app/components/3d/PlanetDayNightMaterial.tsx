@@ -4,7 +4,8 @@ import * as THREE from "three";
 
 interface PlanetDayNightMaterialParams {
     dayTexture: THREE.Texture;
-    nightTexture: THREE.Texture;
+    /** If omitted, day texture is used for night side (no separate city lights) */
+    nightTexture?: THREE.Texture;
     normalTexture?: THREE.Texture;
     specularTexture?: THREE.Texture;
     shininess?: number;
@@ -27,9 +28,10 @@ export function createPlanetDayNightMaterial({
     specularTexture,
     shininess = 25,
 }: PlanetDayNightMaterialParams): THREE.ShaderMaterial {
+    const nightTex = nightTexture ?? dayTexture;
     const uniforms = {
         uDayTexture: { value: dayTexture },
-        uNightTexture: { value: nightTexture },
+        uNightTexture: { value: nightTex },
         uSunDirection: { value: new THREE.Vector3(1, 0, 0) }, // Earth → Sun direction in WORLD space
     };
 
