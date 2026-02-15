@@ -1,63 +1,73 @@
 "use client";
 
 import { useMemo } from "react";
-import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { timeEngine } from "@/app/core/time";
+import { Line } from "@react-three/drei";
 
+import { useSelectionStore } from "@/app/store/selectionStore";
+import { useTimeManager } from "@/app/core/useTimeManager";
+import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
+import { getMoonPosition } from "@/app/astronomy/lunar";
+import { MOON_ORBIT_COLOR } from "@/app/data/satelliteOrbitColors";
+
+const EARTH_ORBIT_RADIUS = 4.5;
+/** Sidereal month in days (~27.3) */
+const MOON_ORBITAL_PERIOD_DAYS = 27.321661;
+const NUM_SAMPLES = 400;
+
+/**
+ * Moon Orbit Path Visualizer
+ *
+ * Renders the Moon's orbit around Earth when the Moon is selected.
+ * The path is a closed ellipse centered on Earth's current position (Moon's
+ * relative positions over one period), so it circles Earth correctly and
+ * does not pass through it.
+ */
 export default function MoonOrbitPath() {
-    const orbitRadius = 2;
-    const groupRef = useMemo(() => new THREE.Group(), []);
+    const { selectedId } = useSelectionStore();
+    const { currentDate } = useTimeManager();
 
-    // Earth's orbital parameters (same as in Earth.tsx)
-    const EARTH_ORBITAL_PERIOD = 365.25 * 24 * 60 * 60; // seconds
-    const EARTH_ORBIT_RADIUS = 4.5; // Distance from Sun
+    const showMoonOrbit = selectedId === "moon";
 
-    const orbitLine = useMemo(() => {
-        const segments = 256;
-        const points = [];
-
-        for (let i = 0; i <= segments; i++) {
-            const angle = (i / segments) * Math.PI * 2;
-            points.push(
-                new THREE.Vector3(
-                    Math.sin(angle) * orbitRadius,
-                    0,
-                    Math.cos(angle) * orbitRadius
-                )
-            );
+    const orbitPoints = useMemo(() => {
+        if (!showMoonOrbit) {
+            return [];
         }
 
-        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const msPerDay = 86400000;
+        const periodMs = MOON_ORBITAL_PERIOD_DAYS * msPerDay;
 
-        const material = new THREE.LineDashedMaterial({
-            color: "#6ea8ff",
-            dashSize: 0.12,   // length of dash
-            gapSize: 0.08,    // spacing
-            opacity: 0.35,
-            transparent: true,
-        });
+        // Earth's position *now* – orbit is drawn centered on current Earth
+        const earthPositionNow = getEarthOrbitPosition(currentDate, EARTH_ORBIT_RADIUS);
 
-        const line = new THREE.Line(geometry, material);
-        line.computeLineDistances(); // 🔥 REQUIRED for dashed lines
+        const points: THREE.Vector3[] = [];
 
-        groupRef.add(line);
-        return groupRef;
-    }, [groupRef]);
+        for (let i = 0; i <= NUM_SAMPLES; i++) {
+            const t = i / NUM_SAMPLES;
+            const date = new Date(currentDate.getTime() + t * periodMs);
+            const moonRelativeToEarth = getMoonPosition(date);
+            points.push(earthPositionNow.clone().add(moonRelativeToEarth));
+        }
 
-    // Update orbit path position to follow Earth
-    useFrame(() => {
-        const t = timeEngine.getTime();
-        
-        // Calculate Earth's position around Sun
-        const earthOrbitAngle =
-            ((t % EARTH_ORBITAL_PERIOD) / EARTH_ORBITAL_PERIOD) * Math.PI * 2;
-        const earthX = Math.cos(earthOrbitAngle) * EARTH_ORBIT_RADIUS;
-        const earthZ = Math.sin(earthOrbitAngle) * EARTH_ORBIT_RADIUS;
-        
-        // Move the orbit path to follow Earth
-        groupRef.position.set(earthX, 0, earthZ);
-    });
+        return points;
+    }, [
+        showMoonOrbit,
+        Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
+    ]);
 
-    return <primitive object={orbitLine} />;
+    if (!showMoonOrbit || orbitPoints.length === 0) {
+        return null;
+    }
+
+    return (
+        <Line
+            points={orbitPoints}
+            color={MOON_ORBIT_COLOR}
+            lineWidth={1.5}
+            transparent
+            opacity={0.6}
+            depthTest={true}
+            depthWrite={false}
+        />
+    );
 }

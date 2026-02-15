@@ -29,6 +29,9 @@ export const PLANET_ORBIT_COLORS: Record<string, string> = {
     mars: "#E65100",     // Dark orange / red - Mars theme
 } as const;
 
+/** Orbit color for Moon (around Earth) - white / light gray */
+export const MOON_ORBIT_COLOR = "#E0E0E0";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
