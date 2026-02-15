@@ -1,0 +1,82 @@
+"use client";
+
+import { useMemo } from "react";
+import * as THREE from "three";
+import { Line } from "@react-three/drei";
+
+import { useSelectionStore } from "@/app/store/selectionStore";
+import { useTimeManager } from "@/app/core/useTimeManager";
+import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
+import {
+    getPlanetOrbitPosition,
+    MARS_ORBIT_PARAMS,
+} from "@/app/astronomy/planetOrbit";
+import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
+
+const EARTH_ORBIT_RADIUS = 4.5;
+const EARTH_ORBITAL_PERIOD_DAYS = 365.2422;
+const MARS_ORBITAL_PERIOD_DAYS = 687;
+const NUM_SAMPLES = 500;
+
+/**
+ * Planet Orbit Path Visualizer
+ *
+ * Renders the orbital path around the Sun for the currently selected planet
+ * (Earth or Mars). Same show/hide behavior as satellite orbit paths:
+ * visible only when that planet is selected, hidden when another object is
+ * selected or selection is cleared.
+ */
+export default function PlanetOrbitPath() {
+    const { selectedId } = useSelectionStore();
+    const { currentDate } = useTimeManager();
+
+    const isPlanet = selectedId === "earth" || selectedId === "mars";
+
+    const orbitPoints = useMemo(() => {
+        if (!isPlanet || !selectedId) {
+            return [];
+        }
+
+        const periodDays =
+            selectedId === "earth" ? EARTH_ORBITAL_PERIOD_DAYS : MARS_ORBITAL_PERIOD_DAYS;
+        const msPerDay = 86400000;
+        const periodMs = periodDays * msPerDay;
+
+        const points: THREE.Vector3[] = [];
+
+        for (let i = 0; i <= NUM_SAMPLES; i++) {
+            const t = i / NUM_SAMPLES;
+            const date = new Date(currentDate.getTime() + t * periodMs);
+
+            if (selectedId === "earth") {
+                points.push(getEarthOrbitPosition(date, EARTH_ORBIT_RADIUS));
+            } else {
+                points.push(getPlanetOrbitPosition(date, MARS_ORBIT_PARAMS));
+            }
+        }
+
+        return points;
+    }, [
+        selectedId,
+        isPlanet,
+        Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
+    ]);
+
+    if (!isPlanet || orbitPoints.length === 0) {
+        return null;
+    }
+
+    const orbitColor = getPlanetOrbitColor(selectedId);
+
+    return (
+        <Line
+            points={orbitPoints}
+            color={orbitColor}
+            lineWidth={1.5}
+            transparent
+            opacity={0.6}
+            depthTest={true}
+            depthWrite={false}
+        />
+    );
+}
