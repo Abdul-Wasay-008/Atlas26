@@ -30,6 +30,8 @@ export interface PlanetConfig {
     cloudScale?: number;
     /** Day-night terminator softness (default 0.04). Larger = softer transition. */
     terminatorWidth?: number;
+    /** If true, planet is fully lit (no shadow) */
+    noShadow?: boolean;
     children?: React.ReactNode;
 }
 
@@ -43,6 +45,7 @@ export default function Planet({
     hasClouds,
     cloudScale = 1.0125,
     terminatorWidth = 0.04,
+    noShadow = false,
     children,
 }: PlanetConfig) {
     const planetRef = useRef<THREE.Mesh>(null);
@@ -96,8 +99,9 @@ export default function Planet({
                 specularTexture: specularMap,
                 shininess: 25,
                 terminatorWidth,
+                noShadow,
             }),
-        [colorMap, nightMap, normalMap, specularMap, terminatorWidth]
+        [colorMap, nightMap, normalMap, specularMap, terminatorWidth, noShadow]
     );
 
     useEffect(() => {

@@ -11,6 +11,8 @@ interface PlanetDayNightMaterialParams {
     shininess?: number;
     /** Width of day-night transition (0–1). Larger = softer terminator (default 0.04) */
     terminatorWidth?: number;
+    /** If true, planet is fully lit (no shadow/night side) */
+    noShadow?: boolean;
 }
 
 /**
@@ -30,6 +32,7 @@ export function createPlanetDayNightMaterial({
     specularTexture,
     shininess = 25,
     terminatorWidth = 0.04,
+    noShadow = false,
 }: PlanetDayNightMaterialParams): THREE.ShaderMaterial {
     const nightTex = nightTexture ?? dayTexture;
     const uniforms = {
@@ -37,6 +40,7 @@ export function createPlanetDayNightMaterial({
         uNightTexture: { value: nightTex },
         uSunDirection: { value: new THREE.Vector3(1, 0, 0) }, // Earth → Sun direction in WORLD space
         uTerminatorWidth: { value: terminatorWidth },
+        uNoShadow: { value: noShadow ? 1 : 0 },
     };
 
     return new THREE.ShaderMaterial({
@@ -64,6 +68,7 @@ export function createPlanetDayNightMaterial({
             uniform sampler2D uNightTexture;
             uniform vec3 uSunDirection;  // Earth → Sun direction in WORLD space
             uniform float uTerminatorWidth;
+            uniform float uNoShadow;
             
             varying vec3 vNormalW;
             varying vec2 vUv;
@@ -85,20 +90,16 @@ export function createPlanetDayNightMaterial({
                 // Clamp ndotl strictly to prevent negative values from affecting lighting
                 float lit = clamp(ndotl, 0.0, 1.0);
                 
-                // Terminator mask: wider uTerminatorWidth = softer day-night transition
                 float dayMask = smoothstep(0.0, uTerminatorWidth, lit);
                 float nightMask = 1.0 - dayMask;
                 
-                // Lighting: ambient + diffuse, but ONLY applied within dayMask
-                // This prevents any ambient light from leaking onto the night side
-                vec3 litDay = dayTex * (0.12 + lit * 1.0);
-                litDay *= dayMask;  // Strictly zero on night side
+                // When uNoShadow=1: uniformly lit (day texture, no dark side)
+                vec3 litDay = dayTex * mix(0.12 + lit * 1.0, 1.0, uNoShadow);
+                litDay *= mix(dayMask, 1.0, uNoShadow);
                 
-                // City lights: isolated to night side only
                 vec3 city = nightTex * 1.4;
-                city *= nightMask;  // Strictly zero on day side
+                city *= mix(nightMask, 0.0, uNoShadow);
                 
-                // Final blend: strictly separated (additive, no mixing)
                 vec3 finalColor = litDay + city;
                 
                 gl_FragColor = vec4(finalColor, 1.0);
