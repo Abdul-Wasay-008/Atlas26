@@ -116,3 +116,13 @@ export const JUPITER_ORBIT_PARAMS: PlanetOrbitParams = {
 
 /** Jupiter axial tilt in radians (3.13°) */
 export const JUPITER_AXIAL_TILT_RADIANS = (3.13 * Math.PI) / 180;
+
+/** Saturn orbital parameters (realistic, scene-scaled) */
+export const SATURN_ORBIT_PARAMS: PlanetOrbitParams = {
+    periodDays: 10759,
+    semiMajorAxis: 24.0, // Visual distance from Sun (scene units)
+    eccentricity: 0.054,
+};
+
+/** Saturn axial tilt in radians (26.73°) */
+export const SATURN_AXIAL_TILT_RADIANS = (26.73 * Math.PI) / 180;

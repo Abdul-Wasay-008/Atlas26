@@ -64,6 +64,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~588 million km at closest"
     },
     {
+        id: "saturn",
+        name: "Saturn",
+        type: "planet",
+        radius: "58,232 km",
+        orbitalPeriod: "~29 years",
+        description: "Saturn is the sixth planet from the Sun, famous for its stunning ring system made of ice and rock particles.",
+        distanceFromEarth: "~1.2 billion km at closest"
+    },
+    {
         id: "moon",
         name: "Moon",
         type: "satellite",

@@ -26,10 +26,11 @@ export const SATELLITE_ORBIT_COLORS: Record<string, string> = {
  */
 export const PLANET_ORBIT_COLORS: Record<string, string> = {
     mercury: "#9E9E9E",  // Gray - Mercury theme
-    venus: "#FDD835",    // Yellowish - Venus theme
+    venus: "#d8bb93",    // Warm beige - Venus theme
     earth: "#42A5F5",    // Blue - Earth theme
     mars: "#E65100",     // Dark orange / red - Mars theme
-    jupiter: "#D4A574", // Light brown/orange - Jupiter theme
+    jupiter: "#cac7c4", // Light gray - Jupiter theme
+    saturn: "#d3c6a8",  // Pale gold - Saturn theme
 } as const;
 
 /** Orbit color for Moon (around Earth) - white / light gray */

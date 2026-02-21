@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "moon" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "moon" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -20,6 +20,7 @@ class CameraController {
     earthOffset = new THREE.Vector3(0, 0, 3);
     marsOffset = new THREE.Vector3(0, 0, 3);
     jupiterOffset = new THREE.Vector3(0, 0, 5);
+    saturnOffset = new THREE.Vector3(0, 0, 5);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
@@ -59,10 +60,11 @@ class CameraController {
                         target === "earth" ? this.earthOffset :
                             target === "mars" ? this.marsOffset :
                                 target === "jupiter" ? this.jupiterOffset :
-                                    target === "moon" ? this.moonOffset :
-                                        target === "iss" ? this.issOffset :
-                                            target === "hubble" ? this.hubbleOffset :
-                                                new THREE.Vector3();
+                                    target === "saturn" ? this.saturnOffset :
+                                        target === "moon" ? this.moonOffset :
+                                            target === "iss" ? this.issOffset :
+                                                target === "hubble" ? this.hubbleOffset :
+                                                    new THREE.Vector3();
 
         this.targetPosition.copy(worldPos).add(offset);
     }

@@ -120,6 +120,7 @@ import Planet from "../3d/Planet";
 import Venus from "../3d/Venus";
 import Mercury from "../3d/Mercury";
 import Jupiter from "../3d/Jupiter";
+import Saturn from "../3d/Saturn";
 import Moon from "../3d/Moon";
 import {
     MARS_ORBIT_PARAMS,
@@ -299,6 +300,9 @@ export default function SpaceCanvas() {
 
                 {/* 🪐 Jupiter (largest planet, gas giant) */}
                 <Jupiter />
+
+                {/* 🪐 Saturn (6th planet, famous for rings) */}
+                <Saturn />
 
                 {/* 🚀 ISS (International Space Station) */}
                 <ISS />
