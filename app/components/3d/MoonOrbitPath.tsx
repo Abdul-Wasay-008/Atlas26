@@ -15,6 +15,11 @@ const EARTH_ORBIT_RADIUS = 8.0;
 const MOON_ORBITAL_PERIOD_DAYS = 27.321661;
 const NUM_SAMPLES = 400;
 
+const BASE_LINE_WIDTH = 0.6;
+const FOCUS_MULTIPLIER = 1.4;
+const BASE_OPACITY = 0.55;
+const FOCUS_OPACITY = 0.8;
+
 /**
  * Moon Orbit Path Visualizer
  *
@@ -24,10 +29,10 @@ const NUM_SAMPLES = 400;
  * does not pass through it.
  */
 export default function MoonOrbitPath() {
-    const { selectedId } = useSelectionStore();
+    const { selectedId, showAllOrbits } = useSelectionStore();
     const { currentDate } = useTimeManager();
 
-    const showMoonOrbit = selectedId === "moon";
+    const showMoonOrbit = selectedId === "moon" || showAllOrbits;
 
     const orbitPoints = useMemo(() => {
         if (!showMoonOrbit) {
@@ -59,13 +64,17 @@ export default function MoonOrbitPath() {
         return null;
     }
 
+    const isFocused = selectedId === "moon";
+    const lineWidth = isFocused ? BASE_LINE_WIDTH * FOCUS_MULTIPLIER : BASE_LINE_WIDTH;
+    const opacity = isFocused ? FOCUS_OPACITY : BASE_OPACITY;
+
     return (
         <Line
             points={orbitPoints}
             color={MOON_ORBIT_COLOR}
-            lineWidth={1.5}
+            lineWidth={lineWidth}
             transparent
-            opacity={0.6}
+            opacity={opacity}
             depthTest={true}
             depthWrite={false}
         />

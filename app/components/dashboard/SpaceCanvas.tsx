@@ -122,6 +122,7 @@ import Mercury from "../3d/Mercury";
 import Jupiter from "../3d/Jupiter";
 import Saturn from "../3d/Saturn";
 import Uranus from "../3d/Uranus";
+import Neptune from "../3d/Neptune";
 import Moon from "../3d/Moon";
 import {
     MARS_ORBIT_PARAMS,
@@ -307,6 +308,9 @@ export default function SpaceCanvas() {
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
                 <Uranus />
+
+                {/* 🪐 Neptune (8th planet, ice giant) */}
+                <Neptune />
 
                 {/* 🚀 ISS (International Space Station) */}
                 <ISS />

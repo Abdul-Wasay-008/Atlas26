@@ -9,10 +9,11 @@ import { spaceObjects } from "@/app/data/spaceObjects"
 
 export default function Sidebar() {
     const [open, setOpen] = useState(false)
-    const [active, setActive] = useState("Planets")
+    const [active, setActive] = useState("All")
     const [satellitesExpanded, setSatellitesExpanded] = useState(false)
     const selectObject = useSelectionStore((state) => state.selectObject)
     const selectedId = useSelectionStore((state) => state.selectedId)
+    const setShowAllOrbits = useSelectionStore((state) => state.setShowAllOrbits)
 
     const menu = [
         { name: "All", icon: LoaderPinwheelIcon },
@@ -41,6 +42,11 @@ export default function Sidebar() {
                         <button
                             onClick={() => {
                                 setActive(name)
+                                if (name === "All") {
+                                    setShowAllOrbits(true)
+                                } else {
+                                    setShowAllOrbits(false)
+                                }
                                 if (isSatellites) {
                                     setSatellitesExpanded(!satellitesExpanded)
                                 }

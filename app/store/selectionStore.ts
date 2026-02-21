@@ -19,13 +19,16 @@ import { spaceObjects, SpaceObjectData } from "../data/spaceObjects";
 interface SelectionState {
     selectedId: string | null;
     selected: SpaceObjectData | null;
+    showAllOrbits: boolean;
     selectObject: (id: string) => void;
     clearSelection: () => void;
+    setShowAllOrbits: (show: boolean) => void;
 }
 
 export const useSelectionStore = create<SelectionState>((set) => ({
     selectedId: null,
     selected: null,
+    showAllOrbits: true,
 
     selectObject: (id) => {
         const obj = spaceObjects.find((o) => o.id === id) || null;
@@ -33,6 +36,7 @@ export const useSelectionStore = create<SelectionState>((set) => ({
         set({
             selectedId: id,
             selected: obj,
+            showAllOrbits: false,
         });
     },
 
@@ -40,6 +44,13 @@ export const useSelectionStore = create<SelectionState>((set) => ({
         set({
             selectedId: null,
             selected: null,
+        }),
+
+    setShowAllOrbits: (show) =>
+        set({
+            showAllOrbits: show,
+            selectedId: show ? null : null,
+            selected: show ? null : null,
         }),
 }));
 

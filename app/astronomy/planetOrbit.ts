@@ -136,3 +136,13 @@ export const URANUS_ORBIT_PARAMS: PlanetOrbitParams = {
 
 /** Uranus axial tilt in radians (97.77° - tilted on its side) */
 export const URANUS_AXIAL_TILT_RADIANS = (97.77 * Math.PI) / 180;
+
+/** Neptune orbital parameters (realistic, scene-scaled) */
+export const NEPTUNE_ORBIT_PARAMS: PlanetOrbitParams = {
+    periodDays: 60190,
+    semiMajorAxis: 36.0, // Visual distance from Sun (scene units)
+    eccentricity: 0.009,
+};
+
+/** Neptune axial tilt in radians (28.32°) */
+export const NEPTUNE_AXIAL_TILT_RADIANS = (28.32 * Math.PI) / 180;

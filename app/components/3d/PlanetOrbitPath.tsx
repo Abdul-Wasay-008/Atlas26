@@ -15,93 +15,169 @@ import {
     JUPITER_ORBIT_PARAMS,
     SATURN_ORBIT_PARAMS,
     URANUS_ORBIT_PARAMS,
+    NEPTUNE_ORBIT_PARAMS,
+    PlanetOrbitParams,
 } from "@/app/astronomy/planetOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
 const EARTH_ORBIT_RADIUS = 8.0;
-const EARTH_ORBITAL_PERIOD_DAYS = 365.2422;
-const MERCURY_ORBITAL_PERIOD_DAYS = 88;
-const VENUS_ORBITAL_PERIOD_DAYS = 225;
-const MARS_ORBITAL_PERIOD_DAYS = 687;
-const JUPITER_ORBITAL_PERIOD_DAYS = 4333;
-const SATURN_ORBITAL_PERIOD_DAYS = 10759;
-const URANUS_ORBITAL_PERIOD_DAYS = 30687;
 const NUM_SAMPLES = 500;
 
-/**
- * Planet Orbit Path Visualizer
- *
- * Renders the orbital path around the Sun for the currently selected planet
- * (Earth or Mars). Same show/hide behavior as satellite orbit paths:
- * visible only when that planet is selected, hidden when another object is
- * selected or selection is cleared.
- */
-export default function PlanetOrbitPath() {
-    const { selectedId } = useSelectionStore();
-    const { currentDate } = useTimeManager();
+const ORBIT_THICKNESS = {
+    inner: 0.65,
+    gas: 0.95,
+    ice: 1.15,
+} as const;
 
-    const isPlanet = selectedId === "mercury" || selectedId === "venus" || selectedId === "earth" || selectedId === "mars" || selectedId === "jupiter" || selectedId === "saturn" || selectedId === "uranus";
+const FOCUS_MULTIPLIER = 1.4;
+const BASE_OPACITY = 0.55;
+const FOCUS_OPACITY = 0.8;
 
-    const orbitPoints = useMemo(() => {
-        if (!isPlanet || !selectedId) {
-            return [];
+function getBaseLineWidth(planetId: string): number {
+    switch (planetId) {
+        case "mercury":
+        case "venus":
+        case "earth":
+        case "mars":
+            return ORBIT_THICKNESS.inner;
+        case "jupiter":
+        case "saturn":
+            return ORBIT_THICKNESS.gas;
+        case "uranus":
+        case "neptune":
+            return ORBIT_THICKNESS.ice;
+        default:
+            return ORBIT_THICKNESS.inner;
+    }
+}
+
+interface PlanetOrbitConfig {
+    id: string;
+    periodDays: number;
+    params?: PlanetOrbitParams;
+    isEarth?: boolean;
+}
+
+const PLANET_CONFIGS: PlanetOrbitConfig[] = [
+    { id: "mercury", periodDays: 88, params: MERCURY_ORBIT_PARAMS },
+    { id: "venus", periodDays: 225, params: VENUS_ORBIT_PARAMS },
+    { id: "earth", periodDays: 365.2422, isEarth: true },
+    { id: "mars", periodDays: 687, params: MARS_ORBIT_PARAMS },
+    { id: "jupiter", periodDays: 4333, params: JUPITER_ORBIT_PARAMS },
+    { id: "saturn", periodDays: 10759, params: SATURN_ORBIT_PARAMS },
+    { id: "uranus", periodDays: 30687, params: URANUS_ORBIT_PARAMS },
+    { id: "neptune", periodDays: 60190, params: NEPTUNE_ORBIT_PARAMS },
+];
+
+function computeOrbitPoints(
+    config: PlanetOrbitConfig,
+    currentDate: Date
+): THREE.Vector3[] {
+    const msPerDay = 86400000;
+    const periodMs = config.periodDays * msPerDay;
+    const points: THREE.Vector3[] = [];
+
+    for (let i = 0; i <= NUM_SAMPLES; i++) {
+        const t = i / NUM_SAMPLES;
+        const date = new Date(currentDate.getTime() + t * periodMs);
+
+        if (config.isEarth) {
+            points.push(getEarthOrbitPosition(date, EARTH_ORBIT_RADIUS));
+        } else if (config.params) {
+            points.push(getPlanetOrbitPosition(date, config.params));
         }
-
-        const periodDays =
-            selectedId === "mercury" ? MERCURY_ORBITAL_PERIOD_DAYS :
-            selectedId === "venus" ? VENUS_ORBITAL_PERIOD_DAYS :
-            selectedId === "earth" ? EARTH_ORBITAL_PERIOD_DAYS :
-            selectedId === "mars" ? MARS_ORBITAL_PERIOD_DAYS :
-            selectedId === "jupiter" ? JUPITER_ORBITAL_PERIOD_DAYS :
-            selectedId === "saturn" ? SATURN_ORBITAL_PERIOD_DAYS : URANUS_ORBITAL_PERIOD_DAYS;
-        const msPerDay = 86400000;
-        const periodMs = periodDays * msPerDay;
-
-        const points: THREE.Vector3[] = [];
-
-        for (let i = 0; i <= NUM_SAMPLES; i++) {
-            const t = i / NUM_SAMPLES;
-            const date = new Date(currentDate.getTime() + t * periodMs);
-
-            if (selectedId === "mercury") {
-                points.push(getPlanetOrbitPosition(date, MERCURY_ORBIT_PARAMS));
-            } else if (selectedId === "venus") {
-                points.push(getPlanetOrbitPosition(date, VENUS_ORBIT_PARAMS));
-            } else if (selectedId === "earth") {
-                points.push(getEarthOrbitPosition(date, EARTH_ORBIT_RADIUS));
-            } else if (selectedId === "mars") {
-                points.push(getPlanetOrbitPosition(date, MARS_ORBIT_PARAMS));
-            } else if (selectedId === "jupiter") {
-                points.push(getPlanetOrbitPosition(date, JUPITER_ORBIT_PARAMS));
-            } else if (selectedId === "saturn") {
-                points.push(getPlanetOrbitPosition(date, SATURN_ORBIT_PARAMS));
-            } else {
-                points.push(getPlanetOrbitPosition(date, URANUS_ORBIT_PARAMS));
-            }
-        }
-
-        return points;
-    }, [
-        selectedId,
-        isPlanet,
-        Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
-    ]);
-
-    if (!isPlanet || orbitPoints.length === 0) {
-        return null;
     }
 
-    const orbitColor = getPlanetOrbitColor(selectedId);
+    return points;
+}
+
+function SingleOrbitLine({ 
+    planetId, 
+    points, 
+    isFocused 
+}: { 
+    planetId: string; 
+    points: THREE.Vector3[];
+    isFocused: boolean;
+}) {
+    const orbitColor = getPlanetOrbitColor(planetId);
+    const baseWidth = getBaseLineWidth(planetId);
+    const lineWidth = isFocused ? baseWidth * FOCUS_MULTIPLIER : baseWidth;
+    const opacity = isFocused ? FOCUS_OPACITY : BASE_OPACITY;
 
     return (
         <Line
-            points={orbitPoints}
+            points={points}
             color={orbitColor}
-            lineWidth={1.5}
+            lineWidth={lineWidth}
             transparent
-            opacity={0.6}
+            opacity={opacity}
             depthTest={true}
             depthWrite={false}
+        />
+    );
+}
+
+export default function PlanetOrbitPath() {
+    const { selectedId, showAllOrbits } = useSelectionStore();
+    const { currentDate } = useTimeManager();
+
+    const isPlanet = PLANET_CONFIGS.some(c => c.id === selectedId);
+
+    const allOrbitData = useMemo(() => {
+        if (!showAllOrbits) {
+            return [];
+        }
+
+        return PLANET_CONFIGS.map(config => ({
+            id: config.id,
+            points: computeOrbitPoints(config, currentDate),
+        }));
+    }, [
+        showAllOrbits,
+        Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
+    ]);
+
+    const singleOrbitPoints = useMemo(() => {
+        if (showAllOrbits || !isPlanet || !selectedId) {
+            return [];
+        }
+
+        const config = PLANET_CONFIGS.find(c => c.id === selectedId);
+        if (!config) return [];
+
+        return computeOrbitPoints(config, currentDate);
+    }, [
+        selectedId,
+        isPlanet,
+        showAllOrbits,
+        Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
+    ]);
+
+    if (showAllOrbits && allOrbitData.length > 0) {
+        return (
+            <>
+                {allOrbitData.map(orbit => (
+                    <SingleOrbitLine
+                        key={orbit.id}
+                        planetId={orbit.id}
+                        points={orbit.points}
+                        isFocused={selectedId === orbit.id}
+                    />
+                ))}
+            </>
+        );
+    }
+
+    if (!isPlanet || singleOrbitPoints.length === 0) {
+        return null;
+    }
+
+    return (
+        <SingleOrbitLine 
+            planetId={selectedId!} 
+            points={singleOrbitPoints} 
+            isFocused={true}
         />
     );
 }

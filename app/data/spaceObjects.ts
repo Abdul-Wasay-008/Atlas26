@@ -82,6 +82,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~2.6 billion km at closest"
     },
     {
+        id: "neptune",
+        name: "Neptune",
+        type: "planet",
+        radius: "24,622 km",
+        orbitalPeriod: "~165 years",
+        description: "Neptune is the outermost ice giant, known for its vivid blue color and the strongest winds in the solar system.",
+        distanceFromEarth: "~4.3 billion km at closest"
+    },
+    {
         id: "moon",
         name: "Moon",
         type: "satellite",
