@@ -35,12 +35,12 @@ export const EARTH_AXIAL_TILT_RADIANS = (23.44 * Math.PI) / 180;
  * Sun is at origin (0, 0, 0), Earth orbits around it
  * 
  * @param date UTC date
- * @param orbitRadius Distance from Sun (in scene units, default 4.5)
+ * @param orbitRadius Distance from Sun (in scene units, default 4.8)
  * @returns Earth position as Vector3 (relative to Sun at origin)
  */
 export function getEarthOrbitPosition(
     date: Date,
-    orbitRadius: number = 4.5
+    orbitRadius: number = 4.8
 ): THREE.Vector3 {
     const JD = dateToJulianDate(date);
     
@@ -149,7 +149,7 @@ export function getSeason(date: Date): string {
  */
 function getSunPositionECI(
     date: Date,
-    orbitRadius: number = 4.5
+    orbitRadius: number = 4.8
 ): THREE.Vector3 {
     // Get Earth's position in heliocentric coordinates
     const earthPosHelio = getEarthOrbitPosition(date, orbitRadius);
@@ -260,12 +260,12 @@ function getSunPositionECI(
  * - Directional light positioning (needs sunToEarthDir = -earthToSunDir)
  * 
  * @param date UTC date
- * @param orbitRadius Distance from Sun (in scene units, default 4.5)
+ * @param orbitRadius Distance from Sun (in scene units, default 4.8)
  * @returns Normalized vector pointing from Earth toward Sun in ECEF coordinates
  */
 export function getEarthToSunDirection(
     date: Date,
-    orbitRadius: number = 4.5
+    orbitRadius: number = 4.8
 ): THREE.Vector3 {
     // Get Sun position in ECI (Earth-Centered Inertial) coordinates
     const sunECI = getSunPositionECI(date, orbitRadius);

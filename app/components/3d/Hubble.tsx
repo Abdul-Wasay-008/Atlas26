@@ -88,7 +88,7 @@ export default function Hubble() {
     const HUBBLE_SCALE = 0.0004;
 
     // 🌍 Earth's orbital radius (same as in Earth.tsx)
-    const EARTH_ORBIT_RADIUS = 4.5;
+    const EARTH_ORBIT_RADIUS = 4.8;
 
     // 🌍 Earth's radius in scene units
     const EARTH_RADIUS_SCENE = 0.8;

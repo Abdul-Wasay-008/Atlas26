@@ -149,7 +149,7 @@ export default function CameraSnapHandler() {
                 } else if (!isSatellite) {
                     // For non-satellites, use existing offset logic
                     cameraController.startSnap(
-                        selectedId as "sun" | "earth" | "mars" | "moon",
+                        selectedId as "sun" | "venus" | "earth" | "mars" | "moon",
                         worldPos
                     );
                 }
@@ -243,7 +243,7 @@ export default function CameraSnapHandler() {
                         } else if (!isSatellite) {
                             // For non-satellites, use existing offset logic
                             cameraController.startSnap(
-                                selectedId as "sun" | "earth" | "mars" | "moon",
+                                selectedId as "sun" | "venus" | "earth" | "mars" | "moon",
                                 worldPos
                             );
                         }

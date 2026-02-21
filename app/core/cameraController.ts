@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "earth" | "mars" | "moon" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "venus" | "earth" | "mars" | "moon" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -15,6 +15,7 @@ class CameraController {
 
     systemPos = new THREE.Vector3(0, 2.5, 12); // Centered position, zoomed out to show all objects
     sunOffset = new THREE.Vector3(0, 0, 6.5); // Increased offset to prevent Sun from being cropped
+    venusOffset = new THREE.Vector3(0, 0, 3);
     earthOffset = new THREE.Vector3(0, 0, 3);
     marsOffset = new THREE.Vector3(0, 0, 3);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
@@ -51,12 +52,13 @@ class CameraController {
 
         const offset =
             target === "sun" ? this.sunOffset :
-                target === "earth" ? this.earthOffset :
-                    target === "mars" ? this.marsOffset :
-                        target === "moon" ? this.moonOffset :
-                            target === "iss" ? this.issOffset :
-                                target === "hubble" ? this.hubbleOffset :
-                                    new THREE.Vector3();
+                target === "venus" ? this.venusOffset :
+                    target === "earth" ? this.earthOffset :
+                        target === "mars" ? this.marsOffset :
+                            target === "moon" ? this.moonOffset :
+                                target === "iss" ? this.issOffset :
+                                    target === "hubble" ? this.hubbleOffset :
+                                        new THREE.Vector3();
 
         this.targetPosition.copy(worldPos).add(offset);
     }

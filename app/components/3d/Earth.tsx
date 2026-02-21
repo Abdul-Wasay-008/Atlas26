@@ -83,7 +83,7 @@ export default function Earth({ children }: { children?: React.ReactNode }) {
     );
 
     const EARTH_DAY = 24 * 60 * 60; // seconds
-    const ORBIT_RADIUS = 4.5; // Distance from Sun
+    const ORBIT_RADIUS = 4.8; // Distance from Sun
 
     // 🌍 Apply axial tilt (FIXED in inertial space, does NOT rotate with orbit)
     useEffect(() => {

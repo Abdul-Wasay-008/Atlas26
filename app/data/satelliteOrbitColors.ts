@@ -25,6 +25,7 @@ export const SATELLITE_ORBIT_COLORS: Record<string, string> = {
  * Key: planet ID | Value: hex color string
  */
 export const PLANET_ORBIT_COLORS: Record<string, string> = {
+    venus: "#FDD835",    // Yellowish - Venus theme
     earth: "#42A5F5",    // Blue - Earth theme
     mars: "#E65100",     // Dark orange / red - Mars theme
 } as const;

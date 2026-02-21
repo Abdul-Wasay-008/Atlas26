@@ -25,7 +25,7 @@ import { getGreenwichSiderealTime } from "@/app/astronomy/siderealTime";
 
 const EARTH_RADIUS_KM = 6371.0;
 const EARTH_RADIUS_SCENE = 0.8;
-const EARTH_ORBIT_RADIUS = 4.5;
+const EARTH_ORBIT_RADIUS = 4.8;
 const SCENE_TO_KM = EARTH_RADIUS_KM / EARTH_RADIUS_SCENE;
 
 // Throttle updates to avoid excessive re-renders

@@ -5,7 +5,7 @@ import * as THREE from "three";
 
 export default function EarthOrbitPath() {
     // Earth's orbital radius (same as in Earth.tsx)
-    const EARTH_ORBIT_RADIUS = 4.5; // Distance from Sun
+    const EARTH_ORBIT_RADIUS = 4.8; // Distance from Sun
 
     const orbitLine = useMemo(() => {
         const segments = 256;

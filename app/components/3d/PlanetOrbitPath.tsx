@@ -10,11 +10,13 @@ import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
 import {
     getPlanetOrbitPosition,
     MARS_ORBIT_PARAMS,
+    VENUS_ORBIT_PARAMS,
 } from "@/app/astronomy/planetOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
-const EARTH_ORBIT_RADIUS = 4.5;
+const EARTH_ORBIT_RADIUS = 4.8;
 const EARTH_ORBITAL_PERIOD_DAYS = 365.2422;
+const VENUS_ORBITAL_PERIOD_DAYS = 225;
 const MARS_ORBITAL_PERIOD_DAYS = 687;
 const NUM_SAMPLES = 500;
 
@@ -30,7 +32,7 @@ export default function PlanetOrbitPath() {
     const { selectedId } = useSelectionStore();
     const { currentDate } = useTimeManager();
 
-    const isPlanet = selectedId === "earth" || selectedId === "mars";
+    const isPlanet = selectedId === "venus" || selectedId === "earth" || selectedId === "mars";
 
     const orbitPoints = useMemo(() => {
         if (!isPlanet || !selectedId) {
@@ -38,6 +40,7 @@ export default function PlanetOrbitPath() {
         }
 
         const periodDays =
+            selectedId === "venus" ? VENUS_ORBITAL_PERIOD_DAYS :
             selectedId === "earth" ? EARTH_ORBITAL_PERIOD_DAYS : MARS_ORBITAL_PERIOD_DAYS;
         const msPerDay = 86400000;
         const periodMs = periodDays * msPerDay;
@@ -48,7 +51,9 @@ export default function PlanetOrbitPath() {
             const t = i / NUM_SAMPLES;
             const date = new Date(currentDate.getTime() + t * periodMs);
 
-            if (selectedId === "earth") {
+            if (selectedId === "venus") {
+                points.push(getPlanetOrbitPosition(date, VENUS_ORBIT_PARAMS));
+            } else if (selectedId === "earth") {
                 points.push(getEarthOrbitPosition(date, EARTH_ORBIT_RADIUS));
             } else {
                 points.push(getPlanetOrbitPosition(date, MARS_ORBIT_PARAMS));

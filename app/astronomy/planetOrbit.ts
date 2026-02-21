@@ -14,7 +14,7 @@ function dateToJulianDate(date: Date): number {
 export interface PlanetOrbitParams {
     /** Orbital period in Earth days */
     periodDays: number;
-    /** Semi-major axis in scene units (Earth = 4.5) */
+    /** Semi-major axis in scene units (Earth = 4.8) */
     semiMajorAxis: number;
     /** Orbital eccentricity (0 = circular) */
     eccentricity: number;
@@ -80,9 +80,19 @@ export function getPlanetOrbitPosition(
 /** Mars orbital parameters (realistic, scene-scaled) */
 export const MARS_ORBIT_PARAMS: PlanetOrbitParams = {
     periodDays: 687,
-    semiMajorAxis: 4.5 * 1.524, // 1.524 AU, Earth = 4.5
+    semiMajorAxis: 7.2, // Visual distance from Sun (scene units)
     eccentricity: 0.0934,
 };
 
 /** Mars axial tilt in radians (25.19°) */
 export const MARS_AXIAL_TILT_RADIANS = (25.19 * Math.PI) / 180;
+
+/** Venus orbital parameters (realistic, scene-scaled) */
+export const VENUS_ORBIT_PARAMS: PlanetOrbitParams = {
+    periodDays: 225,
+    semiMajorAxis: 3.2, // Visual distance from Sun (scene units)
+    eccentricity: 0.0067,
+};
+
+/** Venus axial tilt in radians (177.4° - nearly upside down, but we simplify for now) */
+export const VENUS_AXIAL_TILT_RADIANS = (2.64 * Math.PI) / 180;

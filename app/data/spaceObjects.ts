@@ -28,6 +28,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "0 km"
     },
     {
+        id: "venus",
+        name: "Venus",
+        type: "planet",
+        radius: "6,052 km",
+        orbitalPeriod: "225 days",
+        description: "Venus is the second planet from the Sun, an Earth-sized terrestrial world with a thick, cloudy atmosphere and extreme surface conditions.",
+        distanceFromEarth: "~38 million km at closest"
+    },
+    {
         id: "mars",
         name: "Mars",
         type: "planet",

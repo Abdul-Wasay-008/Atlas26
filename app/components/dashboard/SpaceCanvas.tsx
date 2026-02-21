@@ -117,6 +117,7 @@ import Sun from "../3d/Sun";
 import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
 import Planet from "../3d/Planet";
+import Venus from "../3d/Venus";
 import Moon from "../3d/Moon";
 import {
     MARS_ORBIT_PARAMS,
@@ -264,6 +265,9 @@ export default function SpaceCanvas() {
 
                 {/* ☀️ Sun (center of solar system) */}
                 <Sun />
+
+                {/* 🪐 Venus (closest to Sun, two-layer: surface + atmosphere) */}
+                <Venus />
 
                 {/* 🌍 Earth–Moon System */}
                 <Earth />

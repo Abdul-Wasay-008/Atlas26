@@ -118,7 +118,7 @@ export default function Planet({
             if (orbit.type === "earth") {
                 const pos = getEarthOrbitPosition(
                     currentDate,
-                    orbit.radius ?? 4.5
+                    orbit.radius ?? 4.8
                 );
                 orbitRef.current.position.copy(pos);
             } else {
