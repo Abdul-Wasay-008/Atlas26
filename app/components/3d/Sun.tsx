@@ -73,7 +73,7 @@ export default function Sun() {
                     document.body.style.cursor = "default";
                 }}
             >
-                <sphereGeometry args={[1.5, 64, 64]} />
+                <sphereGeometry args={[1.0, 64, 64]} />
                 <meshStandardMaterial
                     map={sunTexture}
                     emissive={new THREE.Color(0xffff00)}

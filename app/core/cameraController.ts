@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "venus" | "earth" | "mars" | "moon" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "moon" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -13,11 +13,13 @@ class CameraController {
     targetPosition = new THREE.Vector3();
     lookAtPosition = new THREE.Vector3();
 
-    systemPos = new THREE.Vector3(0, 2.5, 12); // Centered position, zoomed out to show all objects
-    sunOffset = new THREE.Vector3(0, 0, 6.5); // Increased offset to prevent Sun from being cropped
+    systemPos = new THREE.Vector3(0, 5, 26); // Centered position, zoomed out to show all objects
+    sunOffset = new THREE.Vector3(0, 0, 4); // Reduced for smaller Sun
+    mercuryOffset = new THREE.Vector3(0, 0, 2);
     venusOffset = new THREE.Vector3(0, 0, 3);
     earthOffset = new THREE.Vector3(0, 0, 3);
     marsOffset = new THREE.Vector3(0, 0, 3);
+    jupiterOffset = new THREE.Vector3(0, 0, 5);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
@@ -52,13 +54,15 @@ class CameraController {
 
         const offset =
             target === "sun" ? this.sunOffset :
-                target === "venus" ? this.venusOffset :
-                    target === "earth" ? this.earthOffset :
-                        target === "mars" ? this.marsOffset :
-                            target === "moon" ? this.moonOffset :
-                                target === "iss" ? this.issOffset :
-                                    target === "hubble" ? this.hubbleOffset :
-                                        new THREE.Vector3();
+                target === "mercury" ? this.mercuryOffset :
+                    target === "venus" ? this.venusOffset :
+                        target === "earth" ? this.earthOffset :
+                            target === "mars" ? this.marsOffset :
+                                target === "jupiter" ? this.jupiterOffset :
+                                    target === "moon" ? this.moonOffset :
+                                        target === "iss" ? this.issOffset :
+                                            target === "hubble" ? this.hubbleOffset :
+                                                new THREE.Vector3();
 
         this.targetPosition.copy(worldPos).add(offset);
     }

@@ -28,6 +28,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "0 km"
     },
     {
+        id: "mercury",
+        name: "Mercury",
+        type: "planet",
+        radius: "2,440 km",
+        orbitalPeriod: "88 days",
+        description: "Mercury is the smallest planet in our solar system and the closest to the Sun. It has a heavily cratered surface and extreme temperature variations.",
+        distanceFromEarth: "~77 million km at closest"
+    },
+    {
         id: "venus",
         name: "Venus",
         type: "planet",
@@ -44,6 +53,15 @@ export const spaceObjects: SpaceObjectData[] = [
         orbitalPeriod: "687 days",
         description: "Mars is the fourth planet from the Sun, a terrestrial world with polar ice caps, seasons, and a history of water.",
         distanceFromEarth: "~78 million km at closest"
+    },
+    {
+        id: "jupiter",
+        name: "Jupiter",
+        type: "planet",
+        radius: "69,911 km",
+        orbitalPeriod: "~12 years",
+        description: "Jupiter is the largest planet in our solar system, a gas giant with a Great Red Spot storm and dozens of moons.",
+        distanceFromEarth: "~588 million km at closest"
     },
     {
         id: "moon",

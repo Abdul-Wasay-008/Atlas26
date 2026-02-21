@@ -118,6 +118,8 @@ import SunLight from "../3d/SunLight";
 import Earth from "../3d/Earth";
 import Planet from "../3d/Planet";
 import Venus from "../3d/Venus";
+import Mercury from "../3d/Mercury";
+import Jupiter from "../3d/Jupiter";
 import Moon from "../3d/Moon";
 import {
     MARS_ORBIT_PARAMS,
@@ -266,7 +268,10 @@ export default function SpaceCanvas() {
                 {/* ☀️ Sun (center of solar system) */}
                 <Sun />
 
-                {/* 🪐 Venus (closest to Sun, two-layer: surface + atmosphere) */}
+                {/* ☿ Mercury (innermost planet) */}
+                <Mercury />
+
+                {/* 🪐 Venus (two-layer: surface + atmosphere) */}
                 <Venus />
 
                 {/* 🌍 Earth–Moon System */}
@@ -292,6 +297,9 @@ export default function SpaceCanvas() {
                 noShadow={true}
                 />
 
+                {/* 🪐 Jupiter (largest planet, gas giant) */}
+                <Jupiter />
+
                 {/* 🚀 ISS (International Space Station) */}
                 <ISS />
 
@@ -312,7 +320,7 @@ export default function SpaceCanvas() {
                     ref={controlsRef}
                     enablePan={false}
                     minDistance={0.1}
-                    maxDistance={14}
+                    maxDistance={50}
                     rotateSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.6 : 1}
                     zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1}
                 />

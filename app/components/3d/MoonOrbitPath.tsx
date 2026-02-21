@@ -10,7 +10,7 @@ import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
 import { getMoonPosition } from "@/app/astronomy/lunar";
 import { MOON_ORBIT_COLOR } from "@/app/data/satelliteOrbitColors";
 
-const EARTH_ORBIT_RADIUS = 4.8;
+const EARTH_ORBIT_RADIUS = 8.0;
 /** Sidereal month in days (~27.3) */
 const MOON_ORBITAL_PERIOD_DAYS = 27.321661;
 const NUM_SAMPLES = 400;

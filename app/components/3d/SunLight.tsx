@@ -20,7 +20,7 @@ export default function SunLight() {
     const lightRef = useRef<THREE.DirectionalLight>(null);
     
     // Earth's orbital radius (same as in Earth.tsx)
-    const EARTH_ORBIT_RADIUS = 4.8;
+    const EARTH_ORBIT_RADIUS = 8.0;
     
     // Distance to position the light (far enough to be effectively directional)
     const LIGHT_DISTANCE = 100;

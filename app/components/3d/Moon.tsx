@@ -132,7 +132,7 @@ export default function Moon() {
         [moonTexture]
     );
 
-    const EARTH_ORBIT_RADIUS = 4.8; // Distance from Sun
+    const EARTH_ORBIT_RADIUS = 8.0; // Distance from Sun
 
     useFrame(() => {
         // Get current date from TimeManager (single source of truth)

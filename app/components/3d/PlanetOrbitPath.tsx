@@ -9,15 +9,19 @@ import { useTimeManager } from "@/app/core/useTimeManager";
 import { getEarthOrbitPosition } from "@/app/astronomy/earthOrbit";
 import {
     getPlanetOrbitPosition,
+    MERCURY_ORBIT_PARAMS,
     MARS_ORBIT_PARAMS,
     VENUS_ORBIT_PARAMS,
+    JUPITER_ORBIT_PARAMS,
 } from "@/app/astronomy/planetOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
-const EARTH_ORBIT_RADIUS = 4.8;
+const EARTH_ORBIT_RADIUS = 8.0;
 const EARTH_ORBITAL_PERIOD_DAYS = 365.2422;
+const MERCURY_ORBITAL_PERIOD_DAYS = 88;
 const VENUS_ORBITAL_PERIOD_DAYS = 225;
 const MARS_ORBITAL_PERIOD_DAYS = 687;
+const JUPITER_ORBITAL_PERIOD_DAYS = 4333;
 const NUM_SAMPLES = 500;
 
 /**
@@ -32,7 +36,7 @@ export default function PlanetOrbitPath() {
     const { selectedId } = useSelectionStore();
     const { currentDate } = useTimeManager();
 
-    const isPlanet = selectedId === "venus" || selectedId === "earth" || selectedId === "mars";
+    const isPlanet = selectedId === "mercury" || selectedId === "venus" || selectedId === "earth" || selectedId === "mars" || selectedId === "jupiter";
 
     const orbitPoints = useMemo(() => {
         if (!isPlanet || !selectedId) {
@@ -40,8 +44,10 @@ export default function PlanetOrbitPath() {
         }
 
         const periodDays =
+            selectedId === "mercury" ? MERCURY_ORBITAL_PERIOD_DAYS :
             selectedId === "venus" ? VENUS_ORBITAL_PERIOD_DAYS :
-            selectedId === "earth" ? EARTH_ORBITAL_PERIOD_DAYS : MARS_ORBITAL_PERIOD_DAYS;
+            selectedId === "earth" ? EARTH_ORBITAL_PERIOD_DAYS :
+            selectedId === "mars" ? MARS_ORBITAL_PERIOD_DAYS : JUPITER_ORBITAL_PERIOD_DAYS;
         const msPerDay = 86400000;
         const periodMs = periodDays * msPerDay;
 
@@ -51,12 +57,16 @@ export default function PlanetOrbitPath() {
             const t = i / NUM_SAMPLES;
             const date = new Date(currentDate.getTime() + t * periodMs);
 
-            if (selectedId === "venus") {
+            if (selectedId === "mercury") {
+                points.push(getPlanetOrbitPosition(date, MERCURY_ORBIT_PARAMS));
+            } else if (selectedId === "venus") {
                 points.push(getPlanetOrbitPosition(date, VENUS_ORBIT_PARAMS));
             } else if (selectedId === "earth") {
                 points.push(getEarthOrbitPosition(date, EARTH_ORBIT_RADIUS));
-            } else {
+            } else if (selectedId === "mars") {
                 points.push(getPlanetOrbitPosition(date, MARS_ORBIT_PARAMS));
+            } else {
+                points.push(getPlanetOrbitPosition(date, JUPITER_ORBIT_PARAMS));
             }
         }
 

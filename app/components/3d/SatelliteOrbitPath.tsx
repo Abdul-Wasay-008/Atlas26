@@ -89,7 +89,7 @@ export default function SatelliteOrbitPath() {
             const cacheKey = selectedId;
 
             // Earth orbit radius (matches the value used in satellite rendering)
-            const EARTH_ORBIT_RADIUS = 4.8;
+            const EARTH_ORBIT_RADIUS = 8.0;
 
             // Sample symmetrically around current time to avoid seam near satellite
             // Sampling window: [-halfPeriod, +halfPeriod]
