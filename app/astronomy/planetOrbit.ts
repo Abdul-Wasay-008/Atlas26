@@ -126,3 +126,13 @@ export const SATURN_ORBIT_PARAMS: PlanetOrbitParams = {
 
 /** Saturn axial tilt in radians (26.73°) */
 export const SATURN_AXIAL_TILT_RADIANS = (26.73 * Math.PI) / 180;
+
+/** Uranus orbital parameters (realistic, scene-scaled) */
+export const URANUS_ORBIT_PARAMS: PlanetOrbitParams = {
+    periodDays: 30687,
+    semiMajorAxis: 30.0, // Visual distance from Sun (scene units)
+    eccentricity: 0.046,
+};
+
+/** Uranus axial tilt in radians (97.77° - tilted on its side) */
+export const URANUS_AXIAL_TILT_RADIANS = (97.77 * Math.PI) / 180;

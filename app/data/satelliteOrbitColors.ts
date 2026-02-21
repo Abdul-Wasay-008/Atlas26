@@ -31,6 +31,7 @@ export const PLANET_ORBIT_COLORS: Record<string, string> = {
     mars: "#E65100",     // Dark orange / red - Mars theme
     jupiter: "#cac7c4", // Light gray - Jupiter theme
     saturn: "#d3c6a8",  // Pale gold - Saturn theme
+    uranus: "#7FDBFF",  // Cyan/blue - Uranus theme
 } as const;
 
 /** Orbit color for Moon (around Earth) - white / light gray */

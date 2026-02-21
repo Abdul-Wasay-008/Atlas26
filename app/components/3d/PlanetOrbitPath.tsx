@@ -14,6 +14,7 @@ import {
     VENUS_ORBIT_PARAMS,
     JUPITER_ORBIT_PARAMS,
     SATURN_ORBIT_PARAMS,
+    URANUS_ORBIT_PARAMS,
 } from "@/app/astronomy/planetOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
@@ -24,6 +25,7 @@ const VENUS_ORBITAL_PERIOD_DAYS = 225;
 const MARS_ORBITAL_PERIOD_DAYS = 687;
 const JUPITER_ORBITAL_PERIOD_DAYS = 4333;
 const SATURN_ORBITAL_PERIOD_DAYS = 10759;
+const URANUS_ORBITAL_PERIOD_DAYS = 30687;
 const NUM_SAMPLES = 500;
 
 /**
@@ -38,7 +40,7 @@ export default function PlanetOrbitPath() {
     const { selectedId } = useSelectionStore();
     const { currentDate } = useTimeManager();
 
-    const isPlanet = selectedId === "mercury" || selectedId === "venus" || selectedId === "earth" || selectedId === "mars" || selectedId === "jupiter" || selectedId === "saturn";
+    const isPlanet = selectedId === "mercury" || selectedId === "venus" || selectedId === "earth" || selectedId === "mars" || selectedId === "jupiter" || selectedId === "saturn" || selectedId === "uranus";
 
     const orbitPoints = useMemo(() => {
         if (!isPlanet || !selectedId) {
@@ -50,7 +52,8 @@ export default function PlanetOrbitPath() {
             selectedId === "venus" ? VENUS_ORBITAL_PERIOD_DAYS :
             selectedId === "earth" ? EARTH_ORBITAL_PERIOD_DAYS :
             selectedId === "mars" ? MARS_ORBITAL_PERIOD_DAYS :
-            selectedId === "jupiter" ? JUPITER_ORBITAL_PERIOD_DAYS : SATURN_ORBITAL_PERIOD_DAYS;
+            selectedId === "jupiter" ? JUPITER_ORBITAL_PERIOD_DAYS :
+            selectedId === "saturn" ? SATURN_ORBITAL_PERIOD_DAYS : URANUS_ORBITAL_PERIOD_DAYS;
         const msPerDay = 86400000;
         const periodMs = periodDays * msPerDay;
 
@@ -70,8 +73,10 @@ export default function PlanetOrbitPath() {
                 points.push(getPlanetOrbitPosition(date, MARS_ORBIT_PARAMS));
             } else if (selectedId === "jupiter") {
                 points.push(getPlanetOrbitPosition(date, JUPITER_ORBIT_PARAMS));
-            } else {
+            } else if (selectedId === "saturn") {
                 points.push(getPlanetOrbitPosition(date, SATURN_ORBIT_PARAMS));
+            } else {
+                points.push(getPlanetOrbitPosition(date, URANUS_ORBIT_PARAMS));
             }
         }
 

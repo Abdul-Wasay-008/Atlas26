@@ -73,6 +73,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~1.2 billion km at closest"
     },
     {
+        id: "uranus",
+        name: "Uranus",
+        type: "planet",
+        radius: "25,362 km",
+        orbitalPeriod: "~84 years",
+        description: "Uranus is an ice giant with a unique sideways rotation. Its blue-green color comes from methane in its atmosphere.",
+        distanceFromEarth: "~2.6 billion km at closest"
+    },
+    {
         id: "moon",
         name: "Moon",
         type: "satellite",
