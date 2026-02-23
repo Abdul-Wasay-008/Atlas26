@@ -21,6 +21,7 @@ import {
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
 const EARTH_ORBIT_RADIUS = 8.0;
+const EARTH_ORBITAL_PERIOD_DAYS = 365.2422; // Tropical year, matches earthOrbit
 const NUM_SAMPLES = 500;
 
 const ORBIT_THICKNESS = {
@@ -53,28 +54,28 @@ function getBaseLineWidth(planetId: string): number {
 
 interface PlanetOrbitConfig {
     id: string;
-    periodDays: number;
     params?: PlanetOrbitParams;
     isEarth?: boolean;
 }
 
 const PLANET_CONFIGS: PlanetOrbitConfig[] = [
-    { id: "mercury", periodDays: 88, params: MERCURY_ORBIT_PARAMS },
-    { id: "venus", periodDays: 225, params: VENUS_ORBIT_PARAMS },
-    { id: "earth", periodDays: 365.2422, isEarth: true },
-    { id: "mars", periodDays: 687, params: MARS_ORBIT_PARAMS },
-    { id: "jupiter", periodDays: 4333, params: JUPITER_ORBIT_PARAMS },
-    { id: "saturn", periodDays: 10759, params: SATURN_ORBIT_PARAMS },
-    { id: "uranus", periodDays: 30687, params: URANUS_ORBIT_PARAMS },
-    { id: "neptune", periodDays: 60190, params: NEPTUNE_ORBIT_PARAMS },
+    { id: "mercury", params: MERCURY_ORBIT_PARAMS },
+    { id: "venus", params: VENUS_ORBIT_PARAMS },
+    { id: "earth", isEarth: true },
+    { id: "mars", params: MARS_ORBIT_PARAMS },
+    { id: "jupiter", params: JUPITER_ORBIT_PARAMS },
+    { id: "saturn", params: SATURN_ORBIT_PARAMS },
+    { id: "uranus", params: URANUS_ORBIT_PARAMS },
+    { id: "neptune", params: NEPTUNE_ORBIT_PARAMS },
 ];
 
 function computeOrbitPoints(
     config: PlanetOrbitConfig,
     currentDate: Date
 ): THREE.Vector3[] {
+    const periodDays = config.params ? config.params.periodDays : EARTH_ORBITAL_PERIOD_DAYS;
     const msPerDay = 86400000;
-    const periodMs = config.periodDays * msPerDay;
+    const periodMs = periodDays * msPerDay;
     const points: THREE.Vector3[] = [];
 
     for (let i = 0; i <= NUM_SAMPLES; i++) {

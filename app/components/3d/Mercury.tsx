@@ -11,7 +11,8 @@ import {
     MERCURY_AXIAL_TILT_RADIANS,
 } from "@/app/astronomy/planetOrbit";
 
-const MERCURY_ROTATION_PERIOD_SECONDS = 59 * 24 * 60 * 60;
+// Mercury's actual rotation: ~59 Earth days. Use 24h for visible display at sim speeds.
+const MERCURY_ROTATION_PERIOD_SECONDS = 24 * 60 * 60;
 const MERCURY_RADIUS = 0.8 * 0.38;
 
 export default function Mercury() {

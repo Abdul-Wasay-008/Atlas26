@@ -11,7 +11,8 @@ import {
     VENUS_AXIAL_TILT_RADIANS,
 } from "@/app/astronomy/planetOrbit";
 
-const VENUS_ROTATION_PERIOD_SECONDS = 243 * 24 * 60 * 60;
+// Venus's actual rotation: ~243 Earth days. Use 24h for visible display at sim speeds.
+const VENUS_ROTATION_PERIOD_SECONDS = 24 * 60 * 60;
 const VENUS_RADIUS = 0.8 * 0.95;
 const ATMOSPHERE_SCALE = 1.025;
 

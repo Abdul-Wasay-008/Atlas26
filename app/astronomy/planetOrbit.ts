@@ -3,18 +3,34 @@
  *
  * Keplerian orbit position for any planet. Used by Mars and any future planets.
  * Earth keeps its own getEarthOrbitPosition in earthOrbit.ts for ECI/ECEF/sidereal logic.
+ *
+ * KEPLER'S THIRD LAW: T² ∝ a³ (orbital period squared proportional to semi-major axis cubed)
+ * Formula: T = T_earth × (a / a_earth)^(3/2)
+ * Orbital periods are derived from real semi-major axes (AU) so planets move like in space.
+ * Scene semi-major axis is separate (visual scaling for layout).
  */
 
 import * as THREE from "three";
+
+const EARTH_ORBITAL_PERIOD_DAYS = 365.2422; // Tropical year, matches earthOrbit.ts
+const EARTH_SEMI_MAJOR_AXIS_AU = 1.0;
+
+/**
+ * Compute orbital period in Earth days from semi-major axis (AU) using Kepler's Third Law.
+ * T² ∝ a³  =>  T = T_earth × (a / a_earth)^(3/2)
+ */
+export function keplerPeriodDays(semiMajorAxisAU: number): number {
+    return EARTH_ORBITAL_PERIOD_DAYS * Math.pow(semiMajorAxisAU / EARTH_SEMI_MAJOR_AXIS_AU, 1.5);
+}
 
 function dateToJulianDate(date: Date): number {
     return date.getTime() / 86400000 + 2440587.5;
 }
 
 export interface PlanetOrbitParams {
-    /** Orbital period in Earth days */
+    /** Orbital period in Earth days (Kepler-derived from semi-major axis AU) */
     periodDays: number;
-    /** Semi-major axis in scene units (Earth = 8.0) */
+    /** Semi-major axis in scene units for position (Earth = 8.0, visual layout) */
     semiMajorAxis: number;
     /** Orbital eccentricity (0 = circular) */
     eccentricity: number;
@@ -77,71 +93,83 @@ export function getPlanetOrbitPosition(
     return new THREE.Vector3(x, 0, z);
 }
 
-/** Mars orbital parameters (realistic, scene-scaled) */
+/** Semi-major axes in AU (NASA/JPL values). Used for Kepler period derivation. */
+const SEMI_MAJOR_AXIS_AU = {
+    mercury: 0.387098,
+    venus: 0.723332,
+    earth: 1.000001,
+    mars: 1.523662,
+    jupiter: 5.203363,
+    saturn: 9.537070,
+    uranus: 19.191264,
+    neptune: 30.068963,
+} as const;
+
+/** Mercury: Kepler period from a=0.387 AU, scene radius 3.0 */
+export const MERCURY_ORBIT_PARAMS: PlanetOrbitParams = {
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.mercury),
+    semiMajorAxis: 3.0,
+    eccentricity: 0.2056,
+};
+
+/** Mercury axial tilt in radians (0.034° - nearly upright) */
+export const MERCURY_AXIAL_TILT_RADIANS = (0.034 * Math.PI) / 180;
+
+/** Venus: Kepler period from a=0.723 AU, scene radius 5.0 */
+export const VENUS_ORBIT_PARAMS: PlanetOrbitParams = {
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.venus),
+    semiMajorAxis: 5.0,
+    eccentricity: 0.0068,
+};
+
+/** Venus axial tilt in radians (2.64° - retrograde rotation) */
+export const VENUS_AXIAL_TILT_RADIANS = (2.64 * Math.PI) / 180;
+
+/** Mars: Kepler period from a=1.524 AU, scene radius 12.0 */
 export const MARS_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 687,
-    semiMajorAxis: 12.0, // Visual distance from Sun (scene units)
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.mars),
+    semiMajorAxis: 12.0,
     eccentricity: 0.0934,
 };
 
 /** Mars axial tilt in radians (25.19°) */
 export const MARS_AXIAL_TILT_RADIANS = (25.19 * Math.PI) / 180;
 
-/** Venus orbital parameters (realistic, scene-scaled) */
-export const VENUS_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 225,
-    semiMajorAxis: 5.0, // Visual distance from Sun (scene units)
-    eccentricity: 0.0067,
-};
-
-/** Venus axial tilt in radians (177.4° - nearly upside down, but we simplify for now) */
-export const VENUS_AXIAL_TILT_RADIANS = (2.64 * Math.PI) / 180;
-
-/** Mercury orbital parameters (realistic, scene-scaled) */
-export const MERCURY_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 88,
-    semiMajorAxis: 3.0, // Visual distance from Sun (scene units)
-    eccentricity: 0.205,
-};
-
-/** Mercury axial tilt in radians (0.034° - nearly upright) */
-export const MERCURY_AXIAL_TILT_RADIANS = (0.034 * Math.PI) / 180;
-
-/** Jupiter orbital parameters (realistic, scene-scaled) */
+/** Jupiter: Kepler period from a=5.203 AU, scene radius 18.0 */
 export const JUPITER_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 4333,
-    semiMajorAxis: 18.0, // Visual distance from Sun (scene units)
-    eccentricity: 0.049,
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.jupiter),
+    semiMajorAxis: 18.0,
+    eccentricity: 0.0484,
 };
 
 /** Jupiter axial tilt in radians (3.13°) */
 export const JUPITER_AXIAL_TILT_RADIANS = (3.13 * Math.PI) / 180;
 
-/** Saturn orbital parameters (realistic, scene-scaled) */
+/** Saturn: Kepler period from a=9.537 AU, scene radius 24.0 */
 export const SATURN_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 10759,
-    semiMajorAxis: 24.0, // Visual distance from Sun (scene units)
-    eccentricity: 0.054,
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.saturn),
+    semiMajorAxis: 24.0,
+    eccentricity: 0.0542,
 };
 
 /** Saturn axial tilt in radians (26.73°) */
 export const SATURN_AXIAL_TILT_RADIANS = (26.73 * Math.PI) / 180;
 
-/** Uranus orbital parameters (realistic, scene-scaled) */
+/** Uranus: Kepler period from a=19.191 AU, scene radius 30.0 */
 export const URANUS_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 30687,
-    semiMajorAxis: 30.0, // Visual distance from Sun (scene units)
-    eccentricity: 0.046,
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.uranus),
+    semiMajorAxis: 30.0,
+    eccentricity: 0.0472,
 };
 
 /** Uranus axial tilt in radians (97.77° - tilted on its side) */
 export const URANUS_AXIAL_TILT_RADIANS = (97.77 * Math.PI) / 180;
 
-/** Neptune orbital parameters (realistic, scene-scaled) */
+/** Neptune: Kepler period from a=30.069 AU, scene radius 36.0 */
 export const NEPTUNE_ORBIT_PARAMS: PlanetOrbitParams = {
-    periodDays: 60190,
-    semiMajorAxis: 36.0, // Visual distance from Sun (scene units)
-    eccentricity: 0.009,
+    periodDays: keplerPeriodDays(SEMI_MAJOR_AXIS_AU.neptune),
+    semiMajorAxis: 36.0,
+    eccentricity: 0.0086,
 };
 
 /** Neptune axial tilt in radians (28.32°) */

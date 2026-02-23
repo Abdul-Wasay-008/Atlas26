@@ -136,40 +136,16 @@ import MoonOrbitPath from "../3d/MoonOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
-import {
-    getGreenwichSiderealTime,
-    getEarthOrbitalLongitude,
-} from "@/app/astronomy/siderealTime";
-
-/* 🌌 Starfield Background - Astronomically Oriented */
+/* 🌌 Starfield Background - Static in World Space
+ * The starfield does NOT rotate with simulation time. It stays fixed so that
+ * only planets and objects move when time is sped up. The user sees stars
+ * shift only when dragging the canvas (camera movement via OrbitControls).
+ */
 function Starfield() {
     const texture = useTexture("/space/stars.jpg");
-    const starfieldRef = useRef<THREE.Mesh>(null);
-
-    useFrame(() => {
-        if (starfieldRef.current) {
-            // Get current date from TimeManager (single source of truth)
-            const currentDate = timeManager.getCurrentDate();
-
-            // A) Sidereal rotation (daily): Stars rotate once per sidereal day (~23h 56m)
-            // This represents Earth's rotation relative to the fixed stars
-            // GST gives the rotation angle of the celestial sphere due to Earth's daily rotation
-            const siderealRotation = getGreenwichSiderealTime(currentDate);
-
-            // B) Annual/seasonal rotation: As Earth orbits the Sun, the night sky shifts
-            // This is Earth's orbital longitude (0 to 2π over a year)
-            // We rotate the sphere opposite to Earth's orbital motion (negative direction)
-            // so that as Earth moves in its orbit, the visible sky shifts correctly
-            const orbitalRotation = -getEarthOrbitalLongitude(currentDate);
-
-            // Combine both rotations around Y-axis (celestial north pole)
-            // Both rotations are around the same axis, so we can simply add them
-            starfieldRef.current.rotation.y = siderealRotation + orbitalRotation;
-        }
-    });
 
     return (
-        <mesh ref={starfieldRef} scale={-1}>
+        <mesh scale={-1}>
             <sphereGeometry args={[500, 64, 64]} />
             <meshBasicMaterial
                 map={texture}
