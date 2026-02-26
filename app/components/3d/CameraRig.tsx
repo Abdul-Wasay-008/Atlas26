@@ -96,7 +96,12 @@ export default function CameraRig({ controlsRef }: { controlsRef: any }) {
     }, [gl, controlsRef]);
 
     useFrame(() => {
-        // Completely stop if user is interacting
+        // Always update controls for damping to work smoothly
+        if (controlsRef?.current) {
+            controlsRef.current.update();
+        }
+
+        // Completely stop snapping logic if user is interacting
         if (cameraController.userInteracting) {
             return;
         }

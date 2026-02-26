@@ -13,7 +13,7 @@ class CameraController {
     targetPosition = new THREE.Vector3();
     lookAtPosition = new THREE.Vector3();
 
-    systemPos = new THREE.Vector3(0, 5, 26); // Centered position, zoomed out to show all objects
+    systemPos = new THREE.Vector3(0, 16, 32); // Lower elevation, zoomed out to fit all planets
     sunOffset = new THREE.Vector3(0, 0, 4); // Reduced for smaller Sun
     mercuryOffset = new THREE.Vector3(0, 0, 2);
     venusOffset = new THREE.Vector3(0, 0, 3);
@@ -34,7 +34,7 @@ class CameraController {
         }
 
         const previousTarget = this.target;
-        
+
         // If user is interacting, only allow snapping to a DIFFERENT target
         // This prevents re-snapping to the same object after user moves camera
         if (this.userInteracting) {

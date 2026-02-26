@@ -112,6 +112,7 @@ import { useEffect, useRef, useState } from "react";
 
 import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
+import CameraKeyboardControls from "../3d/CameraKeyboardControls";
 import KeyboardShortcuts from "./KeyboardShortcuts";
 import Sun from "../3d/Sun";
 import SunLight from "../3d/SunLight";
@@ -177,23 +178,40 @@ export default function SpaceCanvas() {
     // 🔑 ADD THIS
     const controlsRef = useRef<any>(null);
 
-    /* 📐 Responsive Camera */
+    /* 📐 Responsive Camera - Adjusts FOV and position based on screen size */
     useEffect(() => {
         if (typeof window === "undefined") return;
 
         function updateCamera() {
             const w = window.innerWidth;
+            const h = window.innerHeight;
+            const aspectRatio = w / h;
             const basePos = cameraController.systemPos;
 
             if (w < 480) {
-                setFov(65);
-                setCameraPos([basePos.x, basePos.y, basePos.z + 1.5]);
+                // Mobile phones - wider FOV, pull back more
+                setFov(85);
+                setCameraPos([basePos.x, basePos.y * 0.85, basePos.z + 10]);
             } else if (w < 768) {
-                setFov(55);
-                setCameraPos([basePos.x, basePos.y, basePos.z + 1]);
-            } else {
-                setFov(45);
+                // Tablets portrait
+                setFov(75);
+                setCameraPos([basePos.x, basePos.y * 0.9, basePos.z + 6]);
+            } else if (w < 1024) {
+                // Tablets landscape / small laptops
+                setFov(68);
+                setCameraPos([basePos.x, basePos.y * 0.95, basePos.z + 3]);
+            } else if (w < 1440) {
+                // Standard laptops - base position
+                setFov(62);
                 setCameraPos([basePos.x, basePos.y, basePos.z]);
+            } else if (w < 1920) {
+                // Large screens
+                setFov(58);
+                setCameraPos([basePos.x, basePos.y, basePos.z - 3]);
+            } else {
+                // Ultra-wide / 4K displays
+                setFov(aspectRatio > 2 ? 62 : 55);
+                setCameraPos([basePos.x, basePos.y, basePos.z - 5]);
             }
         }
 
@@ -242,6 +260,7 @@ export default function SpaceCanvas() {
 
                 {/* 🔥 CAMERA RIG WITH CONTROLS REF */}
                 <CameraRig controlsRef={controlsRef} />
+                <CameraKeyboardControls controlsRef={controlsRef} />
                 <CameraSnapHandler />
 
                 {/* ☀️ Sun (center of solar system) */}
@@ -306,11 +325,15 @@ export default function SpaceCanvas() {
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
                     ref={controlsRef}
-                    enablePan={false}
-                    minDistance={0.1}
-                    maxDistance={50}
+                    enablePan={true}
+                    panSpeed={0.8}
+                    minDistance={0.5}
+                    maxDistance={80}
                     rotateSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.6 : 1}
-                    zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1}
+                    zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1.2}
+                    enableDamping={true}
+                    dampingFactor={0.05}
+                    screenSpacePanning={true}
                 />
             </Canvas>
         </>
