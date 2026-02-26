@@ -10,6 +10,7 @@ import { spaceObjects } from "@/app/data/spaceObjects"
 export default function Sidebar() {
     const [open, setOpen] = useState(false)
     const [active, setActive] = useState("All")
+    const [planetsExpanded, setPlanetsExpanded] = useState(false)
     const [satellitesExpanded, setSatellitesExpanded] = useState(false)
     const selectObject = useSelectionStore((state) => state.selectObject)
     const selectedId = useSelectionStore((state) => state.selectedId)
@@ -23,9 +24,18 @@ export default function Sidebar() {
         { name: "Interstellar", icon: Stars },
     ]
 
-    // Get satellites for the expandable list
+    // Get planets for the expandable list, ordered from Sun: Mercury → Neptune
+    const PLANET_ORDER = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"] as const
+    const planets = spaceObjects
+        .filter(obj => obj.type === "planet")
+        .sort((a, b) => PLANET_ORDER.indexOf(a.id as typeof PLANET_ORDER[number]) - PLANET_ORDER.indexOf(b.id as typeof PLANET_ORDER[number]))
     const satellites = spaceObjects.filter(obj => obj.type === "satellite" && obj.id !== "moon")
-    
+
+    const handlePlanetClick = (planetId: string) => {
+        selectObject(planetId)
+        setActive("Planets")
+    }
+
     const handleSatelliteClick = (satelliteId: string) => {
         selectObject(satelliteId)
         setActive("Satellites")
@@ -34,9 +44,12 @@ export default function Sidebar() {
     const renderMenu = () => (
         <div className="space-y-3 text-sm md:text-base text-white/60">
             {menu.map(({ name, icon: Icon }) => {
+                const isPlanets = name === "Planets"
                 const isSatellites = name === "Satellites"
                 const isActive = active === name
-                
+                const isExpandable = isPlanets || isSatellites
+                const isExpanded = isPlanets ? planetsExpanded : satellitesExpanded
+
                 return (
                     <div key={name}>
                         <button
@@ -46,6 +59,9 @@ export default function Sidebar() {
                                     setShowAllOrbits(true)
                                 } else {
                                     setShowAllOrbits(false)
+                                }
+                                if (isPlanets) {
+                                    setPlanetsExpanded(!planetsExpanded)
                                 }
                                 if (isSatellites) {
                                     setSatellitesExpanded(!satellitesExpanded)
@@ -75,14 +91,36 @@ export default function Sidebar() {
                             <span className="flex-1 text-left">
                                 {name}
                             </span>
-                            {isSatellites && (
-                                satellitesExpanded ? (
+                            {isExpandable && (
+                                isExpanded ? (
                                     <ChevronDown size={16} className="text-white/60" />
                                 ) : (
                                     <ChevronRight size={16} className="text-white/60" />
                                 )
                             )}
                         </button>
+
+                        {/* Expandable planet list */}
+                        {isPlanets && planetsExpanded && (
+                            <div className="ml-8 mt-1 space-y-1">
+                                {planets.map((planet) => (
+                                    <button
+                                        key={planet.id}
+                                        onClick={() => handlePlanetClick(planet.id)}
+                                        className={`
+                                            w-full px-3 py-1.5 text-left rounded-md
+                                            transition-all duration-200 text-sm cursor-pointer
+                                            ${selectedId === planet.id
+                                                ? "text-cyan-400 bg-cyan-400/10 border border-cyan-400/30"
+                                                : "text-white/70 hover:text-white hover:bg-white/5"
+                                            }
+                                        `}
+                                    >
+                                        {planet.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                         
                         {/* Expandable satellite list */}
                         {isSatellites && satellitesExpanded && (
@@ -93,7 +131,7 @@ export default function Sidebar() {
                                         onClick={() => handleSatelliteClick(satellite.id)}
                                         className={`
                                             w-full px-3 py-1.5 text-left rounded-md
-                                            transition-all duration-200 text-sm
+                                            transition-all duration-200 text-sm cursor-pointer
                                             ${selectedId === satellite.id
                                                 ? "text-cyan-400 bg-cyan-400/10 border border-cyan-400/30"
                                                 : "text-white/70 hover:text-white hover:bg-white/5"
