@@ -29,6 +29,8 @@ export default function TimeControls() {
         setDate,
     } = useTimeManager();
     const clearSelection = useSelectionStore((state) => state.clearSelection);
+    const setShowAllOrbits = useSelectionStore((state) => state.setShowAllOrbits);
+    const setInfoPanelOpen = useSelectionStore((state) => state.setInfoPanelOpen);
 
     // Local state for date input (for scrubber)
     const [dateInputValue, setDateInputValue] = useState(
@@ -80,8 +82,10 @@ export default function TimeControls() {
     const handleReset = () => {
         // Reset time to now
         reset();
-        // Clear selection
-        clearSelection();
+        // Activate all orbit paths (same as clicking "All" in sidebar)
+        setShowAllOrbits(true);
+        // Close the info panel
+        setInfoPanelOpen(false);
         // Reset camera to default system view
         cameraController.snapToSystem();
     };
