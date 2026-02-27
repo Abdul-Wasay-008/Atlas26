@@ -91,7 +91,7 @@ export default function TimeControls() {
     return (
         <div
             className={`
-                fixed bottom-3 lg:bottom-6 z-30 lg:z-50
+                fixed bottom-3 lg:bottom-6 z-30
                 left-1/2 -translate-x-1/2
                 lg:left-[calc(50%+120px)]
                 w-[calc(100%-2rem)] sm:w-auto
