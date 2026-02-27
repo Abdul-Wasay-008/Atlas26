@@ -109,7 +109,7 @@ export default function Moon() {
     const selectObject = useSelectionStore((state) => state.selectObject);
     const [hovered, setHovered] = useState(false);
 
-    const { size } = useThree();
+    const { size, camera } = useThree();
     const [baseScale, setBaseScale] = useState(1);
 
     // 🌕 Responsive sizing
@@ -174,20 +174,20 @@ export default function Moon() {
             );
         }
 
-        // 🌑 Update Moon phase based on Sun direction (physically correct lighting)
+        // Update Moon phase lighting (physically correct, camera-independent)
         if (moonRef.current && moonPhaseMaterial) {
             const sunPosition = new THREE.Vector3(0, 0, 0); // Sun is at origin
 
-            // Calculate direction from Moon to Sun
-            const moonToSunDir = new THREE.Vector3()
-                .subVectors(sunPosition, moonWorldPos)
+            // Direction from Sun to Moon (world space)
+            const sunToMoonDir = new THREE.Vector3()
+                .subVectors(moonWorldPos, sunPosition)
                 .normalize();
-            
-            // Shader expects direction FROM Sun TO Moon (direction light is coming from)
-            const sunToMoonDir = moonToSunDir.clone().negate();
 
-            // Update shader uniform for Moon phase calculation
-            moonPhaseMaterial.uniforms.uSunDirection.value.copy(sunToMoonDir);
+            // The shader normals use normalMatrix which produces view-space normals,
+            // so transform the sun direction into view space to match
+            const sunDirViewSpace = sunToMoonDir.clone().transformDirection(camera.matrixWorldInverse);
+
+            moonPhaseMaterial.uniforms.uSunDirection.value.copy(sunDirViewSpace);
         }
 
         // 🔍 Debug logging (dev mode only, throttled)

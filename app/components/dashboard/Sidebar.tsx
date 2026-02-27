@@ -79,8 +79,8 @@ function ControlsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
                             <span>Click on any planet or satellite</span>
                         </div>
                         <div className="flex gap-3">
-                            <span className="text-cyan-400 font-medium min-w-[140px]">Clear Selection</span>
-                            <span>Press Escape key</span>
+                            <span className="text-cyan-400 font-medium min-w-[140px]">Reset View</span>
+                            <span>Press Escape to reset camera, time, and show all orbits</span>
                         </div>
                     </div>
                 </div>
@@ -120,6 +120,7 @@ function ControlsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => vo
                         <li>Click "All" to see all orbit paths at once</li>
                         <li>Use the time controls at the bottom to speed up orbital motion</li>
                         <li>Selected objects show detailed info in the right panel</li>
+                        <li>Press <span className="text-cyan-400">Esc</span> or the reset button to return to default view</li>
                     </ul>
                 </div>
             </div>
