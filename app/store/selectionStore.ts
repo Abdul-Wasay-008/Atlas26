@@ -20,15 +20,18 @@ interface SelectionState {
     selectedId: string | null;
     selected: SpaceObjectData | null;
     showAllOrbits: boolean;
+    infoPanelOpen: boolean;
     selectObject: (id: string) => void;
     clearSelection: () => void;
     setShowAllOrbits: (show: boolean) => void;
+    setInfoPanelOpen: (open: boolean) => void;
 }
 
 export const useSelectionStore = create<SelectionState>((set) => ({
     selectedId: null,
     selected: null,
     showAllOrbits: true,
+    infoPanelOpen: false,
 
     selectObject: (id) => {
         const obj = spaceObjects.find((o) => o.id === id) || null;
@@ -37,6 +40,7 @@ export const useSelectionStore = create<SelectionState>((set) => ({
             selectedId: id,
             selected: obj,
             showAllOrbits: false,
+            infoPanelOpen: true,
         });
     },
 
@@ -51,6 +55,11 @@ export const useSelectionStore = create<SelectionState>((set) => ({
             showAllOrbits: show,
             selectedId: show ? null : null,
             selected: show ? null : null,
+        }),
+
+    setInfoPanelOpen: (open) =>
+        set({
+            infoPanelOpen: open,
         }),
 }));
 

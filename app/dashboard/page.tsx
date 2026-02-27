@@ -44,24 +44,19 @@ export default function DashboardPage() {
             {/* Sidebar */}
             <Sidebar />
 
-            {/* 🔥 Futuristic Divider (between sidebar & space view) */}
-            <div className="w-px bg-linear-to-b from-transparent via-white/14 to-transparent" />
+            {/* Futuristic Divider (between sidebar & space view) - only on lg+ */}
+            <div className="hidden lg:block w-px bg-linear-to-b from-transparent via-white/15 to-transparent" />
 
-            {/* Space View */}
+            {/* Space View - takes full remaining width */}
             <div id="space-area" className="flex-1 relative">
                 <SpaceCanvas />
             </div>
 
-            <div className=""><TimeControls /></div>
+            {/* Time Controls - fixed overlay */}
+            <TimeControls />
 
-            {/* 🔥 Futuristic Divider (between space view & info panel) */}
-            <div className="w-px bg-linear-to-b from-transparent via-white/14 to-transparent" />
-
-            {/* Info Panel */}
-            <div className="hidden lg:block w-[260px]">
-                <InfoPanel />
-            </div>
-
+            {/* Info Panel - fixed sliding overlay */}
+            <InfoPanel />
         </div>
     )
 }
