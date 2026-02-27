@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Play, Pause, RotateCcw, Clock, Timer, Calendar } from "lucide-react";
 import { useTimeManager } from "@/app/core/useTimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -79,7 +79,7 @@ export default function TimeControls() {
         return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     };
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         // Reset time to now
         reset();
         // Activate all orbit paths (same as clicking "All" in sidebar)
@@ -88,7 +88,20 @@ export default function TimeControls() {
         setInfoPanelOpen(false);
         // Reset camera to default system view
         cameraController.snapToSystem();
-    };
+    }, [reset, setShowAllOrbits, setInfoPanelOpen]);
+
+    // Listen for Escape key to trigger reset
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            // Only trigger if not typing in an input field
+            if (e.key === "Escape" && document.activeElement?.tagName !== "INPUT") {
+                handleReset();
+            }
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [handleReset]);
 
     const isSimulationMode = mode === "SIMULATION";
 
