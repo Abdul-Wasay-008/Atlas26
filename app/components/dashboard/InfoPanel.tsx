@@ -4,7 +4,8 @@ import { useSelectionStore } from "@/app/store/selectionStore";
 import { poppins, orbitron } from "@/app/fonts";
 import { useISSTelemetry } from "@/app/hooks/useISSTelemetry";
 import { useHubbleTelemetry } from "@/app/hooks/useHubbleTelemetry";
-import { PanelRightClose, PanelRightOpen } from "lucide-react";
+import { useReverseGeocode } from "@/app/hooks/useReverseGeocode";
+import { PanelRightClose, PanelRightOpen, MapPin } from "lucide-react";
 
 export default function InfoPanel() {
     const selected = useSelectionStore((state) => state.selected);
@@ -13,6 +14,18 @@ export default function InfoPanel() {
     
     const issTelemetry = useISSTelemetry();
     const hubbleTelemetry = useHubbleTelemetry();
+    
+    // Reverse geocoding for satellite locations - enabled when satellite is selected
+    const issLocation = useReverseGeocode(
+        issTelemetry.latitude,
+        issTelemetry.longitude,
+        selected?.id === "iss" && infoPanelOpen
+    );
+    const hubbleLocation = useReverseGeocode(
+        hubbleTelemetry.latitude,
+        hubbleTelemetry.longitude,
+        selected?.id === "hubble" && infoPanelOpen
+    );
 
     return (
         <>
@@ -106,6 +119,16 @@ export default function InfoPanel() {
                                     <span className="font-semibold text-white">Speed:</span>{" "}
                                     <span className="text-cyan-400">{issTelemetry.speedKmS.toFixed(2)} km/s</span>
                                 </p>
+                                {/* Location card */}
+                                <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
+                                    <MapPin size={18} className="text-cyan-400 shrink-0" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-white/50 uppercase tracking-wider leading-tight">Current Location</span>
+                                        <span className="text-sm text-cyan-400 font-medium leading-snug">
+                                            {issLocation.loading ? "Locating..." : issLocation.location || "Location unavailable"}
+                                        </span>
+                                    </div>
+                                </div>
                             </>
                         ) : selected.id === "hubble" ? (
                             <>
@@ -125,6 +148,16 @@ export default function InfoPanel() {
                                     <span className="font-semibold text-white">Speed:</span>{" "}
                                     <span className="text-cyan-400">{hubbleTelemetry.speedKmS.toFixed(2)} km/s</span>
                                 </p>
+                                {/* Location card */}
+                                <div className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
+                                    <MapPin size={18} className="text-cyan-400 shrink-0" />
+                                    <div className="flex flex-col">
+                                        <span className="text-[10px] text-white/50 uppercase tracking-wider leading-tight">Current Location</span>
+                                        <span className="text-sm text-cyan-400 font-medium leading-snug">
+                                            {hubbleLocation.loading ? "Locating..." : hubbleLocation.location || "Location unavailable"}
+                                        </span>
+                                    </div>
+                                </div>
                             </>
                         ) : (
                             selected.distanceFromEarth && (
