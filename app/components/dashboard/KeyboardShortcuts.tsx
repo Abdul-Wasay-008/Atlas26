@@ -10,11 +10,11 @@ import { useSelectionStore } from "@/app/store/selectionStore";
  * - Key "1" → Select ISS
  * - Key "2" → Select Hubble
  * - Key "Tab" → Cycle through satellites
- * - Key "Escape" → Clear selection
+ * 
+ * Note: Escape key is handled by TimeControls.tsx for comprehensive reset
  */
 export default function KeyboardShortcuts() {
     const selectObject = useSelectionStore((state) => state.selectObject);
-    const clearSelection = useSelectionStore((state) => state.clearSelection);
     const selectedId = useSelectionStore((state) => state.selectedId);
 
     useEffect(() => {
@@ -47,11 +47,8 @@ export default function KeyboardShortcuts() {
                 selectObject(satellites[nextIndex]);
             }
 
-            // Handle Escape to clear selection
-            if (event.key === "Escape") {
-                event.preventDefault();
-                clearSelection();
-            }
+            // Note: Escape key is handled by TimeControls.tsx handleReset()
+            // which provides comprehensive reset (camera, time, orbits, selection)
         };
 
         window.addEventListener("keydown", handleKeyDown);
@@ -59,7 +56,7 @@ export default function KeyboardShortcuts() {
         return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [selectObject, clearSelection, selectedId]);
+    }, [selectObject, selectedId]);
 
     return null;
 }

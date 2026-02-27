@@ -100,6 +100,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~384,400 km"
     },
     {
+        id: "phobos",
+        name: "Phobos",
+        type: "satellite",
+        radius: "~11 km",
+        orbitalPeriod: "7.6 hours",
+        description: "Phobos is the innermost and larger of Mars's two moons. It is an irregular, heavily cratered body believed to be composed of carbon-rich rock. Phobos orbits very close to Mars and completes one orbit in about 7.6 hours.",
+        distanceFromEarth: "~225 million km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

@@ -134,6 +134,8 @@ import Hubble from "../3d/Hubble";
 import SatelliteOrbitPath from "../3d/SatelliteOrbitPath";
 import PlanetOrbitPath from "../3d/PlanetOrbitPath";
 import MoonOrbitPath from "../3d/MoonOrbitPath";
+import Phobos from "../3d/Phobos";
+import PhobosOrbitPath from "../3d/PhobosOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -276,7 +278,7 @@ export default function SpaceCanvas() {
                 <Earth />
                 <Moon />
 
-                {/* 🔴 Mars (softer terminator for a smoother day-night transition) */}
+                {/* 🔴 Mars–Phobos System */}
                 <Planet
                     id="mars"
                     orbit={{ type: "planet", params: MARS_ORBIT_PARAMS }}
@@ -294,6 +296,7 @@ export default function SpaceCanvas() {
                 terminatorWidth={0.22}
                 noShadow={true}
                 />
+                <Phobos />
 
                 {/* 🪐 Jupiter (largest planet, gas giant) */}
                 <Jupiter />
@@ -321,6 +324,9 @@ export default function SpaceCanvas() {
 
                 {/* 🌙 Moon Orbit Path (shows orbit around Earth when Moon selected) */}
                 <MoonOrbitPath />
+
+                {/* 🌑 Phobos Orbit Path (shows orbit around Mars when Mars or Phobos selected) */}
+                <PhobosOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls

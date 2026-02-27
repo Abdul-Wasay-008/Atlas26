@@ -38,6 +38,9 @@ export const PLANET_ORBIT_COLORS: Record<string, string> = {
 /** Orbit color for Moon (around Earth) - white / light gray */
 export const MOON_ORBIT_COLOR = "#E0E0E0";
 
+/** Orbit color for Phobos (around Mars) - dusty brown-gray */
+export const PHOBOS_ORBIT_COLOR = "#B0A090";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
