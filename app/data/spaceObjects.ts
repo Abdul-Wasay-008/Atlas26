@@ -127,6 +127,24 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~628 million km (varies)"
     },
     {
+        id: "europa",
+        name: "Europa",
+        type: "satellite",
+        radius: "~1,560 km",
+        orbitalPeriod: "3.551 days",
+        description: "Europa is Jupiter's second Galilean moon and is covered by a smooth shell of water ice. Beneath its icy crust lies a global subsurface ocean, making Europa one of the most promising places in the solar system to search for extraterrestrial life.",
+        distanceFromEarth: "~628 million km (varies)"
+    },
+    {
+        id: "ganymede",
+        name: "Ganymede",
+        type: "satellite",
+        radius: "~2,634 km",
+        orbitalPeriod: "7.15 days",
+        description: "Ganymede is the largest moon in the solar system and the only moon known to have its own magnetic field. Its surface consists of dark ancient terrain and lighter grooved regions composed of ice and rock.",
+        distanceFromEarth: "~628 million km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

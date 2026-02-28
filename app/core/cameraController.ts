@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -27,6 +27,8 @@ class CameraController {
     phobosOffset = new THREE.Vector3(0, 0, 0.2); // Close-up offset for small moon
     deimosOffset = new THREE.Vector3(0, 0, 0.15); // Close-up offset for smaller moon
     ioOffset = new THREE.Vector3(0, 0, 0.5); // Offset for Jupiter's moon Io
+    europaOffset = new THREE.Vector3(0, 0, 0.4); // Offset for Jupiter's moon Europa (slightly closer due to smaller size)
+    ganymedeOffset = new THREE.Vector3(0, 0, 0.6); // Offset for Jupiter's moon Ganymede (larger moon, needs more distance)
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
@@ -72,7 +74,9 @@ class CameraController {
                                                     target === "phobos" ? this.phobosOffset :
                                                     target === "deimos" ? this.deimosOffset :
                                                         target === "io" ? this.ioOffset :
-                                                            target === "iss" ? this.issOffset :
+                                                            target === "europa" ? this.europaOffset :
+                                                                target === "ganymede" ? this.ganymedeOffset :
+                                                                target === "iss" ? this.issOffset :
                                                             target === "hubble" ? this.hubbleOffset :
                                                                 new THREE.Vector3();
 

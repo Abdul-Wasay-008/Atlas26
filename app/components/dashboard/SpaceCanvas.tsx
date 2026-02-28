@@ -139,7 +139,11 @@ import PhobosOrbitPath from "../3d/PhobosOrbitPath";
 import Deimos from "../3d/Deimos";
 import DeimosOrbitPath from "../3d/DeimosOrbitPath";
 import Io from "../3d/Io";
+import Europa from "../3d/Europa";
+import Ganymede from "../3d/Ganymede";
 import IoOrbitPath from "../3d/IoOrbitPath";
+import EuropaOrbitPath from "../3d/EuropaOrbitPath";
+import GanymedeOrbitPath from "../3d/GanymedeOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -303,9 +307,11 @@ export default function SpaceCanvas() {
                 <Phobos />
                 <Deimos />
 
-                {/* 🪐 Jupiter–Io System (largest planet, gas giant) */}
+                {/* 🪐 Jupiter–Galilean Moons System (largest planet, gas giant) */}
                 <Jupiter />
                 <Io />
+                <Europa />
+                <Ganymede />
 
                 {/* 🪐 Saturn (6th planet, famous for rings) */}
                 <Saturn />
@@ -339,6 +345,12 @@ export default function SpaceCanvas() {
 
                 {/* 🌋 Io Orbit Path (shows orbit around Jupiter when Io or Jupiter selected) */}
                 <IoOrbitPath />
+
+                {/* 🧊 Europa Orbit Path (shows orbit around Jupiter when Europa or Jupiter selected) */}
+                <EuropaOrbitPath />
+
+                {/* 🌑 Ganymede Orbit Path (shows orbit around Jupiter when Ganymede or Jupiter selected) */}
+                <GanymedeOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls

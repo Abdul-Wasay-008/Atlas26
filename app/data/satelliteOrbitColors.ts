@@ -47,6 +47,12 @@ export const DEIMOS_ORBIT_COLOR = "#A89888";
 /** Orbit color for Io (around Jupiter) - sulfur yellow-orange */
 export const IO_ORBIT_COLOR = "#E8C060";
 
+/** Orbit color for Europa (around Jupiter) - icy light blue */
+export const EUROPA_ORBIT_COLOR = "#B0D4E8";
+
+/** Orbit color for Ganymede (around Jupiter) - muted brown-gray */
+export const GANYMEDE_ORBIT_COLOR = "#A09080";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
