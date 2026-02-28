@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -26,6 +26,7 @@ class CameraController {
     moonOffset = new THREE.Vector3(0, 0, 1.8);
     phobosOffset = new THREE.Vector3(0, 0, 0.2); // Close-up offset for small moon
     deimosOffset = new THREE.Vector3(0, 0, 0.15); // Close-up offset for smaller moon
+    ioOffset = new THREE.Vector3(0, 0, 0.5); // Offset for Jupiter's moon Io
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
@@ -70,7 +71,8 @@ class CameraController {
                                                 target === "moon" ? this.moonOffset :
                                                     target === "phobos" ? this.phobosOffset :
                                                     target === "deimos" ? this.deimosOffset :
-                                                        target === "iss" ? this.issOffset :
+                                                        target === "io" ? this.ioOffset :
+                                                            target === "iss" ? this.issOffset :
                                                             target === "hubble" ? this.hubbleOffset :
                                                                 new THREE.Vector3();
 

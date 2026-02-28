@@ -118,6 +118,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~225 million km (varies)"
     },
     {
+        id: "io",
+        name: "Io",
+        type: "satellite",
+        radius: "~1,821 km",
+        orbitalPeriod: "1.769 days",
+        description: "Io is the innermost of Jupiter's four Galilean moons and the most volcanically active body in the solar system. Its surface is covered in sulfur plains and volcanic deposits, giving it a vibrant yellow and orange appearance.",
+        distanceFromEarth: "~628 million km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",
