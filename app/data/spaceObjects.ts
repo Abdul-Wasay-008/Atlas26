@@ -105,7 +105,16 @@ export const spaceObjects: SpaceObjectData[] = [
         type: "satellite",
         radius: "~11 km",
         orbitalPeriod: "7.6 hours",
-        description: "Phobos is the innermost and larger of Mars's two moons. It is an irregular, heavily cratered body believed to be composed of carbon-rich rock. Phobos orbits very close to Mars and completes one orbit in about 7.6 hours.",
+        description: "Phobos is the innermost and larger of Mars's two moons. It is an irregular, heavily cratered body believed to be composed of carbon-rich rock. Phobos orbits very close to Mars and completes one orbit in about 7.6 hours. Due to its low orbit, Phobos is destined to crash into or be destroyed by Mars in 30–50 million years.",
+        distanceFromEarth: "~225 million km (varies)"
+    },
+    {
+        id: "deimos",
+        name: "Deimos",
+        type: "satellite",
+        radius: "~6 km",
+        orbitalPeriod: "30.3 hours",
+        description: "Deimos is the outer and smaller of Mars's two moons. It is smoother and less cratered than Phobos and orbits Mars at a greater distance, completing one orbit in about 30.3 hours.",
         distanceFromEarth: "~225 million km (varies)"
     },
     {

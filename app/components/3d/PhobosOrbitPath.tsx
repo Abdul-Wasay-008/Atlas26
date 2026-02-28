@@ -20,14 +20,14 @@ const FOCUS_OPACITY = 0.8;
 /**
  * Phobos Orbit Path Visualizer
  *
- * Renders Phobos's orbit around Mars when Mars or Phobos is selected.
+ * Renders Phobos's orbit around Mars when Phobos is selected or all orbits are shown.
  * The path is a closed ellipse centered on Mars's current position.
  */
 export default function PhobosOrbitPath() {
     const { selectedId, showAllOrbits } = useSelectionStore();
     const { currentDate } = useTimeManager();
 
-    const showPhobosOrbit = selectedId === "mars" || selectedId === "phobos" || showAllOrbits;
+    const showPhobosOrbit = selectedId === "phobos" || selectedId === "mars" || showAllOrbits;
 
     const orbitPoints = useMemo(() => {
         if (!showPhobosOrbit) {

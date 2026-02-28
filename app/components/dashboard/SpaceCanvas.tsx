@@ -136,6 +136,8 @@ import PlanetOrbitPath from "../3d/PlanetOrbitPath";
 import MoonOrbitPath from "../3d/MoonOrbitPath";
 import Phobos from "../3d/Phobos";
 import PhobosOrbitPath from "../3d/PhobosOrbitPath";
+import Deimos from "../3d/Deimos";
+import DeimosOrbitPath from "../3d/DeimosOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -297,6 +299,7 @@ export default function SpaceCanvas() {
                 noShadow={true}
                 />
                 <Phobos />
+                <Deimos />
 
                 {/* 🪐 Jupiter (largest planet, gas giant) */}
                 <Jupiter />
@@ -325,8 +328,11 @@ export default function SpaceCanvas() {
                 {/* 🌙 Moon Orbit Path (shows orbit around Earth when Moon selected) */}
                 <MoonOrbitPath />
 
-                {/* 🌑 Phobos Orbit Path (shows orbit around Mars when Mars or Phobos selected) */}
+                {/* 🌑 Phobos Orbit Path (shows orbit around Mars when Phobos selected) */}
                 <PhobosOrbitPath />
+
+                {/* 🌑 Deimos Orbit Path (shows orbit around Mars when Deimos selected) */}
+                <DeimosOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls

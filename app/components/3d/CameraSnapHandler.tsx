@@ -149,7 +149,7 @@ export default function CameraSnapHandler() {
                 } else if (!isSatellite) {
                     // For non-satellites, use existing offset logic
                     cameraController.startSnap(
-                        selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos",
+                        selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos",
                         worldPos
                     );
                 }
@@ -243,7 +243,7 @@ export default function CameraSnapHandler() {
                         } else if (!isSatellite) {
                             // For non-satellites, use existing offset logic
                             cameraController.startSnap(
-                                selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos",
+                                selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos",
                                 worldPos
                             );
                         }

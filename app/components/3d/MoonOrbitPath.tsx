@@ -32,7 +32,7 @@ export default function MoonOrbitPath() {
     const { selectedId, showAllOrbits } = useSelectionStore();
     const { currentDate } = useTimeManager();
 
-    const showMoonOrbit = selectedId === "moon" || showAllOrbits;
+    const showMoonOrbit = selectedId === "moon" || selectedId === "earth" || showAllOrbits;
 
     const orbitPoints = useMemo(() => {
         if (!showMoonOrbit) {

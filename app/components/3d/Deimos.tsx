@@ -5,36 +5,33 @@ import { useRef, useEffect, useState, useCallback, useMemo } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { timeManager } from "@/app/core/TimeManager";
-import { getPhobosWorldPosition } from "@/app/astronomy/phobosOrbit";
+import { getDeimosWorldPosition } from "@/app/astronomy/deimosOrbit";
 import { getPlanetOrbitPosition, MARS_ORBIT_PARAMS } from "@/app/astronomy/planetOrbit";
 
-const PHOBOS_RADIUS = 0.04;
+const DEIMOS_RADIUS = 0.026;
 
 /**
  * Simple deterministic pseudo-noise function for vertex displacement.
- * Uses a seed-based approach to create reproducible "rocky" variation.
+ * Uses a seed-based approach to create reproducible variation.
  */
 function pseudoNoise3D(x: number, y: number, z: number, seed: number): number {
     const n = Math.sin(x * 12.9898 + y * 78.233 + z * 37.719 + seed) * 43758.5453;
-    return (n - Math.floor(n)) * 2 - 1; // Range: -1 to 1
+    return (n - Math.floor(n)) * 2 - 1;
 }
 
 /**
- * Multi-octave noise for more natural rocky variation
+ * Multi-octave noise for smoother rocky variation (less rugged than Phobos)
  */
-function rockyNoise(x: number, y: number, z: number): number {
-    // Low frequency: large-scale bumps
-    const lowFreq = pseudoNoise3D(x * 2, y * 2, z * 2, 1.0) * 0.6;
-    // Medium frequency: medium detail
-    const medFreq = pseudoNoise3D(x * 5, y * 5, z * 5, 2.0) * 0.25;
-    // High frequency: fine detail
-    const highFreq = pseudoNoise3D(x * 12, y * 12, z * 12, 3.0) * 0.15;
+function smoothRockyNoise(x: number, y: number, z: number): number {
+    const lowFreq = pseudoNoise3D(x * 2, y * 2, z * 2, 5.0) * 0.65;
+    const medFreq = pseudoNoise3D(x * 4, y * 4, z * 4, 6.0) * 0.25;
+    const highFreq = pseudoNoise3D(x * 8, y * 8, z * 8, 7.0) * 0.10;
     
     return lowFreq + medFreq + highFreq;
 }
 
-export default function Phobos() {
-    const phobosRef = useRef<THREE.Mesh>(null);
+export default function Deimos() {
+    const deimosRef = useRef<THREE.Mesh>(null);
     const orbitRef = useRef<THREE.Group>(null);
     const groupRef = useRef<THREE.Group>(null);
 
@@ -44,7 +41,6 @@ export default function Phobos() {
     const { size } = useThree();
     const [baseScale, setBaseScale] = useState(1);
 
-    // Responsive sizing (Phobos is much smaller than Moon)
     useEffect(() => {
         const width = size.width;
         setBaseScale(
@@ -55,12 +51,11 @@ export default function Phobos() {
         );
     }, [size.width]);
 
-    // Texture loading
-    const phobosTexture = useLoader(THREE.TextureLoader, "/textures/Mars - Phobos.jpg");
+    const deimosTexture = useLoader(THREE.TextureLoader, "/textures/Mars - Deimos.jpg");
 
-    // Create irregular "potato-shaped" geometry (done once, not per frame)
+    // Create irregular geometry (smoother than Phobos - 7% displacement vs 12%)
     const irregularGeometry = useMemo(() => {
-        const baseGeometry = new THREE.IcosahedronGeometry(PHOBOS_RADIUS, 5);
+        const baseGeometry = new THREE.IcosahedronGeometry(DEIMOS_RADIUS, 5);
         const geometry = baseGeometry.clone();
         
         const positionAttr = geometry.getAttribute("position");
@@ -68,20 +63,15 @@ export default function Phobos() {
         const vertex = new THREE.Vector3();
         const normal = new THREE.Vector3();
         
-        // Displacement amplitude: 12% of radius for visible but not extreme irregularity
-        const displacementAmplitude = PHOBOS_RADIUS * 0.12;
+        const displacementAmplitude = DEIMOS_RADIUS * 0.07;
         
         for (let i = 0; i < positionAttr.count; i++) {
             vertex.fromBufferAttribute(positionAttr, i);
-            
-            // Get normalized direction (used as displacement direction)
             normal.copy(vertex).normalize();
             
-            // Compute noise based on vertex position
-            const noise = rockyNoise(vertex.x * 25, vertex.y * 25, vertex.z * 25);
-            
-            // Displace vertex along its normal
+            const noise = smoothRockyNoise(vertex.x * 30, vertex.y * 30, vertex.z * 30);
             const displacement = displacementAmplitude * noise;
+            
             positions[i * 3] += normal.x * displacement;
             positions[i * 3 + 1] += normal.y * displacement;
             positions[i * 3 + 2] += normal.z * displacement;
@@ -93,41 +83,35 @@ export default function Phobos() {
         return geometry;
     }, []);
 
-    // Create material with subtle warm brown tint (matte, rocky appearance)
-    const phobosMaterial = useMemo(() => {
+    // Natural material with minimal tint
+    const deimosMaterial = useMemo(() => {
         return new THREE.MeshStandardMaterial({
-            map: phobosTexture,
-            color: new THREE.Color(0xB8A08A), // Subtle warm gray-brown tint
+            map: deimosTexture,
+            color: new THREE.Color(0xE8E0D8),
             metalness: 0,
-            roughness: 0.92,
+            roughness: 0.9,
         });
-    }, [phobosTexture]);
+    }, [deimosTexture]);
 
     useFrame(() => {
-        // Get current date from TimeManager (single source of truth)
         const currentDate = timeManager.getCurrentDate();
-
-        // Get Mars's position around Sun
         const marsPosition = getPlanetOrbitPosition(currentDate, MARS_ORBIT_PARAMS);
-
-        // Get Phobos position relative to Mars, then convert to world coords
-        const phobosWorldPos = getPhobosWorldPosition(currentDate, marsPosition);
+        const deimosWorldPos = getDeimosWorldPosition(currentDate, marsPosition);
 
         if (orbitRef.current) {
-            orbitRef.current.position.copy(phobosWorldPos);
+            orbitRef.current.position.copy(deimosWorldPos);
         }
 
-        // Phobos rotation (tidally locked to Mars)
-        if (phobosRef.current) {
-            const phobosRelativePos = new THREE.Vector3().subVectors(
-                phobosWorldPos,
+        // Tidal locking rotation
+        if (deimosRef.current) {
+            const deimosRelativePos = new THREE.Vector3().subVectors(
+                deimosWorldPos,
                 marsPosition
             );
-            const rotationAngle = Math.atan2(phobosRelativePos.x, phobosRelativePos.z);
-            phobosRef.current.rotation.y = rotationAngle;
+            const rotationAngle = Math.atan2(deimosRelativePos.x, deimosRelativePos.z);
+            deimosRef.current.rotation.y = rotationAngle;
         }
 
-        // Smooth hover scaling
         if (groupRef.current) {
             const targetScale = hovered ? baseScale * 1.12 : baseScale;
             groupRef.current.scale.lerp(
@@ -138,18 +122,18 @@ export default function Phobos() {
     });
 
     const handleClick = useCallback(() => {
-        selectObject("phobos");
+        selectObject("deimos");
     }, [selectObject]);
 
-    // Non-uniform scale to reinforce irregular shape (Phobos is ~27×22×18 km)
-    const irregularScale = useMemo(() => new THREE.Vector3(1.1, 0.88, 0.95), []);
+    // Subtle non-uniform scale (smoother than Phobos)
+    const irregularScale = useMemo(() => new THREE.Vector3(1.05, 0.92, 0.98), []);
 
     return (
         <group ref={orbitRef}>
             <group ref={groupRef}>
                 <mesh
-                    ref={phobosRef}
-                    name="phobos"
+                    ref={deimosRef}
+                    name="deimos"
                     scale={irregularScale}
                     onClick={handleClick}
                     onPointerOver={() => {
@@ -162,7 +146,7 @@ export default function Phobos() {
                     }}
                 >
                     <primitive object={irregularGeometry} attach="geometry" />
-                    <primitive object={phobosMaterial} attach="material" />
+                    <primitive object={deimosMaterial} attach="material" />
                 </mesh>
             </group>
         </group>

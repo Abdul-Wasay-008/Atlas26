@@ -101,9 +101,10 @@ export default function SatelliteOrbitPath() {
     const { currentDate } = useTimeManager();
 
     const isSatellite = selectedId === "iss" || selectedId === "hubble";
+    const isEarthSelected = selectedId === "earth";
 
     const allOrbitData = useMemo(() => {
-        if (!showAllOrbits) {
+        if (!showAllOrbits && !isEarthSelected) {
             return [];
         }
 
@@ -113,11 +114,12 @@ export default function SatelliteOrbitPath() {
         })).filter(orbit => orbit.points.length > 0);
     }, [
         showAllOrbits,
+        isEarthSelected,
         Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
     ]);
 
     const singleOrbitPoints = useMemo(() => {
-        if (showAllOrbits || !isSatellite || !selectedId) {
+        if (showAllOrbits || isEarthSelected || !isSatellite || !selectedId) {
             return [];
         }
 
@@ -128,11 +130,12 @@ export default function SatelliteOrbitPath() {
     }, [
         selectedId,
         isSatellite,
+        isEarthSelected,
         showAllOrbits,
         Math.floor(currentDate.getTime() / (5 * 60 * 1000)),
     ]);
 
-    if (showAllOrbits && allOrbitData.length > 0) {
+    if ((showAllOrbits || isEarthSelected) && allOrbitData.length > 0) {
         return (
             <>
                 {allOrbitData.map(orbit => (

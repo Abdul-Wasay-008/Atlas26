@@ -41,6 +41,9 @@ export const MOON_ORBIT_COLOR = "#E0E0E0";
 /** Orbit color for Phobos (around Mars) - dusty brown-gray */
 export const PHOBOS_ORBIT_COLOR = "#B0A090";
 
+/** Orbit color for Deimos (around Mars) - slightly different dusty tone */
+export const DEIMOS_ORBIT_COLOR = "#A89888";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
