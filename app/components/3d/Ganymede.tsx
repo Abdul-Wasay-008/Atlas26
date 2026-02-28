@@ -8,7 +8,9 @@ import { timeManager } from "@/app/core/TimeManager";
 import { getGanymedeWorldPosition } from "@/app/astronomy/ganymedeOrbit";
 import { getPlanetOrbitPosition, JUPITER_ORBIT_PARAMS } from "@/app/astronomy/planetOrbit";
 
-const GANYMEDE_RADIUS = 0.11;
+// Ganymede is ~8% larger than Mercury visually (Mercury radius = 0.8 * 0.38 = 0.304)
+const MERCURY_SCENE_RADIUS = 0.8 * 0.38;
+const GANYMEDE_RADIUS = MERCURY_SCENE_RADIUS * 1.08;
 
 /**
  * Simple deterministic pseudo-noise function for minimal vertex displacement.

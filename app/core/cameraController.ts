@@ -28,7 +28,7 @@ class CameraController {
     deimosOffset = new THREE.Vector3(0, 0, 0.15); // Close-up offset for smaller moon
     ioOffset = new THREE.Vector3(0, 0, 0.5); // Offset for Jupiter's moon Io
     europaOffset = new THREE.Vector3(0, 0, 0.4); // Offset for Jupiter's moon Europa (slightly closer due to smaller size)
-    ganymedeOffset = new THREE.Vector3(0, 0, 0.6); // Offset for Jupiter's moon Ganymede (larger moon, needs more distance)
+    ganymedeOffset = new THREE.Vector3(0, 0, 2.2); // Offset for Jupiter's moon Ganymede (similar size to Mercury)
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
