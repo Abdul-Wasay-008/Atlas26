@@ -10,6 +10,15 @@ import { getPlanetOrbitPosition, JUPITER_ORBIT_PARAMS } from "@/app/astronomy/pl
 
 const IO_RADIUS = 0.08;
 
+/** Distance threshold for volcanic glow visibility (scene units) */
+const VOLCANIC_GLOW_DISTANCE_THRESHOLD = 50.0;
+/** Base emissive intensity for volcanic activity */
+const BASE_EMISSIVE_INTENSITY = 0.50;
+/** Maximum additional emissive intensity from pulsing */
+const PULSE_AMPLITUDE = 0.1;
+/** Pulse cycle duration in seconds (slow, natural feel) */
+const PULSE_CYCLE_SECONDS = 1.0;
+
 /**
  * Simple deterministic pseudo-noise function for subtle vertex displacement.
  * Io is nearly spherical, so displacement is minimal.
@@ -36,7 +45,7 @@ export default function Io() {
     const selectObject = useSelectionStore((state) => state.selectObject);
     const [hovered, setHovered] = useState(false);
 
-    const { size } = useThree();
+    const { size, camera } = useThree();
     const [baseScale, setBaseScale] = useState(1);
 
     useEffect(() => {
@@ -55,39 +64,41 @@ export default function Io() {
     const ioGeometry = useMemo(() => {
         const baseGeometry = new THREE.IcosahedronGeometry(IO_RADIUS, 5);
         const geometry = baseGeometry.clone();
-        
+
         const positionAttr = geometry.getAttribute("position");
         const positions = positionAttr.array as Float32Array;
         const vertex = new THREE.Vector3();
         const normal = new THREE.Vector3();
-        
+
         // Very subtle displacement: 2.5% of radius (Io is nearly spherical)
         const displacementAmplitude = IO_RADIUS * 0.025;
-        
+
         for (let i = 0; i < positionAttr.count; i++) {
             vertex.fromBufferAttribute(positionAttr, i);
             normal.copy(vertex).normalize();
-            
+
             const noise = subtleNoise(vertex.x * 20, vertex.y * 20, vertex.z * 20);
             const displacement = displacementAmplitude * noise;
-            
+
             positions[i * 3] += normal.x * displacement;
             positions[i * 3 + 1] += normal.y * displacement;
             positions[i * 3 + 2] += normal.z * displacement;
         }
-        
+
         positionAttr.needsUpdate = true;
         geometry.computeVertexNormals();
-        
+
         return geometry;
     }, []);
 
-    // Material: let sulfur colors from texture dominate, no artificial tint
+    // Material: sulfur texture with subtle volcanic emissive glow
     const ioMaterial = useMemo(() => {
         return new THREE.MeshStandardMaterial({
             map: ioTexture,
             metalness: 0,
             roughness: 0.85,
+            emissive: new THREE.Color(0xFF6B30), // Warm volcanic orange-red
+            emissiveIntensity: 0, // Start at zero, animate based on distance
         });
     }, [ioTexture]);
 
@@ -108,6 +119,28 @@ export default function Io() {
             );
             const rotationAngle = Math.atan2(ioRelativePos.x, ioRelativePos.z);
             ioRef.current.rotation.y = rotationAngle;
+        }
+
+        // Volcanic glow animation (distance-based)
+        if (ioMaterial) {
+            const distanceToCamera = camera.position.distanceTo(ioWorldPos);
+
+            if (distanceToCamera < VOLCANIC_GLOW_DISTANCE_THRESHOLD) {
+                // Calculate proximity factor (1 when close, 0 at threshold)
+                const proximityFactor = 1 - (distanceToCamera / VOLCANIC_GLOW_DISTANCE_THRESHOLD);
+                const smoothProximity = proximityFactor * proximityFactor; // Quadratic falloff
+
+                // Slow sine pulse for volcanic activity
+                const time = performance.now() / 1000;
+                const pulse = Math.sin(time * (2 * Math.PI / PULSE_CYCLE_SECONDS)) * 0.5 + 0.5;
+
+                // Combine base intensity with pulse, scaled by proximity
+                const emissiveIntensity = (BASE_EMISSIVE_INTENSITY + pulse * PULSE_AMPLITUDE) * smoothProximity;
+                ioMaterial.emissiveIntensity = emissiveIntensity;
+            } else {
+                // Far away - no glow for performance
+                ioMaterial.emissiveIntensity = 0;
+            }
         }
 
         // Smooth hover scaling
