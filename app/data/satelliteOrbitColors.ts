@@ -53,6 +53,12 @@ export const EUROPA_ORBIT_COLOR = "#B0D4E8";
 /** Orbit color for Ganymede (around Jupiter) - muted brown-gray */
 export const GANYMEDE_ORBIT_COLOR = "#A09080";
 
+/** Orbit color for Callisto (around Jupiter) - muted gray, distinct from Ganymede */
+export const CALLISTO_ORBIT_COLOR = "#909080";
+
+/** Orbit color for Titan (around Saturn) - soft orange-brown to match Titan */
+export const TITAN_ORBIT_COLOR = "#c47c2c";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

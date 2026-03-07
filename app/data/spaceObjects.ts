@@ -145,6 +145,24 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~628 million km (varies)"
     },
     {
+        id: "callisto",
+        name: "Callisto",
+        type: "satellite",
+        radius: "~2,410 km",
+        orbitalPeriod: "16.69 days",
+        description: "Callisto is Jupiter's second-largest moon and the outermost of the four Galilean moons. It is the most heavily cratered object in the solar system and is composed of roughly equal parts rock and ice.",
+        distanceFromEarth: "~628 million km (varies)"
+    },
+    {
+        id: "titan",
+        name: "Titan",
+        type: "satellite",
+        radius: "~2,575 km",
+        orbitalPeriod: "15.95 days",
+        description: "Titan is Saturn's largest moon and the second-largest moon in the Solar System. It has a dense nitrogen atmosphere and lakes of liquid methane and ethane on its surface.",
+        distanceFromEarth: "~1.4 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

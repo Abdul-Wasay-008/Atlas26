@@ -141,9 +141,13 @@ import DeimosOrbitPath from "../3d/DeimosOrbitPath";
 import Io from "../3d/Io";
 import Europa from "../3d/Europa";
 import Ganymede from "../3d/Ganymede";
+import Callisto from "../3d/Callisto";
+import Titan from "../3d/Titan";
 import IoOrbitPath from "../3d/IoOrbitPath";
 import EuropaOrbitPath from "../3d/EuropaOrbitPath";
 import GanymedeOrbitPath from "../3d/GanymedeOrbitPath";
+import CallistoOrbitPath from "../3d/CallistoOrbitPath";
+import TitanOrbitPath from "../3d/TitanOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -312,9 +316,11 @@ export default function SpaceCanvas() {
                 <Io />
                 <Europa />
                 <Ganymede />
+                <Callisto />
 
                 {/* 🪐 Saturn (6th planet, famous for rings) */}
                 <Saturn />
+                <Titan />
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
                 <Uranus />
@@ -351,6 +357,12 @@ export default function SpaceCanvas() {
 
                 {/* 🌑 Ganymede Orbit Path (shows orbit around Jupiter when Ganymede or Jupiter selected) */}
                 <GanymedeOrbitPath />
+
+                {/* 🌑 Callisto Orbit Path (shows orbit around Jupiter when Callisto or Jupiter selected) */}
+                <CallistoOrbitPath />
+
+                {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
+                <TitanOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
