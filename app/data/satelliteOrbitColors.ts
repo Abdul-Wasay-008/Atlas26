@@ -71,6 +71,9 @@ export const TETHYS_ORBIT_COLOR = "#E0E0E0";
 /** Orbit color for Dione (around Saturn) - light grey */
 export const DIONE_ORBIT_COLOR = "#E5E5E5";
 
+/** Orbit color for Rhea (around Saturn) - light grey */
+export const RHEA_ORBIT_COLOR = "#E8E8E8";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

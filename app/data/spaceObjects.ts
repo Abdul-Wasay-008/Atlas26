@@ -190,6 +190,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~1.2 billion km (varies)"
     },
     {
+        id: "rhea",
+        name: "Rhea",
+        type: "satellite",
+        radius: "~764 km",
+        orbitalPeriod: "4.518 days",
+        description: "Rhea is Saturn's second-largest moon, heavily cratered and composed primarily of water ice.",
+        distanceFromEarth: "~1.2 billion km (varies)"
+    },
+    {
         id: "titan",
         name: "Titan",
         type: "satellite",

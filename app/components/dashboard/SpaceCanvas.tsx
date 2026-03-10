@@ -42,6 +42,7 @@ import Mimas from "../3d/Mimas";
 import Enceladus from "../3d/Enceladus";
 import Tethys from "../3d/Tethys";
 import Dione from "../3d/Dione";
+import Rhea from "../3d/Rhea";
 import IoOrbitPath from "../3d/IoOrbitPath";
 import EuropaOrbitPath from "../3d/EuropaOrbitPath";
 import GanymedeOrbitPath from "../3d/GanymedeOrbitPath";
@@ -51,6 +52,7 @@ import MimasOrbitPath from "../3d/MimasOrbitPath";
 import EnceladusOrbitPath from "../3d/EnceladusOrbitPath";
 import TethysOrbitPath from "../3d/TethysOrbitPath";
 import DioneOrbitPath from "../3d/DioneOrbitPath";
+import RheaOrbitPath from "../3d/RheaOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -227,6 +229,7 @@ export default function SpaceCanvas() {
                 <Enceladus />
                 <Tethys />
                 <Dione />
+                <Rhea />
                 {/* <Titan /> */}
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
@@ -276,6 +279,8 @@ export default function SpaceCanvas() {
                 <TethysOrbitPath />
                 {/* 🪐 Dione Orbit Path (shows orbit around Saturn when Dione or Saturn selected) */}
                 <DioneOrbitPath />
+                {/* 🪐 Rhea Orbit Path (shows orbit around Saturn when Rhea or Saturn selected) */}
+                <RheaOrbitPath />
                 {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
                 {/* <TitanOrbitPath /> */}
 
