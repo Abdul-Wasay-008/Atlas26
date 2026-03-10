@@ -39,12 +39,14 @@ import Ganymede from "../3d/Ganymede";
 import Callisto from "../3d/Callisto";
 import Titan from "../3d/Titan";
 import Mimas from "../3d/Mimas";
+import Enceladus from "../3d/Enceladus";
 import IoOrbitPath from "../3d/IoOrbitPath";
 import EuropaOrbitPath from "../3d/EuropaOrbitPath";
 import GanymedeOrbitPath from "../3d/GanymedeOrbitPath";
 import CallistoOrbitPath from "../3d/CallistoOrbitPath";
 import TitanOrbitPath from "../3d/TitanOrbitPath";
 import MimasOrbitPath from "../3d/MimasOrbitPath";
+import EnceladusOrbitPath from "../3d/EnceladusOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -218,6 +220,7 @@ export default function SpaceCanvas() {
                 {/* 🪐 Saturn (6th planet, famous for rings) */}
                 <Saturn />
                 <Mimas />
+                <Enceladus />
                 {/* <Titan /> */}
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
@@ -261,6 +264,8 @@ export default function SpaceCanvas() {
 
                 {/* 🪐 Mimas Orbit Path (shows orbit around Saturn when Mimas or Saturn selected) */}
                 <MimasOrbitPath />
+                {/* 🪐 Enceladus Orbit Path (shows orbit around Saturn when Enceladus or Saturn selected) */}
+                <EnceladusOrbitPath />
                 {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
                 {/* <TitanOrbitPath /> */}
 

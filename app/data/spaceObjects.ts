@@ -163,6 +163,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~1.2 billion km (varies)"
     },
     {
+        id: "enceladus",
+        name: "Enceladus",
+        type: "satellite",
+        radius: "~252 km",
+        orbitalPeriod: "1.37 days",
+        description: "Enceladus is a bright icy moon of Saturn known for its cryovolcanoes that eject water vapor and ice particles from its south polar region.",
+        distanceFromEarth: "~1.2 billion km (varies)"
+    },
+    {
         id: "titan",
         name: "Titan",
         type: "satellite",

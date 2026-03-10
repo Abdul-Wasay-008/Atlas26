@@ -32,7 +32,7 @@ const SATURN_RADIUS = 0.85;
 
 /**
  * Scene scale for Mimas orbit radius
- * Mimas is innermost Saturn moon; orbit at 2.0 (rings extend to ~1.95)
+ * Mimas is innermost Saturn moon; orbit at 2.0 (rings extend to ~1.95, Enceladus at 2.5)
  */
 const MIMAS_ORBIT_SCENE_RADIUS = 2.5;
 

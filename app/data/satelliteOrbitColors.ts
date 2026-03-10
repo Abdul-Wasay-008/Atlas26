@@ -62,6 +62,9 @@ export const TITAN_ORBIT_COLOR = "#c47c2c";
 /** Orbit color for Mimas (around Saturn) - light grey for icy moon */
 export const MIMAS_ORBIT_COLOR = "#C0C0C0";
 
+/** Orbit color for Enceladus (around Saturn) - icy blue */
+export const ENCELADUS_ORBIT_COLOR = "#D6E4FF";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
