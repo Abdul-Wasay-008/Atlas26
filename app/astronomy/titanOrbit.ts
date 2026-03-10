@@ -34,7 +34,7 @@ const SATURN_RADIUS = 0.85;
  * Scene scale for Titan orbit radius
  * Titan orbits at 6x Saturn radius - outer large moon, clearly separated from rings
  */
-const TITAN_ORBIT_SCENE_RADIUS = SATURN_RADIUS * 3.2;
+const TITAN_ORBIT_SCENE_RADIUS = SATURN_RADIUS * 6.0;
 
 /** Scale factor: km to scene units */
 const SCENE_SCALE = TITAN_ORBIT_SCENE_RADIUS / TITAN_SEMI_MAJOR_AXIS_KM;

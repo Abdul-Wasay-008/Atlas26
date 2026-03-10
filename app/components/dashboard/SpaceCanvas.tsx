@@ -230,7 +230,7 @@ export default function SpaceCanvas() {
                 <Tethys />
                 <Dione />
                 <Rhea />
-                {/* <Titan /> */}
+                <Titan />
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
                 <Uranus />
@@ -282,7 +282,7 @@ export default function SpaceCanvas() {
                 {/* 🪐 Rhea Orbit Path (shows orbit around Saturn when Rhea or Saturn selected) */}
                 <RheaOrbitPath />
                 {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
-                {/* <TitanOrbitPath /> */}
+                <TitanOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
