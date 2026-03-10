@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "titan" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "titan" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -33,6 +33,7 @@ class CameraController {
     mimasOffset = new THREE.Vector3(0, 0, 0.3); // Offset for Saturn's moon Mimas (small icy moon)
     enceladusOffset = new THREE.Vector3(0, 0, 0.35); // Offset for Saturn's moon Enceladus
     tethysOffset = new THREE.Vector3(0, 0, 0.4); // Offset for Saturn's moon Tethys
+    dioneOffset = new THREE.Vector3(0, 0, 0.45); // Offset for Saturn's moon Dione
     titanOffset = new THREE.Vector3(0, 0, 2.2); // Offset for Saturn's moon Titan (similar size to Mercury)
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
@@ -85,6 +86,7 @@ class CameraController {
                                                                 target === "mimas" ? this.mimasOffset :
                                                                 target === "enceladus" ? this.enceladusOffset :
                                                                 target === "tethys" ? this.tethysOffset :
+                                                                target === "dione" ? this.dioneOffset :
                                                                 target === "titan" ? this.titanOffset :
                                                                 target === "iss" ? this.issOffset :
                                                             target === "hubble" ? this.hubbleOffset :

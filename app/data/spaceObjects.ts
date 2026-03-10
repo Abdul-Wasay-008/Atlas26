@@ -181,6 +181,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~1.2 billion km (varies)"
     },
     {
+        id: "dione",
+        name: "Dione",
+        type: "satellite",
+        radius: "~561 km",
+        orbitalPeriod: "2.736 days",
+        description: "Dione is an icy moon of Saturn known for its bright fracture lines and heavily cratered terrain.",
+        distanceFromEarth: "~1.2 billion km (varies)"
+    },
+    {
         id: "titan",
         name: "Titan",
         type: "satellite",
