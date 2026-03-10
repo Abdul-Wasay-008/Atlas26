@@ -154,6 +154,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~628 million km (varies)"
     },
     {
+        id: "mimas",
+        name: "Mimas",
+        type: "satellite",
+        radius: "~198 km",
+        orbitalPeriod: "0.94 days",
+        description: "Mimas is Saturn's smallest and innermost major moon, famous for its large Herschel crater that gives it a 'Death Star' appearance. It is composed primarily of water ice with a rocky core.",
+        distanceFromEarth: "~1.2 billion km (varies)"
+    },
+    {
         id: "titan",
         name: "Titan",
         type: "satellite",

@@ -59,6 +59,9 @@ export const CALLISTO_ORBIT_COLOR = "#909080";
 /** Orbit color for Titan (around Saturn) - soft orange-brown to match Titan */
 export const TITAN_ORBIT_COLOR = "#c47c2c";
 
+/** Orbit color for Mimas (around Saturn) - light grey for icy moon */
+export const MIMAS_ORBIT_COLOR = "#C0C0C0";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

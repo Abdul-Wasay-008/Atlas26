@@ -1,108 +1,3 @@
-// "use client"
-
-// import { Canvas } from "@react-three/fiber"
-// import { OrbitControls, useTexture } from "@react-three/drei"
-// import * as THREE from "three"
-// import { useEffect, useState } from "react"
-// import Earth from "../3d/Earth"
-// import Moon from "../3d/Moon"
-// import MoonOrbitPath from "../3d/MoonOrbitPath"
-
-// function Starfield() {
-//     const texture = useTexture("/space/stars.jpg")
-
-//     return (
-//         <mesh scale={-1}>
-//             <sphereGeometry args={[500, 64, 64]} />
-//             <meshBasicMaterial
-//                 map={texture}
-//                 side={THREE.BackSide}
-//                 depthWrite={false}
-//             />
-//         </mesh>
-//     )
-// }
-
-// export default function SpaceCanvas() {
-
-//     const [fov, setFov] = useState(45)
-//     const [cameraPos, setCameraPos] = useState<[number, number, number]>([0, 0, 8])
-
-//     // 📌 Ensure responsive camera only runs in client
-//     useEffect(() => {
-//         if (typeof window === "undefined") return
-
-//         function updateCamera() {
-//             const w = window.innerWidth
-
-//             if (w < 480) {
-//                 setFov(65)
-//                 setCameraPos([0, 0, 9.5])
-//             } else if (w < 768) {
-//                 setFov(55)
-//                 setCameraPos([0, 0, 9])
-//             } else {
-//                 setFov(45)
-//                 setCameraPos([0, 0, 8])
-//             }
-//         }
-
-//         updateCamera()
-//         window.addEventListener("resize", updateCamera)
-//         return () => window.removeEventListener("resize", updateCamera)
-//     }, [])
-
-//     useEffect(() => {
-//         const spaceArea = document.getElementById("space-area")
-//         if (!spaceArea) return
-
-//         const onEnter = () => (spaceArea.style.cursor = "grab")
-//         const onLeave = () => (spaceArea.style.cursor = "default")
-//         const onDown = () => (spaceArea.style.cursor = "grabbing")
-//         const onUp = () => (spaceArea.style.cursor = "grab")
-
-//         spaceArea.addEventListener("mouseenter", onEnter)
-//         spaceArea.addEventListener("mouseleave", onLeave)
-//         spaceArea.addEventListener("mousedown", onDown)
-//         spaceArea.addEventListener("mouseup", onUp)
-
-//         return () => {
-//             spaceArea.removeEventListener("mouseenter", onEnter)
-//             spaceArea.removeEventListener("mouseleave", onLeave)
-//             spaceArea.removeEventListener("mousedown", onDown)
-//             spaceArea.removeEventListener("mouseup", onUp)
-//         }
-//     }, [])
-
-//     return (
-//         <Canvas
-//             camera={{ position: cameraPos, fov }}
-//             gl={{ antialias: true }}
-//         >
-//             {/* 🌌 Deep Space Starfield */}
-//             <Starfield />
-
-//             {/* 💡 Lighting */}
-//             <ambientLight intensity={3.5} />
-//             <directionalLight position={[5, 3, 5]} intensity={1.2} />
-
-//             {/* 🌍 Earth + Moon System */}
-//             <Earth />
-//             <Moon />
-//             <MoonOrbitPath />
-
-//             {/* 🎮 Camera Controls */}
-//             {/* ONLY adjust speeds if "window" exists */}
-//             <OrbitControls
-//                 enablePan={false}
-//                 minDistance={4}
-//                 maxDistance={14}
-//                 rotateSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.6 : 1}
-//                 zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1}
-//             />
-//         </Canvas>
-//     )
-// }
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
@@ -143,11 +38,13 @@ import Europa from "../3d/Europa";
 import Ganymede from "../3d/Ganymede";
 import Callisto from "../3d/Callisto";
 import Titan from "../3d/Titan";
+import Mimas from "../3d/Mimas";
 import IoOrbitPath from "../3d/IoOrbitPath";
 import EuropaOrbitPath from "../3d/EuropaOrbitPath";
 import GanymedeOrbitPath from "../3d/GanymedeOrbitPath";
 import CallistoOrbitPath from "../3d/CallistoOrbitPath";
 import TitanOrbitPath from "../3d/TitanOrbitPath";
+import MimasOrbitPath from "../3d/MimasOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -304,9 +201,9 @@ export default function SpaceCanvas() {
                         "/textures/mars.jpg",
                         "/textures/mars.jpg",
                     ]}
-                hasClouds={false}
-                terminatorWidth={0.22}
-                noShadow={true}
+                    hasClouds={false}
+                    terminatorWidth={0.22}
+                    noShadow={true}
                 />
                 <Phobos />
                 <Deimos />
@@ -320,7 +217,8 @@ export default function SpaceCanvas() {
 
                 {/* 🪐 Saturn (6th planet, famous for rings) */}
                 <Saturn />
-                <Titan />
+                <Mimas />
+                {/* <Titan /> */}
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
                 <Uranus />
@@ -361,8 +259,10 @@ export default function SpaceCanvas() {
                 {/* 🌑 Callisto Orbit Path (shows orbit around Jupiter when Callisto or Jupiter selected) */}
                 <CallistoOrbitPath />
 
+                {/* 🪐 Mimas Orbit Path (shows orbit around Saturn when Mimas or Saturn selected) */}
+                <MimasOrbitPath />
                 {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
-                <TitanOrbitPath />
+                {/* <TitanOrbitPath /> */}
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
