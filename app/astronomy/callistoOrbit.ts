@@ -34,7 +34,7 @@ const JUPITER_RADIUS = 0.9;
  * Scene scale for Callisto orbit radius
  * Callisto is the outermost Galilean moon; visually compress to 8.5x Jupiter radius
  */
-const CALLISTO_ORBIT_SCENE_RADIUS = JUPITER_RADIUS * 8.5;
+const CALLISTO_ORBIT_SCENE_RADIUS = JUPITER_RADIUS * 6.0;
 
 /** Scale factor: km to scene units */
 const SCENE_SCALE = CALLISTO_ORBIT_SCENE_RADIUS / CALLISTO_SEMI_MAJOR_AXIS_KM;
