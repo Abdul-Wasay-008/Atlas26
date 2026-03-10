@@ -40,6 +40,7 @@ import Callisto from "../3d/Callisto";
 import Titan from "../3d/Titan";
 import Mimas from "../3d/Mimas";
 import Enceladus from "../3d/Enceladus";
+import Tethys from "../3d/Tethys";
 import IoOrbitPath from "../3d/IoOrbitPath";
 import EuropaOrbitPath from "../3d/EuropaOrbitPath";
 import GanymedeOrbitPath from "../3d/GanymedeOrbitPath";
@@ -47,6 +48,7 @@ import CallistoOrbitPath from "../3d/CallistoOrbitPath";
 import TitanOrbitPath from "../3d/TitanOrbitPath";
 import MimasOrbitPath from "../3d/MimasOrbitPath";
 import EnceladusOrbitPath from "../3d/EnceladusOrbitPath";
+import TethysOrbitPath from "../3d/TethysOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -221,6 +223,7 @@ export default function SpaceCanvas() {
                 <Saturn />
                 <Mimas />
                 <Enceladus />
+                <Tethys />
                 {/* <Titan /> */}
 
                 {/* 🪐 Uranus (7th planet, ice giant) */}
@@ -266,6 +269,8 @@ export default function SpaceCanvas() {
                 <MimasOrbitPath />
                 {/* 🪐 Enceladus Orbit Path (shows orbit around Saturn when Enceladus or Saturn selected) */}
                 <EnceladusOrbitPath />
+                {/* 🪐 Tethys Orbit Path (shows orbit around Saturn when Tethys or Saturn selected) */}
+                <TethysOrbitPath />
                 {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
                 {/* <TitanOrbitPath /> */}
 

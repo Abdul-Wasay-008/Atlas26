@@ -65,6 +65,9 @@ export const MIMAS_ORBIT_COLOR = "#C0C0C0";
 /** Orbit color for Enceladus (around Saturn) - icy blue */
 export const ENCELADUS_ORBIT_COLOR = "#D6E4FF";
 
+/** Orbit color for Tethys (around Saturn) - light grey */
+export const TETHYS_ORBIT_COLOR = "#E0E0E0";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

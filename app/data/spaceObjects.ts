@@ -172,6 +172,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~1.2 billion km (varies)"
     },
     {
+        id: "tethys",
+        name: "Tethys",
+        type: "satellite",
+        radius: "~531 km",
+        orbitalPeriod: "1.89 days",
+        description: "Tethys is an icy moon of Saturn known for its enormous Ithaca Chasma canyon that stretches across much of its surface.",
+        distanceFromEarth: "~1.2 billion km (varies)"
+    },
+    {
         id: "titan",
         name: "Titan",
         type: "satellite",
