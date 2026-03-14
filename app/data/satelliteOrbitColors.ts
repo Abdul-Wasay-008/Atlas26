@@ -80,6 +80,9 @@ export const MIRANDA_ORBIT_COLOR = "#D0D8E0";
 /** Orbit color for Ariel (around Uranus) - icy blue-grey */
 export const ARIEL_ORBIT_COLOR = "#C9D4DF";
 
+/** Orbit color for Umbriel (around Uranus) - darker grey for dark moon */
+export const UMBRIEL_ORBIT_COLOR = "#B8C2CC";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

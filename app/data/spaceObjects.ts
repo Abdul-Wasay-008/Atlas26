@@ -226,6 +226,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~2.6 billion km (varies)"
     },
     {
+        id: "umbriel",
+        name: "Umbriel",
+        type: "satellite",
+        radius: "~584 km",
+        orbitalPeriod: "4.144 days",
+        description: "Umbriel is one of Uranus's five major moons and has the darkest surface among them, heavily cratered with ancient terrain.",
+        distanceFromEarth: "~2.6 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

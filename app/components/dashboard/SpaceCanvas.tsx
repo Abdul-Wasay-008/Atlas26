@@ -57,6 +57,8 @@ import Miranda from "../3d/Miranda";
 import MirandaOrbitPath from "../3d/MirandaOrbitPath";
 import Ariel from "../3d/Ariel";
 import ArielOrbitPath from "../3d/ArielOrbitPath";
+import Umbriel from "../3d/Umbriel";
+import UmbrielOrbitPath from "../3d/UmbrielOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -240,6 +242,7 @@ export default function SpaceCanvas() {
                 <Uranus />
                 <Miranda />
                 <Ariel />
+                <Umbriel />
 
                 {/* 🪐 Neptune (8th planet, ice giant) */}
                 <Neptune />
@@ -293,6 +296,8 @@ export default function SpaceCanvas() {
                 <MirandaOrbitPath />
                 {/* 🪐 Ariel Orbit Path (shows orbit around Uranus when Ariel or Uranus selected) */}
                 <ArielOrbitPath />
+                {/* 🪐 Umbriel Orbit Path (shows orbit around Uranus when Umbriel or Uranus selected) */}
+                <UmbrielOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
