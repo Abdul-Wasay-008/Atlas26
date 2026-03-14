@@ -77,6 +77,9 @@ export const RHEA_ORBIT_COLOR = "#E8E8E8";
 /** Orbit color for Miranda (around Uranus) - icy/neutral tone */
 export const MIRANDA_ORBIT_COLOR = "#D0D8E0";
 
+/** Orbit color for Ariel (around Uranus) - icy blue-grey */
+export const ARIEL_ORBIT_COLOR = "#C9D4DF";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

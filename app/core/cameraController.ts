@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -37,6 +37,7 @@ class CameraController {
     rheaOffset = new THREE.Vector3(0, 0, 0.5); // Offset for Saturn's moon Rhea
     titanOffset = new THREE.Vector3(0, 0, 2.2); // Offset for Saturn's moon Titan (similar size to Mercury)
     mirandaOffset = new THREE.Vector3(0, 0, 0.25); // Offset for Uranus's moon Miranda (innermost, small)
+    arielOffset = new THREE.Vector3(0, 0, 0.35); // Offset for Uranus's moon Ariel
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
@@ -92,6 +93,7 @@ class CameraController {
                                                                 target === "rhea" ? this.rheaOffset :
                                                                 target === "titan" ? this.titanOffset :
                                                                 target === "miranda" ? this.mirandaOffset :
+                                                                target === "ariel" ? this.arielOffset :
                                                                 target === "iss" ? this.issOffset :
                                                             target === "hubble" ? this.hubbleOffset :
                                                                 new THREE.Vector3();

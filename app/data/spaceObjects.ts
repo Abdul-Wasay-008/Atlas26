@@ -217,6 +217,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~2.6 billion km (varies)"
     },
     {
+        id: "ariel",
+        name: "Ariel",
+        type: "satellite",
+        radius: "~578 km",
+        orbitalPeriod: "2.52 days",
+        description: "Ariel is one of Uranus's five major moons and is known for its bright icy surface and deep valleys formed by tectonic activity.",
+        distanceFromEarth: "~2.6 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

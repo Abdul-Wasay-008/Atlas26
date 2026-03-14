@@ -55,6 +55,8 @@ import DioneOrbitPath from "../3d/DioneOrbitPath";
 import RheaOrbitPath from "../3d/RheaOrbitPath";
 import Miranda from "../3d/Miranda";
 import MirandaOrbitPath from "../3d/MirandaOrbitPath";
+import Ariel from "../3d/Ariel";
+import ArielOrbitPath from "../3d/ArielOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -237,6 +239,7 @@ export default function SpaceCanvas() {
                 {/* 🪐 Uranus (7th planet, ice giant) */}
                 <Uranus />
                 <Miranda />
+                <Ariel />
 
                 {/* 🪐 Neptune (8th planet, ice giant) */}
                 <Neptune />
@@ -288,6 +291,8 @@ export default function SpaceCanvas() {
                 <TitanOrbitPath />
                 {/* 🪐 Miranda Orbit Path (shows orbit around Uranus when Miranda or Uranus selected) */}
                 <MirandaOrbitPath />
+                {/* 🪐 Ariel Orbit Path (shows orbit around Uranus when Ariel or Uranus selected) */}
+                <ArielOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
