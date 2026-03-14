@@ -208,6 +208,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~1.4 billion km (varies)"
     },
     {
+        id: "miranda",
+        name: "Miranda",
+        type: "satellite",
+        radius: "~235 km",
+        orbitalPeriod: "1.413 days",
+        description: "Miranda is the smallest and innermost of Uranus's five major moons. It has a bizarre, patchwork surface with cliffs, canyons, and varied terrain, suggesting it may have been shattered and reassembled.",
+        distanceFromEarth: "~2.6 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

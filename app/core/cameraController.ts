@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -36,6 +36,7 @@ class CameraController {
     dioneOffset = new THREE.Vector3(0, 0, 0.45); // Offset for Saturn's moon Dione
     rheaOffset = new THREE.Vector3(0, 0, 0.5); // Offset for Saturn's moon Rhea
     titanOffset = new THREE.Vector3(0, 0, 2.2); // Offset for Saturn's moon Titan (similar size to Mercury)
+    mirandaOffset = new THREE.Vector3(0, 0, 0.25); // Offset for Uranus's moon Miranda (innermost, small)
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
@@ -90,6 +91,7 @@ class CameraController {
                                                                 target === "dione" ? this.dioneOffset :
                                                                 target === "rhea" ? this.rheaOffset :
                                                                 target === "titan" ? this.titanOffset :
+                                                                target === "miranda" ? this.mirandaOffset :
                                                                 target === "iss" ? this.issOffset :
                                                             target === "hubble" ? this.hubbleOffset :
                                                                 new THREE.Vector3();
