@@ -244,6 +244,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~2.6 billion km (varies)"
     },
     {
+        id: "oberon",
+        name: "Oberon",
+        type: "satellite",
+        radius: "~761 km",
+        orbitalPeriod: "13.463 days",
+        description: "Oberon is the outermost major moon of Uranus and is heavily cratered with dark ancient terrain.",
+        distanceFromEarth: "~2.6 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

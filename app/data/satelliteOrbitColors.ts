@@ -86,6 +86,9 @@ export const UMBRIEL_ORBIT_COLOR = "#B8C2CC";
 /** Orbit color for Titania (around Uranus) - light grey for largest moon */
 export const TITANIA_ORBIT_COLOR = "#C8D0D8";
 
+/** Orbit color for Oberon (around Uranus) - outermost moon */
+export const OBERON_ORBIT_COLOR = "#BFC8D0";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
