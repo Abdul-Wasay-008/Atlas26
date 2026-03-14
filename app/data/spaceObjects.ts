@@ -235,6 +235,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~2.6 billion km (varies)"
     },
     {
+        id: "titania",
+        name: "Titania",
+        type: "satellite",
+        radius: "~788 km",
+        orbitalPeriod: "8.706 days",
+        description: "Titania is the largest moon of Uranus and features large fault valleys and icy plains formed by tectonic activity.",
+        distanceFromEarth: "~2.6 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

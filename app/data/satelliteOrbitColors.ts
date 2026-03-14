@@ -83,6 +83,9 @@ export const ARIEL_ORBIT_COLOR = "#C9D4DF";
 /** Orbit color for Umbriel (around Uranus) - darker grey for dark moon */
 export const UMBRIEL_ORBIT_COLOR = "#B8C2CC";
 
+/** Orbit color for Titania (around Uranus) - light grey for largest moon */
+export const TITANIA_ORBIT_COLOR = "#C8D0D8";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility
