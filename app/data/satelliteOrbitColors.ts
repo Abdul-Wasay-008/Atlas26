@@ -89,6 +89,9 @@ export const TITANIA_ORBIT_COLOR = "#C8D0D8";
 /** Orbit color for Oberon (around Uranus) - outermost moon */
 export const OBERON_ORBIT_COLOR = "#BFC8D0";
 
+/** Orbit color for Triton (around Neptune) - icy moon */
+export const TRITON_ORBIT_COLOR = "#9BB5C4";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

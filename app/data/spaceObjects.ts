@@ -253,6 +253,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~2.6 billion km (varies)"
     },
     {
+        id: "triton",
+        name: "Triton",
+        type: "satellite",
+        radius: "~1353 km",
+        orbitalPeriod: "5.876 days",
+        description: "Triton is the largest moon of Neptune and the only large moon in the solar system with a retrograde orbit. It likely formed as a captured Kuiper Belt object and has cryovolcanoes on its surface.",
+        distanceFromEarth: "~4.3 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -41,6 +41,7 @@ class CameraController {
     umbrielOffset = new THREE.Vector3(0, 0, 0.4); // Offset for Uranus's moon Umbriel
     titaniaOffset = new THREE.Vector3(0, 0, 0.5); // Offset for Uranus's moon Titania (largest)
     oberonOffset = new THREE.Vector3(0, 0, 0.55); // Offset for Uranus's moon Oberon (outermost)
+    tritonOffset = new THREE.Vector3(0, 0, 0.6); // Offset for Neptune's moon Triton
     issOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
     hubbleOffset = new THREE.Vector3(0, 0, 0.5); // Close-up offset for satellites
 
@@ -100,6 +101,7 @@ class CameraController {
                                                                 target === "umbriel" ? this.umbrielOffset :
                                                                 target === "titania" ? this.titaniaOffset :
                                                                 target === "oberon" ? this.oberonOffset :
+                                                                target === "triton" ? this.tritonOffset :
                                                                 target === "iss" ? this.issOffset :
                                                             target === "hubble" ? this.hubbleOffset :
                                                                 new THREE.Vector3();
