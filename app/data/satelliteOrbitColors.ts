@@ -95,6 +95,9 @@ export const TRITON_ORBIT_COLOR = "#9BB5C4";
 /** Orbit color for Proteus (around Neptune) - irregular rocky moon */
 export const PROTEUS_ORBIT_COLOR = "#8E8E8E";
 
+/** Orbit color for Nereid (around Neptune) - distant eccentric moon */
+export const NEREID_ORBIT_COLOR = "#9AA0A6";
+
 /**
  * Default fallback color if a satellite is missing from the mapping
  * Neutral white with slight blue tint for visibility

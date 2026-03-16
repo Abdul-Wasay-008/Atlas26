@@ -271,6 +271,16 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~4.3 billion km (varies)"
     },
     {
+        id: "nereid",
+        name: "Nereid",
+        type: "satellite",
+        radius: "~170 km",
+        orbitalPeriod: "360 days",
+        distanceFromEarth: "~4.5 billion km",
+        description:
+            "Nereid is an irregular moon of Neptune discovered in 1949. It has one of the most eccentric orbits of any moon in the solar system and is believed to be a captured object."
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

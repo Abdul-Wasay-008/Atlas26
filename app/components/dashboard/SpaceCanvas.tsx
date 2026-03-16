@@ -67,6 +67,8 @@ import Triton from "../3d/Triton";
 import TritonOrbitPath from "../3d/TritonOrbitPath";
 import Proteus from "../3d/Proteus";
 import ProteusOrbitPath from "../3d/ProteusOrbitPath";
+import Nereid from "../3d/Nereid";
+import NereidOrbitPath from "../3d/NereidOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -258,6 +260,7 @@ export default function SpaceCanvas() {
                 <Neptune />
                 <Proteus />
                 <Triton />
+                <Nereid />
 
                 {/* 🚀 ISS (International Space Station) */}
                 <ISS />
@@ -318,6 +321,8 @@ export default function SpaceCanvas() {
                 <ProteusOrbitPath />
                 {/* 🪐 Triton Orbit Path (shows orbit around Neptune when Triton or Neptune selected) */}
                 <TritonOrbitPath />
+                {/* 🪐 Nereid Orbit Path (shows orbit around Neptune when Nereid or Neptune selected) */}
+                <NereidOrbitPath />
 
                 {/* 🎮 Orbit Controls (CONNECTED) */}
                 <OrbitControls
