@@ -51,7 +51,7 @@ export default function Triton() {
         tritonTexture.colorSpace = THREE.SRGBColorSpace;
     }, [tritonTexture]);
 
-    // Geometry with subtle displacement for icy moon surface
+    // Geometry with stronger displacement for Triton's rugged, fractured surface
     const tritonGeometry = useMemo(() => {
         const baseGeometry = new THREE.IcosahedronGeometry(TRITON_RADIUS, 5);
         const geometry = baseGeometry.clone();
@@ -61,13 +61,15 @@ export default function Triton() {
         const vertex = new THREE.Vector3();
         const normal = new THREE.Vector3();
 
-        const displacementAmplitude = TRITON_RADIUS * 0.02;
+        // Increase amplitude compared to other moons so Triton looks noticeably rougher
+        const displacementAmplitude = TRITON_RADIUS * 0.05;
 
         for (let i = 0; i < positionAttr.count; i++) {
             vertex.fromBufferAttribute(positionAttr, i);
             normal.copy(vertex).normalize();
 
-            const noise = subtleNoise(vertex.x * 20, vertex.y * 20, vertex.z * 20);
+            // Slightly higher frequency sampling for more small-scale terrain variation
+            const noise = subtleNoise(vertex.x * 30, vertex.y * 30, vertex.z * 30);
             const displacement = displacementAmplitude * noise;
 
             positions[i * 3] += normal.x * displacement;
