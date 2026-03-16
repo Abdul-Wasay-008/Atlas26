@@ -159,9 +159,9 @@ export default function Sidebar() {
         obj => obj.type === "satellite" && obj.id !== "iss" && obj.id !== "hubble"
     )
 
-    // All satellites except Earth's Moon (kept separate as a moon)
+    // Artificial satellites only (ISS, Hubble Space Telescope)
     const satellites = spaceObjects.filter(
-        obj => obj.type === "satellite" && obj.id !== "moon"
+        obj => obj.id === "iss" || obj.id === "hubble"
     )
 
     const handlePlanetClick = (planetId: string) => {
@@ -364,7 +364,7 @@ export default function Sidebar() {
                     ATLAS26
                 </h1>
 
-                <div className="flex-1">
+                <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
                     {renderMenu()}
                 </div>
 
@@ -400,7 +400,7 @@ export default function Sidebar() {
                     ATLAS26
                 </h1>
 
-                <div className="flex-1">
+                <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
                     {renderMenu()}
                 </div>
 
