@@ -133,6 +133,7 @@ export default function Sidebar() {
     const [active, setActive] = useState("All")
     const [planetsExpanded, setPlanetsExpanded] = useState(false)
     const [satellitesExpanded, setSatellitesExpanded] = useState(false)
+    const [moonsExpanded, setMoonsExpanded] = useState(false)
     const [controlsModalOpen, setControlsModalOpen] = useState(false)
     const selectObject = useSelectionStore((state) => state.selectObject)
     const selectedId = useSelectionStore((state) => state.selectedId)
@@ -141,6 +142,7 @@ export default function Sidebar() {
     const menu = [
         { name: "All", icon: LoaderPinwheelIcon },
         { name: "Planets", icon: Orbit },
+        { name: "Moons", icon: Satellite },
         { name: "Satellites", icon: Satellite },
         { name: "Comets", icon: Sparkle },
         { name: "Interstellar", icon: Stars },
@@ -151,11 +153,25 @@ export default function Sidebar() {
     const planets = spaceObjects
         .filter(obj => obj.type === "planet")
         .sort((a, b) => PLANET_ORDER.indexOf(a.id as typeof PLANET_ORDER[number]) - PLANET_ORDER.indexOf(b.id as typeof PLANET_ORDER[number]))
-    const satellites = spaceObjects.filter(obj => obj.type === "satellite" && obj.id !== "moon")
+
+    // Natural moons: all satellites except artificial ones (ISS, Hubble)
+    const moons = spaceObjects.filter(
+        obj => obj.type === "satellite" && obj.id !== "iss" && obj.id !== "hubble"
+    )
+
+    // All satellites except Earth's Moon (kept separate as a moon)
+    const satellites = spaceObjects.filter(
+        obj => obj.type === "satellite" && obj.id !== "moon"
+    )
 
     const handlePlanetClick = (planetId: string) => {
         selectObject(planetId)
         setActive("Planets")
+    }
+
+    const handleMoonClick = (moonId: string) => {
+        selectObject(moonId)
+        setActive("Moons")
     }
 
     const handleSatelliteClick = (satelliteId: string) => {
@@ -167,10 +183,15 @@ export default function Sidebar() {
         <div className="space-y-3 text-sm md:text-base text-white/60">
             {menu.map(({ name, icon: Icon }) => {
                 const isPlanets = name === "Planets"
+                const isMoons = name === "Moons"
                 const isSatellites = name === "Satellites"
                 const isActive = active === name
-                const isExpandable = isPlanets || isSatellites
-                const isExpanded = isPlanets ? planetsExpanded : satellitesExpanded
+                const isExpandable = isPlanets || isMoons || isSatellites
+                const isExpanded = isPlanets
+                    ? planetsExpanded
+                    : isMoons
+                        ? moonsExpanded
+                        : satellitesExpanded
 
                 return (
                     <div key={name}>
@@ -184,6 +205,9 @@ export default function Sidebar() {
                                 }
                                 if (isPlanets) {
                                     setPlanetsExpanded(!planetsExpanded)
+                                }
+                                if (isMoons) {
+                                    setMoonsExpanded(!moonsExpanded)
                                 }
                                 if (isSatellites) {
                                     setSatellitesExpanded(!satellitesExpanded)
@@ -239,6 +263,28 @@ export default function Sidebar() {
                                         `}
                                     >
                                         {planet.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Expandable moons list */}
+                        {isMoons && moonsExpanded && (
+                            <div className="ml-8 mt-1 space-y-1">
+                                {moons.map((moon) => (
+                                    <button
+                                        key={moon.id}
+                                        onClick={() => handleMoonClick(moon.id)}
+                                        className={`
+                                            w-full px-3 py-1.5 text-left rounded-md
+                                            transition-all duration-200 text-sm cursor-pointer
+                                            ${selectedId === moon.id
+                                                ? "text-cyan-400 bg-cyan-400/10 border border-cyan-400/30"
+                                                : "text-white/70 hover:text-white hover:bg-white/5"
+                                            }
+                                        `}
+                                    >
+                                        {moon.name}
                                     </button>
                                 ))}
                             </div>

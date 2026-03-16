@@ -18,7 +18,8 @@ function pseudoNoise3D(x: number, y: number, z: number, seed: number): number {
 function nereidNoise(x: number, y: number, z: number): number {
     const lowFreq = pseudoNoise3D(x * 3, y * 3, z * 3, 501.0);
     const highFreq = pseudoNoise3D(x * 8, y * 8, z * 8, 902.0);
-    return lowFreq * 0.006 + highFreq * 0.003;
+    // Slightly smoother than Proteus: lower overall displacement
+    return lowFreq * 0.004 + highFreq * 0.002;
 }
 
 export default function Nereid() {
@@ -77,6 +78,7 @@ export default function Nereid() {
     const nereidMaterial = useMemo(() => {
         return new THREE.MeshStandardMaterial({
             map: nereidTexture,
+            color: new THREE.Color("#777777"), // dark grey tint
             metalness: 0,
             roughness: 1,
         });
