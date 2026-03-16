@@ -262,6 +262,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~4.3 billion km (varies)"
     },
     {
+        id: "proteus",
+        name: "Proteus",
+        type: "satellite",
+        radius: "~210 km",
+        orbitalPeriod: "1.12 days",
+        description: "Proteus is the second largest moon of Neptune and has an irregular rocky shape with many impact craters.",
+        distanceFromEarth: "~4.3 billion km (varies)"
+    },
+    {
         id: "iss",
         name: "ISS",
         type: "satellite",

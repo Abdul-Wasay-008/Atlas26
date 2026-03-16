@@ -65,6 +65,8 @@ import Oberon from "../3d/Oberon";
 import OberonOrbitPath from "../3d/OberonOrbitPath";
 import Triton from "../3d/Triton";
 import TritonOrbitPath from "../3d/TritonOrbitPath";
+import Proteus from "../3d/Proteus";
+import ProteusOrbitPath from "../3d/ProteusOrbitPath";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -254,6 +256,7 @@ export default function SpaceCanvas() {
 
                 {/* 🪐 Neptune (8th planet, ice giant) */}
                 <Neptune />
+                <Proteus />
                 <Triton />
 
                 {/* 🚀 ISS (International Space Station) */}
@@ -311,6 +314,8 @@ export default function SpaceCanvas() {
                 <TitaniaOrbitPath />
                 {/* 🪐 Oberon Orbit Path (shows orbit around Uranus when Oberon or Uranus selected) */}
                 <OberonOrbitPath />
+                {/* 🪐 Proteus Orbit Path (shows orbit around Neptune when Proteus or Neptune selected) */}
+                <ProteusOrbitPath />
                 {/* 🪐 Triton Orbit Path (shows orbit around Neptune when Triton or Neptune selected) */}
                 <TritonOrbitPath />
 
