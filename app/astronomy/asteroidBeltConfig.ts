@@ -17,3 +17,11 @@ export const BASE_ORBITAL_PERIOD_DAYS = keplerPeriodDays(MEDIAN_BELT_AU);
 export const MEDIAN_RADIUS = (INNER_RADIUS + OUTER_RADIUS) / 2;
 
 export const GEOMETRY_DETAIL = 0;
+
+/**
+ * Visual speed boost so belt motion is perceptible at 1x time.
+ * The real orbital period (~4.7 yr) makes the belt look stationary at scene
+ * scale; this multiplier only affects apparent rotation speed while keeping the
+ * belt fully driven by the time engine (pause, speed, time-travel all work).
+ */
+export const BELT_VISUAL_SPEED_MULTIPLIER = 80;

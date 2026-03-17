@@ -8,6 +8,7 @@ import { generateAsteroidData } from "@/app/astronomy/asteroidBeltDistribution";
 import {
     ASTEROID_COUNT,
     BASE_ORBITAL_PERIOD_DAYS,
+    BELT_VISUAL_SPEED_MULTIPLIER,
     GEOMETRY_DETAIL,
 } from "@/app/astronomy/asteroidBeltConfig";
 
@@ -82,7 +83,7 @@ export default function AsteroidBelt({ visible = true }: AsteroidBeltProps) {
         if (!beltRef.current || !visible) return;
         const t = timeManager.getCurrentDate().getTime() / 1000;
         beltRef.current.rotation.y =
-            (t / BELT_ORBITAL_PERIOD_SECONDS) * Math.PI * 2
+            (t / BELT_ORBITAL_PERIOD_SECONDS) * Math.PI * 2 * BELT_VISUAL_SPEED_MULTIPLIER
             + Math.sin(t * 0.0000002) * VARIATION_AMPLITUDE;
     });
 
