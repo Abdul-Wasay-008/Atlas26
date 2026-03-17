@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { orbitron, poppins } from "@/app/fonts"
 import { FaBars, FaTimes } from "react-icons/fa"
-import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon, ChevronDown, ChevronRight, SlidersVertical, X, Monitor, Smartphone } from "lucide-react"
+import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon, ChevronDown, ChevronRight, SlidersVertical, X, Monitor, Smartphone, Moon } from "lucide-react"
 import { useSelectionStore } from "@/app/store/selectionStore"
 import { spaceObjects } from "@/app/data/spaceObjects"
 
@@ -142,7 +142,7 @@ export default function Sidebar() {
     const menu = [
         { name: "All", icon: LoaderPinwheelIcon },
         { name: "Planets", icon: Orbit },
-        { name: "Moons", icon: Satellite },
+        { name: "Moons", icon: Moon },
         { name: "Satellites", icon: Satellite },
         { name: "Comets", icon: Sparkle },
         { name: "Interstellar", icon: Stars },

@@ -69,6 +69,7 @@ import Proteus from "../3d/Proteus";
 import ProteusOrbitPath from "../3d/ProteusOrbitPath";
 import Nereid from "../3d/Nereid";
 import NereidOrbitPath from "../3d/NereidOrbitPath";
+import AsteroidBelt from "../3d/AsteroidBelt";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -231,6 +232,9 @@ export default function SpaceCanvas() {
                 />
                 <Phobos />
                 <Deimos />
+
+                {/* 🪨 Asteroid Belt (between Mars and Jupiter) */}
+                <AsteroidBelt />
 
                 {/* 🪐 Jupiter–Galilean Moons System (largest planet, gas giant) */}
                 <Jupiter />
