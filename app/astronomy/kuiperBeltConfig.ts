@@ -22,4 +22,4 @@ export const GEOMETRY_DETAIL = 0;
  * only affects apparent rotation speed while keeping the belt fully driven by
  * the time engine (pause, speed, time-travel all work).
  */
-export const KUIPER_VISUAL_SPEED_MULTIPLIER = 120;
+export const KUIPER_VISUAL_SPEED_MULTIPLIER = 1000;
