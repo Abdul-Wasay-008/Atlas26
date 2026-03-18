@@ -70,6 +70,7 @@ import ProteusOrbitPath from "../3d/ProteusOrbitPath";
 import Nereid from "../3d/Nereid";
 import NereidOrbitPath from "../3d/NereidOrbitPath";
 import AsteroidBelt from "../3d/AsteroidBelt";
+import KuiperBelt from "../3d/KuiperBelt";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -265,6 +266,9 @@ export default function SpaceCanvas() {
                 <Proteus />
                 <Triton />
                 <Nereid />
+
+                {/* 🧊 Kuiper Belt (beyond Neptune) */}
+                <KuiperBelt />
 
                 {/* 🚀 ISS (International Space Station) */}
                 <ISS />
