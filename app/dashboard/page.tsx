@@ -44,6 +44,7 @@ import { useLoadingStore } from "@/app/store/loadingStore"
 export default function DashboardPage() {
     const pathname = usePathname();
     const prevPathRef = useRef<string | null>(null);
+    const isReady = useLoadingStore((s) => s.isReady);
 
     if (pathname === "/dashboard" && prevPathRef.current !== "/dashboard") {
         prevPathRef.current = "/dashboard";
@@ -70,11 +71,15 @@ export default function DashboardPage() {
                 <DashboardLoadingOverlay />
             </div>
 
-            {/* Time Controls - fixed overlay */}
-            <TimeControls />
+            {isReady && (
+                <>
+                    {/* Time Controls - fixed overlay */}
+                    <TimeControls />
 
-            {/* Info Panel - fixed sliding overlay */}
-            <InfoPanel />
+                    {/* Info Panel - fixed sliding overlay */}
+                    <InfoPanel />
+                </>
+            )}
         </div>
     )
 }

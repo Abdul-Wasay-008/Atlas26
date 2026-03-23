@@ -146,7 +146,7 @@ export default function Sidebar() {
         { name: "Moons", icon: Moon },
         { name: "Satellites", icon: Satellite },
         { name: "Comets", icon: Sparkle },
-        { name: "Interstellar", icon: Stars },
+        // { name: "Interstellar", icon: Stars },
     ]
 
     // Get planets for the expandable list, ordered from Sun: Mercury → Neptune
