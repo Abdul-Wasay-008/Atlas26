@@ -90,7 +90,7 @@ export default function AsteroidBelt({ visible = true }: AsteroidBeltProps) {
     if (!visible) return null;
 
     return (
-        <group ref={beltRef} rotation={[0.02, 0, 0]}>
+        <group ref={beltRef} rotation={[0, 0, 0]}>
             <instancedMesh
                 ref={meshRef}
                 args={[geometry, material, ASTEROID_COUNT]}

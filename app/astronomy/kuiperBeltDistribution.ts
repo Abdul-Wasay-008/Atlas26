@@ -16,13 +16,6 @@ export interface KuiperData {
     rotations: Float32Array;
 }
 
-function gaussianRandom(): number {
-    const u1 = Math.random() || 1e-10;
-    const u2 = Math.random();
-    const g = Math.sqrt(-2 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
-    return Math.max(-1, Math.min(1, g * 0.33));
-}
-
 /**
  * Generate procedural Kuiper Belt object data.
  *
@@ -72,7 +65,7 @@ export function generateKuiperData(count: number = KUIPER_COUNT): KuiperData {
         baseAngles[i] = angle;
         radii[i] = finalRadius;
 
-        yOffsets[i] = gaussianRandom() * (BELT_THICKNESS / 2);
+        yOffsets[i] = (Math.random() - 0.5) * BELT_THICKNESS;
 
         const sRand = Math.random();
         scales[i] = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * sRand * sRand;

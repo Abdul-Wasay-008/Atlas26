@@ -88,7 +88,7 @@ export default function KuiperBelt({ visible = true }: KuiperBeltProps) {
     if (!visible) return null;
 
     return (
-        <group ref={beltRef} rotation={[0.04, 0, 0]}>
+        <group ref={beltRef} rotation={[0, 0, 0]}>
             <instancedMesh
                 ref={meshRef}
                 args={[geometry, material, KUIPER_COUNT]}
