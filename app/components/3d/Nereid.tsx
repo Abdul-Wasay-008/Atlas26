@@ -8,7 +8,7 @@ import { timeManager } from "@/app/core/TimeManager";
 import { getNereidWorldPosition } from "@/app/astronomy/nereidOrbit";
 import { getPlanetOrbitPosition, NEPTUNE_ORBIT_PARAMS } from "@/app/astronomy/planetOrbit";
 
-const NEREID_RADIUS = 0.035;
+const NEREID_RADIUS = 0.085;
 
 function pseudoNoise3D(x: number, y: number, z: number, seed: number): number {
     const n = Math.sin(x * 12.9898 + y * 78.233 + z * 37.719 + seed) * 43758.5453;

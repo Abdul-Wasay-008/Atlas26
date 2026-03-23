@@ -74,7 +74,7 @@ export default function DashboardLoadingOverlay() {
                         </p>
                         <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
                             <motion.div
-                                className="h-full rounded-full bg-gradient-to-r from-[#3fa9f5] via-[#00d4ff] to-[#3fa9f5]"
+                                className="h-full rounded-full bg-linear-to-r from-[#3fa9f5] via-[#00d4ff] to-[#3fa9f5]"
                                 initial={{ width: 0 }}
                                 animate={{ width: `${barWidth}%` }}
                                 transition={{ type: "tween", duration: 0.35, ease: "easeOut" }}

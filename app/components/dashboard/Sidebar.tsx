@@ -149,7 +149,7 @@ export default function Sidebar() {
     ]
 
     // Get planets for the expandable list, ordered from Sun: Mercury → Neptune
-    const PLANET_ORDER = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune"] as const
+    const PLANET_ORDER = ["mercury", "venus", "earth", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"] as const
     const planets = spaceObjects
         .filter(obj => obj.type === "planet")
         .sort((a, b) => PLANET_ORDER.indexOf(a.id as typeof PLANET_ORDER[number]) - PLANET_ORDER.indexOf(b.id as typeof PLANET_ORDER[number]))
@@ -262,7 +262,7 @@ export default function Sidebar() {
                                             }
                                         `}
                                     >
-                                        {planet.name}
+                                        {planet.id === "pluto" ? "Pluto (Dwarf)" : planet.name}
                                     </button>
                                 ))}
                             </div>

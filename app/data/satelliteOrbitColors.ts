@@ -33,6 +33,7 @@ export const PLANET_ORBIT_COLORS: Record<string, string> = {
     saturn: "#d3c6a8",  // Pale gold - Saturn theme
     uranus: "#7FDBFF",  // Cyan/blue - Uranus theme
     neptune: "#3D5AFE", // Deep blue - Neptune theme
+    pluto: "#C4A77D",   // Pale icy/beige - Pluto dwarf planet
 } as const;
 
 /** Orbit color for Moon (around Earth) - white / light gray */

@@ -26,6 +26,7 @@ import {
     MARS_ORBIT_PARAMS,
     MARS_AXIAL_TILT_RADIANS,
 } from "@/app/astronomy/planetOrbit";
+import { PLUTO_ORBIT_PARAMS } from "@/app/astronomy/plutoOrbit";
 import ISS from "../3d/ISS";
 import Hubble from "../3d/Hubble";
 import SatelliteOrbitPath from "../3d/SatelliteOrbitPath";
@@ -193,6 +194,23 @@ function SceneContent({
             <Triton />
             <Nereid />
             <KuiperBelt />
+            <Planet
+                id="pluto"
+                orbit={{ type: "planet", params: PLUTO_ORBIT_PARAMS }}
+                rotationPeriodSeconds={1e12}
+                axialTiltRadians={0}
+                radiusScale={0.16}
+                textureUrls={[
+                    "/textures/Pluto.webp",
+                    "/textures/Pluto.webp",
+                    "/textures/Pluto.webp",
+                    "/textures/Pluto.webp",
+                    "/textures/Pluto.webp",
+                ]}
+                hasClouds={false}
+                terminatorWidth={0.22}
+                noShadow={true}
+            />
             <ISS />
             <Hubble />
             <SatelliteOrbitPath />

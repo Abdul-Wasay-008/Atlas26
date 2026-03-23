@@ -91,6 +91,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "~4.3 billion km at closest"
     },
     {
+        id: "pluto",
+        name: "Pluto",
+        type: "planet",
+        radius: "1,188 km",
+        orbitalPeriod: "~248 years",
+        description: "Pluto is a dwarf planet in the Kuiper Belt. Reclassified in 2006, it remains a fascinating icy world with a heart-shaped region and complex geology.",
+        distanceFromEarth: "~4.28 billion km at closest"
+    },
+    {
         id: "moon",
         name: "Moon",
         type: "satellite",

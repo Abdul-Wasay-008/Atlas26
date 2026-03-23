@@ -18,6 +18,7 @@ import {
     NEPTUNE_ORBIT_PARAMS,
     PlanetOrbitParams,
 } from "@/app/astronomy/planetOrbit";
+import { PLUTO_ORBIT_PARAMS } from "@/app/astronomy/plutoOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
 const EARTH_ORBIT_RADIUS = 8.0;
@@ -46,6 +47,7 @@ function getBaseLineWidth(planetId: string): number {
             return ORBIT_THICKNESS.gas;
         case "uranus":
         case "neptune":
+        case "pluto":
             return ORBIT_THICKNESS.ice;
         default:
             return ORBIT_THICKNESS.inner;
@@ -67,6 +69,7 @@ const PLANET_CONFIGS: PlanetOrbitConfig[] = [
     { id: "saturn", params: SATURN_ORBIT_PARAMS },
     { id: "uranus", params: URANUS_ORBIT_PARAMS },
     { id: "neptune", params: NEPTUNE_ORBIT_PARAMS },
+    { id: "pluto", params: PLUTO_ORBIT_PARAMS },
 ];
 
 function computeOrbitPoints(
@@ -103,8 +106,10 @@ function SingleOrbitLine({
 }) {
     const orbitColor = getPlanetOrbitColor(planetId);
     const baseWidth = getBaseLineWidth(planetId);
+    const isPluto = planetId === "pluto";
     const lineWidth = isFocused ? baseWidth * FOCUS_MULTIPLIER : baseWidth;
-    const opacity = isFocused ? FOCUS_OPACITY : BASE_OPACITY;
+    const baseOpacity = isFocused ? FOCUS_OPACITY : BASE_OPACITY;
+    const opacity = isPluto ? baseOpacity * 0.72 : baseOpacity;
 
     return (
         <Line
