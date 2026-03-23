@@ -109,6 +109,15 @@ export const spaceObjects: SpaceObjectData[] = [
         distanceFromEarth: "varies (0.6 AU at perihelion to 35 AU at aphelion)"
     },
     {
+        id: "encke",
+        name: "Encke's Comet",
+        type: "comet",
+        radius: "~4.8 km",
+        orbitalPeriod: "~3.3 years",
+        description: "Encke's Comet is a short-period comet with one of the fastest known orbits around the Sun, completing a full orbit in just over 3 years.",
+        distanceFromEarth: "varies"
+    },
+    {
         id: "moon",
         name: "Moon",
         type: "satellite",

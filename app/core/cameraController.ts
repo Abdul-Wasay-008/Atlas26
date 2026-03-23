@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "pluto" | "halley" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "proteus" | "nereid" | "iss" | "hubble";
+type CameraTarget = "system" | "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "pluto" | "halley" | "encke" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "proteus" | "nereid" | "iss" | "hubble";
 
 class CameraController {
     snapping = false;
@@ -25,6 +25,7 @@ class CameraController {
     neptuneOffset = new THREE.Vector3(0, 0, 4);
     plutoOffset = new THREE.Vector3(0, 0, 0.4);
     halleyOffset = new THREE.Vector3(0, 0, 0.35);
+    enckeOffset = new THREE.Vector3(0, 0, 0.35);
     moonOffset = new THREE.Vector3(0, 0, 1.8);
     phobosOffset = new THREE.Vector3(0, 0, 0.2); // Close-up offset for small moon
     deimosOffset = new THREE.Vector3(0, 0, 0.15); // Close-up offset for smaller moon
@@ -89,6 +90,7 @@ class CameraController {
                                             target === "neptune" ? this.neptuneOffset :
                                                 target === "pluto" ? this.plutoOffset :
                                                     target === "halley" ? this.halleyOffset :
+                                                        target === "encke" ? this.enckeOffset :
                                                     target === "moon" ? this.moonOffset :
                                                     target === "phobos" ? this.phobosOffset :
                                                         target === "deimos" ? this.deimosOffset :

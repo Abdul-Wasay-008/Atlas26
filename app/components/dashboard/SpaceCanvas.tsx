@@ -28,6 +28,7 @@ import {
 } from "@/app/astronomy/planetOrbit";
 import { PLUTO_ORBIT_PARAMS } from "@/app/astronomy/plutoOrbit";
 import { getHalleyPosition } from "@/app/astronomy/halleyOrbit";
+import { getEnckePosition } from "@/app/astronomy/enckeOrbit";
 import ISS from "../3d/ISS";
 import Hubble from "../3d/Hubble";
 import SatelliteOrbitPath from "../3d/SatelliteOrbitPath";
@@ -214,6 +215,7 @@ function SceneContent({
                 noShadow={true}
             />
             <Comet id="halley" orbitFn={getHalleyPosition} />
+            <Comet id="encke" orbitFn={getEnckePosition} />
             <ISS />
             <Hubble />
             <SatelliteOrbitPath />

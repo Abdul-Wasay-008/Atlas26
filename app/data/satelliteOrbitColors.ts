@@ -35,6 +35,7 @@ export const PLANET_ORBIT_COLORS: Record<string, string> = {
     neptune: "#3D5AFE", // Deep blue - Neptune theme
     pluto: "#C4A77D",   // Pale icy/beige - Pluto dwarf planet
     halley: "#A8D8EA",  // Icy blue - Halley's Comet
+    encke: "#B8E8C0",   // Soft green - Encke's Comet
 } as const;
 
 /** Orbit color for Moon (around Earth) - white / light gray */

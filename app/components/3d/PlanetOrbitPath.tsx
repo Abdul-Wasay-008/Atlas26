@@ -20,6 +20,7 @@ import {
 } from "@/app/astronomy/planetOrbit";
 import { PLUTO_ORBIT_PARAMS } from "@/app/astronomy/plutoOrbit";
 import { getHalleyPosition, HALLEY_ORBIT_PARAMS } from "@/app/astronomy/halleyOrbit";
+import { getEnckePosition, ENCKE_ORBIT_PARAMS } from "@/app/astronomy/enckeOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
 const EARTH_ORBIT_RADIUS = 8.0;
@@ -51,6 +52,7 @@ function getBaseLineWidth(planetId: string): number {
         case "pluto":
             return ORBIT_THICKNESS.ice;
         case "halley":
+        case "encke":
             return 0.3;
         default:
             return ORBIT_THICKNESS.inner;
@@ -76,6 +78,7 @@ const PLANET_CONFIGS: PlanetOrbitConfig[] = [
     { id: "neptune", params: NEPTUNE_ORBIT_PARAMS },
     { id: "pluto", params: PLUTO_ORBIT_PARAMS },
     { id: "halley", getPosition: getHalleyPosition, periodDays: HALLEY_ORBIT_PARAMS.periodDays },
+    { id: "encke", getPosition: getEnckePosition, periodDays: ENCKE_ORBIT_PARAMS.periodDays },
 ];
 
 function computeOrbitPoints(
