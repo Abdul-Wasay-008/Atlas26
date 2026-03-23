@@ -23,25 +23,24 @@ export default function DashboardLoadingOverlay() {
 
     useEffect(() => {
         if (!showOverlay) return;
+        let running = true;
         const animate = () => {
+            if (!running) return;
             const current = displayProgressRef.current;
             const target = targetProgress;
             const diff = target - current;
-            if (Math.abs(diff) < 0.1 && target >= 99.9) {
-                displayProgressRef.current = 100;
-                setDisplayProgress(100);
-                return;
-            }
-            if (Math.abs(diff) < 0.1) {
-                displayProgressRef.current = target;
-            } else {
+            if (diff > 0) {
                 displayProgressRef.current = current + diff * LERP_FACTOR;
+                if (target - displayProgressRef.current < 0.5) {
+                    displayProgressRef.current = target;
+                }
             }
             setDisplayProgress(displayProgressRef.current);
             rafRef.current = requestAnimationFrame(animate);
         };
         rafRef.current = requestAnimationFrame(animate);
         return () => {
+            running = false;
             if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
         };
     }, [targetProgress, showOverlay]);
@@ -73,11 +72,9 @@ export default function DashboardLoadingOverlay() {
                             Loading solar system assets…
                         </p>
                         <div className="w-full h-2 rounded-full bg-white/10 overflow-hidden">
-                            <motion.div
+                            <div
                                 className="h-full rounded-full bg-linear-to-r from-[#3fa9f5] via-[#00d4ff] to-[#3fa9f5]"
-                                initial={{ width: 0 }}
-                                animate={{ width: `${barWidth}%` }}
-                                transition={{ type: "tween", duration: 0.35, ease: "easeOut" }}
+                                style={{ width: `${barWidth}%` }}
                             />
                         </div>
                         <span

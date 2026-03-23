@@ -110,15 +110,17 @@ function TimeTicker() {
 
 /* 📊 Progress Reporter - feeds useProgress into loadingStore for overlay */
 function ProgressReporter() {
-    const { progress, active } = useProgress();
+    const { progress, active, loaded, total } = useProgress();
     const setProgress = useLoadingStore((s) => s.setProgress);
     const setReady = useLoadingStore((s) => s.setReady);
     const readyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    useEffect(() => {
-        setProgress(progress, active);
+    const cumulativeProgress = total > 0 ? (loaded / total) * 100 : 0;
 
-        if (progress >= 100 && !active) {
+    useEffect(() => {
+        setProgress(cumulativeProgress, active);
+
+        if (cumulativeProgress >= 100 && !active) {
             readyTimeoutRef.current = setTimeout(() => {
                 setReady();
             }, 400);
@@ -129,7 +131,7 @@ function ProgressReporter() {
                 clearTimeout(readyTimeoutRef.current);
             }
         };
-    }, [progress, active, setProgress, setReady]);
+    }, [cumulativeProgress, active, setProgress, setReady]);
 
     return null;
 }

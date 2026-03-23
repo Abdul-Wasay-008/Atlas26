@@ -19,10 +19,10 @@ export const useLoadingStore = create<LoadingState>((set) => ({
     ...initialState,
 
     setProgress: (progress, active) =>
-        set({
-            progress,
+        set((state) => ({
+            progress: Math.max(state.progress, progress),
             active,
-        }),
+        })),
 
     setReady: () =>
         set({
