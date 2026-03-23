@@ -19,6 +19,7 @@ import {
     PlanetOrbitParams,
 } from "@/app/astronomy/planetOrbit";
 import { PLUTO_ORBIT_PARAMS } from "@/app/astronomy/plutoOrbit";
+import { getHalleyPosition, HALLEY_ORBIT_PARAMS } from "@/app/astronomy/halleyOrbit";
 import { getPlanetOrbitColor } from "@/app/data/satelliteOrbitColors";
 
 const EARTH_ORBIT_RADIUS = 8.0;
@@ -49,6 +50,8 @@ function getBaseLineWidth(planetId: string): number {
         case "neptune":
         case "pluto":
             return ORBIT_THICKNESS.ice;
+        case "halley":
+            return 0.3;
         default:
             return ORBIT_THICKNESS.inner;
     }
@@ -58,6 +61,8 @@ interface PlanetOrbitConfig {
     id: string;
     params?: PlanetOrbitParams;
     isEarth?: boolean;
+    getPosition?: (date: Date) => THREE.Vector3;
+    periodDays?: number;
 }
 
 const PLANET_CONFIGS: PlanetOrbitConfig[] = [
@@ -70,13 +75,18 @@ const PLANET_CONFIGS: PlanetOrbitConfig[] = [
     { id: "uranus", params: URANUS_ORBIT_PARAMS },
     { id: "neptune", params: NEPTUNE_ORBIT_PARAMS },
     { id: "pluto", params: PLUTO_ORBIT_PARAMS },
+    { id: "halley", getPosition: getHalleyPosition, periodDays: HALLEY_ORBIT_PARAMS.periodDays },
 ];
 
 function computeOrbitPoints(
     config: PlanetOrbitConfig,
     currentDate: Date
 ): THREE.Vector3[] {
-    const periodDays = config.params ? config.params.periodDays : EARTH_ORBITAL_PERIOD_DAYS;
+    const periodDays = config.getPosition
+        ? (config.periodDays ?? EARTH_ORBITAL_PERIOD_DAYS)
+        : config.params
+            ? config.params.periodDays
+            : EARTH_ORBITAL_PERIOD_DAYS;
     const msPerDay = 86400000;
     const periodMs = periodDays * msPerDay;
     const points: THREE.Vector3[] = [];
@@ -85,7 +95,9 @@ function computeOrbitPoints(
         const t = i / NUM_SAMPLES;
         const date = new Date(currentDate.getTime() + t * periodMs);
 
-        if (config.isEarth) {
+        if (config.getPosition) {
+            points.push(config.getPosition(date));
+        } else if (config.isEarth) {
             points.push(getEarthOrbitPosition(date, EARTH_ORBIT_RADIUS));
         } else if (config.params) {
             points.push(getPlanetOrbitPosition(date, config.params));

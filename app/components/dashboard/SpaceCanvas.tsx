@@ -27,6 +27,7 @@ import {
     MARS_AXIAL_TILT_RADIANS,
 } from "@/app/astronomy/planetOrbit";
 import { PLUTO_ORBIT_PARAMS } from "@/app/astronomy/plutoOrbit";
+import { getHalleyPosition } from "@/app/astronomy/halleyOrbit";
 import ISS from "../3d/ISS";
 import Hubble from "../3d/Hubble";
 import SatelliteOrbitPath from "../3d/SatelliteOrbitPath";
@@ -74,6 +75,7 @@ import Nereid from "../3d/Nereid";
 import NereidOrbitPath from "../3d/NereidOrbitPath";
 import AsteroidBelt from "../3d/AsteroidBelt";
 import KuiperBelt from "../3d/KuiperBelt";
+import Comet from "../3d/Comet";
 
 import { timeManager } from "@/app/core/TimeManager";
 import { cameraController } from "@/app/core/cameraController";
@@ -211,6 +213,7 @@ function SceneContent({
                 terminatorWidth={0.22}
                 noShadow={true}
             />
+            <Comet id="halley" orbitFn={getHalleyPosition} />
             <ISS />
             <Hubble />
             <SatelliteOrbitPath />

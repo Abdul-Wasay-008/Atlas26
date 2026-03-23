@@ -1,7 +1,7 @@
 export interface SpaceObjectData {
     id: string;
     name: string;
-    type: "planet" | "satellite" | "star" | "other";
+    type: "planet" | "satellite" | "star" | "comet" | "other";
     radius: string;
     orbitalPeriod: string;
     description: string;
@@ -98,6 +98,15 @@ export const spaceObjects: SpaceObjectData[] = [
         orbitalPeriod: "~248 years",
         description: "Pluto is a dwarf planet in the Kuiper Belt. Reclassified in 2006, it remains a fascinating icy world with a heart-shaped region and complex geology.",
         distanceFromEarth: "~4.28 billion km at closest"
+    },
+    {
+        id: "halley",
+        name: "Halley's Comet",
+        type: "comet",
+        radius: "~11 km",
+        orbitalPeriod: "~75 years",
+        description: "Halley's Comet is one of the most famous periodic comets, visible from Earth every 75–76 years. It follows a highly elliptical orbit around the Sun.",
+        distanceFromEarth: "varies (0.6 AU at perihelion to 35 AU at aphelion)"
     },
     {
         id: "moon",

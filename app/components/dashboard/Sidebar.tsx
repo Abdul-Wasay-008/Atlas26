@@ -134,6 +134,7 @@ export default function Sidebar() {
     const [planetsExpanded, setPlanetsExpanded] = useState(false)
     const [satellitesExpanded, setSatellitesExpanded] = useState(false)
     const [moonsExpanded, setMoonsExpanded] = useState(false)
+    const [cometsExpanded, setCometsExpanded] = useState(false)
     const [controlsModalOpen, setControlsModalOpen] = useState(false)
     const selectObject = useSelectionStore((state) => state.selectObject)
     const selectedId = useSelectionStore((state) => state.selectedId)
@@ -164,6 +165,9 @@ export default function Sidebar() {
         obj => obj.id === "iss" || obj.id === "hubble"
     )
 
+    // Comets (e.g. Halley)
+    const comets = spaceObjects.filter(obj => obj.type === "comet")
+
     const handlePlanetClick = (planetId: string) => {
         selectObject(planetId)
         setActive("Planets")
@@ -179,19 +183,27 @@ export default function Sidebar() {
         setActive("Satellites")
     }
 
+    const handleCometClick = (cometId: string) => {
+        selectObject(cometId)
+        setActive("Comets")
+    }
+
     const renderMenu = () => (
         <div className="space-y-3 text-sm md:text-base text-white/60">
             {menu.map(({ name, icon: Icon }) => {
                 const isPlanets = name === "Planets"
                 const isMoons = name === "Moons"
                 const isSatellites = name === "Satellites"
+                const isComets = name === "Comets"
                 const isActive = active === name
-                const isExpandable = isPlanets || isMoons || isSatellites
+                const isExpandable = isPlanets || isMoons || isSatellites || isComets
                 const isExpanded = isPlanets
                     ? planetsExpanded
                     : isMoons
                         ? moonsExpanded
-                        : satellitesExpanded
+                        : isSatellites
+                            ? satellitesExpanded
+                            : cometsExpanded
 
                 return (
                     <div key={name}>
@@ -211,6 +223,9 @@ export default function Sidebar() {
                                 }
                                 if (isSatellites) {
                                     setSatellitesExpanded(!satellitesExpanded)
+                                }
+                                if (isComets) {
+                                    setCometsExpanded(!cometsExpanded)
                                 }
                             }}
                             className={`
@@ -285,6 +300,28 @@ export default function Sidebar() {
                                         `}
                                     >
                                         {moon.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        {/* Expandable comets list */}
+                        {isComets && cometsExpanded && (
+                            <div className="ml-8 mt-1 space-y-1">
+                                {comets.map((comet) => (
+                                    <button
+                                        key={comet.id}
+                                        onClick={() => handleCometClick(comet.id)}
+                                        className={`
+                                            w-full px-3 py-1.5 text-left rounded-md
+                                            transition-all duration-200 text-sm cursor-pointer
+                                            ${selectedId === comet.id
+                                                ? "text-cyan-400 bg-cyan-400/10 border border-cyan-400/30"
+                                                : "text-white/70 hover:text-white hover:bg-white/5"
+                                            }
+                                        `}
+                                    >
+                                        {comet.name}
                                     </button>
                                 ))}
                             </div>

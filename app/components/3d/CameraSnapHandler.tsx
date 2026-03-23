@@ -149,7 +149,7 @@ export default function CameraSnapHandler() {
                 } else if (!isSatellite) {
                     // For non-satellites, use existing offset logic
                     cameraController.startSnap(
-                        selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "pluto" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "proteus" | "nereid",
+                        selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "pluto" | "halley" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "proteus" | "nereid",
                         worldPos
                     );
                 }
@@ -243,7 +243,7 @@ export default function CameraSnapHandler() {
                         } else if (!isSatellite) {
                             // For non-satellites, use existing offset logic
                             cameraController.startSnap(
-                                selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "pluto" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "proteus" | "nereid",
+                                selectedId as "sun" | "mercury" | "venus" | "earth" | "mars" | "jupiter" | "saturn" | "uranus" | "neptune" | "pluto" | "halley" | "moon" | "phobos" | "deimos" | "io" | "europa" | "ganymede" | "callisto" | "mimas" | "enceladus" | "tethys" | "dione" | "rhea" | "titan" | "miranda" | "ariel" | "umbriel" | "titania" | "oberon" | "triton" | "proteus" | "nereid",
                                 worldPos
                             );
                         }
