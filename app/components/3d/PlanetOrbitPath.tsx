@@ -92,12 +92,12 @@ function computeOrbitPoints(
     return points;
 }
 
-function SingleOrbitLine({ 
-    planetId, 
-    points, 
-    isFocused 
-}: { 
-    planetId: string; 
+function SingleOrbitLine({
+    planetId,
+    points,
+    isFocused
+}: {
+    planetId: string;
     points: THREE.Vector3[];
     isFocused: boolean;
 }) {
@@ -175,9 +175,9 @@ export default function PlanetOrbitPath() {
     }
 
     return (
-        <SingleOrbitLine 
-            planetId={selectedId!} 
-            points={singleOrbitPoints} 
+        <SingleOrbitLine
+            planetId={selectedId!}
+            points={singleOrbitPoints}
             isFocused={true}
         />
     );

@@ -29,13 +29,30 @@
 //     )
 // }
 
+"use client";
+
+import { useRef } from "react";
+import { usePathname } from "next/navigation";
 import Sidebar from "../components/dashboard/Sidebar"
 import SpaceCanvas from "../components/dashboard/SpaceCanvas"
 import InfoPanel from "../components/dashboard/InfoPanel"
 import TimeControls from "../components/dashboard/TimeControls"
 import TLEInitializer from "../components/dashboard/TLEInitializer"
+import DashboardLoadingOverlay from "../components/dashboard/DashboardLoadingOverlay"
+import { useLoadingStore } from "@/app/store/loadingStore"
 
 export default function DashboardPage() {
+    const pathname = usePathname();
+    const prevPathRef = useRef<string | null>(null);
+
+    if (pathname === "/dashboard" && prevPathRef.current !== "/dashboard") {
+        prevPathRef.current = "/dashboard";
+        useLoadingStore.getState().reset();
+    }
+    if (pathname !== "/dashboard") {
+        prevPathRef.current = pathname;
+    }
+
     return (
         <div className="w-screen h-screen flex bg-black overflow-hidden">
             {/* Initialize TLE data at app startup */}
@@ -50,6 +67,7 @@ export default function DashboardPage() {
             {/* Space View - takes full remaining width */}
             <div id="space-area" className="flex-1 relative">
                 <SpaceCanvas />
+                <DashboardLoadingOverlay />
             </div>
 
             {/* Time Controls - fixed overlay */}

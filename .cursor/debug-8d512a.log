@@ -1,0 +1,44 @@
+{"sessionId":"8d512a","location":"dashboard/page.tsx:reset","message":"Dashboard route - sync reset","data":{"prevPath":null},"hypothesisId":"H1","timestamp":1774275917612}
+{"sessionId":"8d512a","location":"DashboardLoadingOverlay.tsx:mount","message":"Overlay mounted","data":{"progress":0,"isReady":false,"showOverlay":true},"hypothesisId":"H2","timestamp":1774275917684}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":85.71428571428571,"active":true},"hypothesisId":"H4","timestamp":1774275917784}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275917798}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275917851}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275917920}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275917970}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918031}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918082}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918113}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918163}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918252}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918296}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918355}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918409}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918466}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918529}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918584}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918650}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918726}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918794}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918861}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275918932}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919008}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919077}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919151}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919225}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919299}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919366}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919443}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919529}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919615}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919705}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":75,"active":true},"hypothesisId":"H4","timestamp":1774275919869}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275919966}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":50,"active":true},"hypothesisId":"H4","timestamp":1774275920143}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275920250}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:setReady","message":"Calling setReady after 400ms","data":{"progress":100,"active":false},"hypothesisId":"H5","timestamp":1774275926748}
+{"sessionId":"8d512a","location":"DashboardLoadingOverlay.tsx:isReady","message":"isReady=true, hiding overlay","data":{"progress":100},"hypothesisId":"H3","timestamp":1774275926753}
+{"sessionId":"8d512a","location":"dashboard/page.tsx:reset","message":"Dashboard route - sync reset","data":{"prevPath":null},"hypothesisId":"H1","timestamp":1774275941570}
+{"sessionId":"8d512a","location":"DashboardLoadingOverlay.tsx:mount","message":"Overlay mounted","data":{"progress":0,"isReady":false,"showOverlay":true},"hypothesisId":"H2","timestamp":1774275941601}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:ProgressReporter","message":"Progress update","data":{"progress":100,"active":false},"hypothesisId":"H4","timestamp":1774275948933}
+{"sessionId":"8d512a","location":"SpaceCanvas.tsx:setReady","message":"Calling setReady after 400ms","data":{"progress":100,"active":false},"hypothesisId":"H5","timestamp":1774275949334}
+{"sessionId":"8d512a","location":"DashboardLoadingOverlay.tsx:isReady","message":"isReady=true, hiding overlay","data":{"progress":100},"hypothesisId":"H3","timestamp":1774275949336}

@@ -87,28 +87,28 @@ class CameraController {
                                             target === "neptune" ? this.neptuneOffset :
                                                 target === "moon" ? this.moonOffset :
                                                     target === "phobos" ? this.phobosOffset :
-                                                    target === "deimos" ? this.deimosOffset :
-                                                        target === "io" ? this.ioOffset :
-                                                            target === "europa" ? this.europaOffset :
-                                                                target === "ganymede" ? this.ganymedeOffset :
-                                                                target === "callisto" ? this.callistoOffset :
-                                                                target === "mimas" ? this.mimasOffset :
-                                                                target === "enceladus" ? this.enceladusOffset :
-                                                                target === "tethys" ? this.tethysOffset :
-                                                                target === "dione" ? this.dioneOffset :
-                                                                target === "rhea" ? this.rheaOffset :
-                                                                target === "titan" ? this.titanOffset :
-                                                                target === "miranda" ? this.mirandaOffset :
-                                                                target === "ariel" ? this.arielOffset :
-                                                                target === "umbriel" ? this.umbrielOffset :
-                                                                target === "titania" ? this.titaniaOffset :
-                                                                target === "oberon" ? this.oberonOffset :
-                                                                target === "triton" ? this.tritonOffset :
-                                                                target === "proteus" ? this.proteusOffset :
-                                                                target === "nereid" ? this.nereidOffset :
-                                                                target === "iss" ? this.issOffset :
-                                                            target === "hubble" ? this.hubbleOffset :
-                                                                new THREE.Vector3();
+                                                        target === "deimos" ? this.deimosOffset :
+                                                            target === "io" ? this.ioOffset :
+                                                                target === "europa" ? this.europaOffset :
+                                                                    target === "ganymede" ? this.ganymedeOffset :
+                                                                        target === "callisto" ? this.callistoOffset :
+                                                                            target === "mimas" ? this.mimasOffset :
+                                                                                target === "enceladus" ? this.enceladusOffset :
+                                                                                    target === "tethys" ? this.tethysOffset :
+                                                                                        target === "dione" ? this.dioneOffset :
+                                                                                            target === "rhea" ? this.rheaOffset :
+                                                                                                target === "titan" ? this.titanOffset :
+                                                                                                    target === "miranda" ? this.mirandaOffset :
+                                                                                                        target === "ariel" ? this.arielOffset :
+                                                                                                            target === "umbriel" ? this.umbrielOffset :
+                                                                                                                target === "titania" ? this.titaniaOffset :
+                                                                                                                    target === "oberon" ? this.oberonOffset :
+                                                                                                                        target === "triton" ? this.tritonOffset :
+                                                                                                                            target === "proteus" ? this.proteusOffset :
+                                                                                                                                target === "nereid" ? this.nereidOffset :
+                                                                                                                                    target === "iss" ? this.issOffset :
+                                                                                                                                        target === "hubble" ? this.hubbleOffset :
+                                                                                                                                            new THREE.Vector3();
 
         this.targetPosition.copy(worldPos).add(offset);
     }

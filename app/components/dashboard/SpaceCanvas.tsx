@@ -1,9 +1,11 @@
 "use client";
 
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, useTexture } from "@react-three/drei";
+import { OrbitControls, useTexture, useProgress } from "@react-three/drei";
 import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
+import { Suspense } from "react";
+import { useLoadingStore } from "@/app/store/loadingStore";
 
 import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
@@ -102,6 +104,144 @@ function TimeTicker() {
     return null;
 }
 
+/* 📊 Progress Reporter - feeds useProgress into loadingStore for overlay */
+function ProgressReporter() {
+    const { progress, active } = useProgress();
+    const setProgress = useLoadingStore((s) => s.setProgress);
+    const setReady = useLoadingStore((s) => s.setReady);
+    const readyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        setProgress(progress, active);
+
+        if (progress >= 100 && !active) {
+            readyTimeoutRef.current = setTimeout(() => {
+                setReady();
+            }, 400);
+        }
+
+        return () => {
+            if (readyTimeoutRef.current) {
+                clearTimeout(readyTimeoutRef.current);
+            }
+        };
+    }, [progress, active, setProgress, setReady]);
+
+    return null;
+}
+
+/* 🌌 Scene content - all 3D objects (wrapped in Suspense for loading) */
+function SceneContent({
+    controlsRef,
+}: {
+    controlsRef: React.MutableRefObject<any>;
+}) {
+    return (
+        <>
+            <TimeTicker />
+            <Starfield />
+            <ambientLight intensity={3.5} />
+            <SunLight />
+            <CameraRig controlsRef={controlsRef} />
+            <CameraKeyboardControls controlsRef={controlsRef} />
+            <CameraSnapHandler />
+            <Sun />
+            <Mercury />
+            <Venus />
+            <Earth />
+            <Moon />
+            <Planet
+                id="mars"
+                orbit={{ type: "planet", params: MARS_ORBIT_PARAMS }}
+                rotationPeriodSeconds={24.6 * 60 * 60}
+                axialTiltRadians={MARS_AXIAL_TILT_RADIANS}
+                radiusScale={0.8 * 0.53}
+                textureUrls={[
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                    "/textures/mars.jpg",
+                ]}
+                hasClouds={false}
+                terminatorWidth={0.22}
+                noShadow={true}
+            />
+            <Phobos />
+            <Deimos />
+            <AsteroidBelt />
+            <Jupiter />
+            <Io />
+            <Europa />
+            <Ganymede />
+            <Callisto />
+            <Saturn />
+            <Mimas />
+            <Enceladus />
+            <Tethys />
+            <Dione />
+            <Rhea />
+            <Titan />
+            <Uranus />
+            <Miranda />
+            <Ariel />
+            <Umbriel />
+            <Titania />
+            <Oberon />
+            <Neptune />
+            <Proteus />
+            <Triton />
+            <Nereid />
+            <KuiperBelt />
+            <ISS />
+            <Hubble />
+            <SatelliteOrbitPath />
+            <PlanetOrbitPath />
+            <MoonOrbitPath />
+            <PhobosOrbitPath />
+            <DeimosOrbitPath />
+            <IoOrbitPath />
+            <EuropaOrbitPath />
+            <GanymedeOrbitPath />
+            <CallistoOrbitPath />
+            <MimasOrbitPath />
+            <EnceladusOrbitPath />
+            <TethysOrbitPath />
+            <DioneOrbitPath />
+            <RheaOrbitPath />
+            <TitanOrbitPath />
+            <MirandaOrbitPath />
+            <ArielOrbitPath />
+            <UmbrielOrbitPath />
+            <TitaniaOrbitPath />
+            <OberonOrbitPath />
+            <ProteusOrbitPath />
+            <TritonOrbitPath />
+            <NereidOrbitPath />
+            <OrbitControls
+                ref={controlsRef}
+                enablePan={true}
+                panSpeed={0.8}
+                minDistance={0.5}
+                maxDistance={80}
+                rotateSpeed={
+                    typeof window !== "undefined" && window.innerWidth < 480
+                        ? 0.6
+                        : 1
+                }
+                zoomSpeed={
+                    typeof window !== "undefined" && window.innerWidth < 480
+                        ? 0.7
+                        : 1.2
+                }
+                enableDamping={true}
+                dampingFactor={0.05}
+                screenSpacePanning={true}
+            />
+        </>
+    );
+}
+
 export default function SpaceCanvas() {
     // Use default system position from cameraController (slight top-right)
     const defaultPos = cameraController.systemPos;
@@ -184,167 +324,10 @@ export default function SpaceCanvas() {
         <>
             <KeyboardShortcuts />
             <Canvas camera={{ position: cameraPos, fov }} gl={{ antialias: true }}>
-                {/* ⏱ Global Simulation Clock */}
-                <TimeTicker />
-
-                {/* 🌌 Deep Space Background */}
-                <Starfield />
-
-                {/* 💡 Lighting */}
-                <ambientLight intensity={3.5} />
-                {/* Dynamic Sun light - updates based on Earth-Sun geometry, world-space */}
-                <SunLight />
-
-                {/* 🔥 CAMERA RIG WITH CONTROLS REF */}
-                <CameraRig controlsRef={controlsRef} />
-                <CameraKeyboardControls controlsRef={controlsRef} />
-                <CameraSnapHandler />
-
-                {/* ☀️ Sun (center of solar system) */}
-                <Sun />
-
-                {/* ☿ Mercury (innermost planet) */}
-                <Mercury />
-
-                {/* 🪐 Venus (two-layer: surface + atmosphere) */}
-                <Venus />
-
-                {/* 🌍 Earth–Moon System */}
-                <Earth />
-                <Moon />
-
-                {/* 🔴 Mars–Phobos System */}
-                <Planet
-                    id="mars"
-                    orbit={{ type: "planet", params: MARS_ORBIT_PARAMS }}
-                    rotationPeriodSeconds={24.6 * 60 * 60}
-                    axialTiltRadians={MARS_AXIAL_TILT_RADIANS}
-                    radiusScale={0.8 * 0.53}
-                    textureUrls={[
-                        "/textures/mars.jpg",
-                        "/textures/mars.jpg",
-                        "/textures/mars.jpg",
-                        "/textures/mars.jpg",
-                        "/textures/mars.jpg",
-                    ]}
-                    hasClouds={false}
-                    terminatorWidth={0.22}
-                    noShadow={true}
-                />
-                <Phobos />
-                <Deimos />
-
-                {/* 🪨 Asteroid Belt (between Mars and Jupiter) */}
-                <AsteroidBelt />
-
-                {/* 🪐 Jupiter–Galilean Moons System (largest planet, gas giant) */}
-                <Jupiter />
-                <Io />
-                <Europa />
-                <Ganymede />
-                <Callisto />
-
-                {/* 🪐 Saturn (6th planet, famous for rings) */}
-                <Saturn />
-                <Mimas />
-                <Enceladus />
-                <Tethys />
-                <Dione />
-                <Rhea />
-                <Titan />
-
-                {/* 🪐 Uranus (7th planet, ice giant) */}
-                <Uranus />
-                <Miranda />
-                <Ariel />
-                <Umbriel />
-                <Titania />
-                <Oberon />
-
-                {/* 🪐 Neptune (8th planet, ice giant) */}
-                <Neptune />
-                <Proteus />
-                <Triton />
-                <Nereid />
-
-                {/* 🧊 Kuiper Belt (beyond Neptune) */}
-                <KuiperBelt />
-
-                {/* 🚀 ISS (International Space Station) */}
-                <ISS />
-
-                {/* 🔭 Hubble Space Telescope */}
-                <Hubble />
-
-                {/* 🛰️ Satellite Orbit Path (shows orbit for selected satellite) */}
-                <SatelliteOrbitPath />
-
-                {/* 🪐 Planet Orbit Path (shows orbit around Sun for selected planet) */}
-                <PlanetOrbitPath />
-
-                {/* 🌙 Moon Orbit Path (shows orbit around Earth when Moon selected) */}
-                <MoonOrbitPath />
-
-                {/* 🌑 Phobos Orbit Path (shows orbit around Mars when Phobos selected) */}
-                <PhobosOrbitPath />
-
-                {/* 🌑 Deimos Orbit Path (shows orbit around Mars when Deimos selected) */}
-                <DeimosOrbitPath />
-
-                {/* 🌋 Io Orbit Path (shows orbit around Jupiter when Io or Jupiter selected) */}
-                <IoOrbitPath />
-
-                {/* 🧊 Europa Orbit Path (shows orbit around Jupiter when Europa or Jupiter selected) */}
-                <EuropaOrbitPath />
-
-                {/* 🌑 Ganymede Orbit Path (shows orbit around Jupiter when Ganymede or Jupiter selected) */}
-                <GanymedeOrbitPath />
-
-                {/* 🌑 Callisto Orbit Path (shows orbit around Jupiter when Callisto or Jupiter selected) */}
-                <CallistoOrbitPath />
-
-                {/* 🪐 Mimas Orbit Path (shows orbit around Saturn when Mimas or Saturn selected) */}
-                <MimasOrbitPath />
-                {/* 🪐 Enceladus Orbit Path (shows orbit around Saturn when Enceladus or Saturn selected) */}
-                <EnceladusOrbitPath />
-                {/* 🪐 Tethys Orbit Path (shows orbit around Saturn when Tethys or Saturn selected) */}
-                <TethysOrbitPath />
-                {/* 🪐 Dione Orbit Path (shows orbit around Saturn when Dione or Saturn selected) */}
-                <DioneOrbitPath />
-                {/* 🪐 Rhea Orbit Path (shows orbit around Saturn when Rhea or Saturn selected) */}
-                <RheaOrbitPath />
-                {/* 🪐 Titan Orbit Path (shows orbit around Saturn when Titan or Saturn selected) */}
-                <TitanOrbitPath />
-                {/* 🪐 Miranda Orbit Path (shows orbit around Uranus when Miranda or Uranus selected) */}
-                <MirandaOrbitPath />
-                {/* 🪐 Ariel Orbit Path (shows orbit around Uranus when Ariel or Uranus selected) */}
-                <ArielOrbitPath />
-                {/* 🪐 Umbriel Orbit Path (shows orbit around Uranus when Umbriel or Uranus selected) */}
-                <UmbrielOrbitPath />
-                {/* 🪐 Titania Orbit Path (shows orbit around Uranus when Titania or Uranus selected) */}
-                <TitaniaOrbitPath />
-                {/* 🪐 Oberon Orbit Path (shows orbit around Uranus when Oberon or Uranus selected) */}
-                <OberonOrbitPath />
-                {/* 🪐 Proteus Orbit Path (shows orbit around Neptune when Proteus or Neptune selected) */}
-                <ProteusOrbitPath />
-                {/* 🪐 Triton Orbit Path (shows orbit around Neptune when Triton or Neptune selected) */}
-                <TritonOrbitPath />
-                {/* 🪐 Nereid Orbit Path (shows orbit around Neptune when Nereid or Neptune selected) */}
-                <NereidOrbitPath />
-
-                {/* 🎮 Orbit Controls (CONNECTED) */}
-                <OrbitControls
-                    ref={controlsRef}
-                    enablePan={true}
-                    panSpeed={0.8}
-                    minDistance={0.5}
-                    maxDistance={80}
-                    rotateSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.6 : 1}
-                    zoomSpeed={typeof window !== "undefined" && window.innerWidth < 480 ? 0.7 : 1.2}
-                    enableDamping={true}
-                    dampingFactor={0.05}
-                    screenSpacePanning={true}
-                />
+                <ProgressReporter />
+                <Suspense fallback={null}>
+                    <SceneContent controlsRef={controlsRef} />
+                </Suspense>
             </Canvas>
         </>
     );
