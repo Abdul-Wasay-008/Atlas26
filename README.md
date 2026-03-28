@@ -156,9 +156,12 @@ http://localhost:3000
 
 <img width="1792" height="926" alt="Hero" src="https://github.com/user-attachments/assets/3666359c-ccb6-42a2-a50f-32fed7219358" />
 
-<img width="1792" height="926" alt="Dash3" src="https://github.com/user-attachments/assets/e84de34c-9443-4d3e-a5aa-7891ae4d87c8" />
+<img width="1919" height="880" alt="Dashboard" src="https://github.com/user-attachments/assets/aaf91398-7398-4831-b9b6-03e8be4f066d" />
 
-<img width="1792" height="926" alt="Dash2" src="https://github.com/user-attachments/assets/7f6b493a-b364-463e-b5dc-15431e0a25de" />
+<img width="1919" height="880" alt="Hst" src="https://github.com/user-attachments/assets/497bf541-b662-4baf-a9bd-a60c17fb5bbc" />
 
-<img width="1792" height="926" alt="Dash1" src="https://github.com/user-attachments/assets/650eb066-c697-405a-8ea7-d55974f3a342" />
+<img width="1919" height="880" alt="Moon" src="https://github.com/user-attachments/assets/4babcf22-114e-4616-a7ef-ae82247ac761" />
+
+
+
 
