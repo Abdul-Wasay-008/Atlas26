@@ -3,20 +3,16 @@
 import * as THREE from "three";
 import { useRef, useEffect, useState } from "react";
 import { useFrame, useLoader, useThree } from "@react-three/fiber";
-import { useSelectionStore } from "@/app/store/selectionStore";
 
 export default function LandingEarth() {
     const earthRef = useRef<THREE.Mesh>(null);
     const cloudsRef = useRef<THREE.Mesh>(null);
     const groupRef = useRef<THREE.Group>(null);
 
-    const selectObject = useSelectionStore((state) => state.selectObject);
-
     const [baseScale, setBaseScale] = useState(1);
     const [hovered, setHovered] = useState(false);
     const { size } = useThree();
 
-    // 📱 Responsive scale
     useEffect(() => {
         const width = size.width;
         setBaseScale(
@@ -27,11 +23,10 @@ export default function LandingEarth() {
         );
     }, [size.width]);
 
-    // 🌍 Load textures
     const [colorMap, normalMap, specularMap, cloudsMap, nightMap] = useLoader(
         THREE.TextureLoader,
         [
-            "/textures/earth_daymap.jpg",
+            "/textures/earth_daymap_4k.jpg",
             "/textures/earth_normal.jpg",
             "/textures/earth_specular.jpg",
             "/textures/earth_clouds.jpg",
@@ -39,26 +34,24 @@ export default function LandingEarth() {
         ]
     );
 
-    // 🌎 Rotation Animation + Hover Scale Animation
     useFrame(() => {
         if (earthRef.current) earthRef.current.rotation.y += 0.0008;
         if (cloudsRef.current) cloudsRef.current.rotation.y += 0.0006;
 
-        // 🎯 Apply smooth hover scaling
         if (groupRef.current) {
             const targetScale = hovered ? baseScale * 1.08 : baseScale;
             groupRef.current.scale.lerp(
                 new THREE.Vector3(targetScale, targetScale, targetScale),
-                0.12 // smooth animation strength
+                0.12
             );
         }
     });
 
     return (
         <group ref={groupRef} scale={[baseScale, baseScale, baseScale]}>
-            {/* ☁️ Clouds */}
+            {/* Clouds */}
             <mesh ref={cloudsRef}>
-                <sphereGeometry args={[0.81, 64, 64]} />
+                <sphereGeometry args={[0.81, 48, 48]} />
                 <meshPhongMaterial
                     map={cloudsMap}
                     opacity={0.4}
@@ -68,20 +61,13 @@ export default function LandingEarth() {
                 />
             </mesh>
 
-            {/* 🌍 Interactive Earth layer */}
+            {/* Earth */}
             <mesh
                 ref={earthRef}
-                // onClick={() => selectObject("earth")}
-                onPointerOver={() => {
-                    setHovered(true);
-                    // document.body.style.cursor = "pointer";
-                }}
-                onPointerOut={() => {
-                    setHovered(false);
-                    // document.body.style.cursor = "default";
-                }}
+                onPointerOver={() => setHovered(true)}
+                onPointerOut={() => setHovered(false)}
             >
-                <sphereGeometry args={[0.8, 128, 128]} />
+                <sphereGeometry args={[0.8, 64, 64]} />
                 <meshPhongMaterial
                     map={colorMap}
                     normalMap={normalMap}
@@ -90,15 +76,15 @@ export default function LandingEarth() {
                 />
             </mesh>
 
-            {/* 🌃 Night Lights */}
+            {/* Night Lights */}
             <mesh>
-                <sphereGeometry args={[0.75, 64, 64]} />
+                <sphereGeometry args={[0.75, 32, 32]} />
                 <meshBasicMaterial map={nightMap} blending={THREE.AdditiveBlending} />
             </mesh>
 
-            {/* ✨ Atmosphere */}
+            {/* Atmosphere */}
             <mesh>
-                <sphereGeometry args={[0.88, 64, 64]} />
+                <sphereGeometry args={[0.88, 48, 48]} />
                 <shaderMaterial
                     transparent
                     blending={THREE.AdditiveBlending}
@@ -123,6 +109,3 @@ export default function LandingEarth() {
         </group>
     );
 }
-
-
-
