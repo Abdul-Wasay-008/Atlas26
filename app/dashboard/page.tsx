@@ -31,7 +31,7 @@
 
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Sidebar from "../components/dashboard/Sidebar"
 import SpaceCanvas from "../components/dashboard/SpaceCanvas"
@@ -40,6 +40,8 @@ import TimeControls from "../components/dashboard/TimeControls"
 import TLEInitializer from "../components/dashboard/TLEInitializer"
 import DashboardLoadingOverlay from "../components/dashboard/DashboardLoadingOverlay"
 import { useLoadingStore } from "@/app/store/loadingStore"
+import { trackEvent } from "@/app/lib/gtag"
+import { quality } from "@/app/store/qualityStore"
 
 export default function DashboardPage() {
     const pathname = usePathname();
@@ -53,6 +55,11 @@ export default function DashboardPage() {
     if (pathname !== "/dashboard") {
         prevPathRef.current = pathname;
     }
+
+    useEffect(() => {
+        trackEvent("enter_dashboard");
+        trackEvent("device_quality", { tier: quality.tier });
+    }, []);
 
     return (
         <div className="w-screen h-screen flex bg-black overflow-hidden">

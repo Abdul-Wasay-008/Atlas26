@@ -7,6 +7,7 @@ import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon, ChevronDown, Chev
 import SystemInfoCard from "./SystemInfoCard"
 import { useSelectionStore } from "@/app/store/selectionStore"
 import { spaceObjects } from "@/app/data/spaceObjects"
+import { trackEvent } from "@/app/lib/gtag"
 
 function ControlsModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     if (!isOpen) return null
@@ -409,7 +410,7 @@ export default function Sidebar() {
 
                 {/* Controls Button */}
                 <button
-                    onClick={() => setControlsModalOpen(true)}
+                    onClick={() => { trackEvent("open_controls"); setControlsModalOpen(true); }}
                     className={`
                         flex items-center gap-3 w-full px-3 py-2
                         rounded-lg font-medium transition-all duration-300 cursor-pointer
@@ -463,7 +464,7 @@ export default function Sidebar() {
 
                 {/* Controls Button */}
                 <button
-                    onClick={() => setControlsModalOpen(true)}
+                    onClick={() => { trackEvent("open_controls"); setControlsModalOpen(true); }}
                     className={`
                         group flex items-center gap-3 w-full px-3 py-2
                         rounded-lg font-medium transition-all duration-300 cursor-pointer

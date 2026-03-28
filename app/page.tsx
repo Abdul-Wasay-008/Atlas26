@@ -5,6 +5,7 @@ import { orbitron, poppins } from "./fonts";
 import { motion } from "framer-motion";
 import { FaRocket } from "react-icons/fa";
 import Link from "next/link";
+import { trackEvent } from "./lib/gtag";
 
 
 export default function Home() {
@@ -43,6 +44,7 @@ export default function Home() {
         <div className="absolute bottom-24 md:bottom-16 left-1/2 -translate-x-1/2 z-10 text-center text-white">
           <motion.button
             className={`relative px-4 md:px-6 xl:px-8 py-4 rounded-full font-medium overflow-hidden cursor-pointer select-none ${poppins.className}`}
+            onClick={() => trackEvent("launch_atlas")}
             initial={{ scale: 1 }}
             whileHover={{
               scale: 1.04,

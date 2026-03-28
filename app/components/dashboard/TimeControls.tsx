@@ -6,6 +6,7 @@ import { useTimeManager } from "@/app/core/useTimeManager";
 import { cameraController } from "@/app/core/cameraController";
 import { useSelectionStore } from "@/app/store/selectionStore";
 import { poppins } from "@/app/fonts";
+import { trackEvent } from "@/app/lib/gtag";
 
 // Speed presets: 1x, 60x (1 min = 1 hour), 1440x (1 sec = 1 day), 30000x (1 sec ≈ 1 month)
 const SPEEDS = [1, 60, 1440, 30000];
@@ -48,6 +49,7 @@ export default function TimeControls() {
 
     const handleSpeedChange = (value: number) => {
         setSpeed(value);
+        trackEvent("time_speed_change", { speed: SPEED_LABELS[value] ?? `${value}x` });
     };
 
     const handleDateInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

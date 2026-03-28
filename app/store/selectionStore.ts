@@ -15,6 +15,7 @@
 // }));
 import { create } from "zustand";
 import { spaceObjects, SpaceObjectData } from "../data/spaceObjects";
+import { trackEvent } from "@/app/lib/gtag";
 
 interface SelectionState {
     selectedId: string | null;
@@ -35,6 +36,7 @@ export const useSelectionStore = create<SelectionState>((set) => ({
 
     selectObject: (id) => {
         const obj = spaceObjects.find((o) => o.id === id) || null;
+        trackEvent("select_object", { object_name: id });
 
         set({
             selectedId: id,
