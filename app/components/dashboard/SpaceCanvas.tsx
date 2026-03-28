@@ -6,6 +6,8 @@ import * as THREE from "three";
 import { useEffect, useRef, useState } from "react";
 import { Suspense } from "react";
 import { useLoadingStore } from "@/app/store/loadingStore";
+import { quality } from "@/app/store/qualityStore";
+import { FpsRecorder } from "@/app/hooks/useFPS";
 
 import CameraRig from "../3d/CameraRig";
 import CameraSnapHandler from "../3d/CameraSnapHandler";
@@ -348,7 +350,8 @@ export default function SpaceCanvas() {
     return (
         <>
             <KeyboardShortcuts />
-            <Canvas camera={{ position: cameraPos, fov }} gl={{ antialias: true }}>
+            <Canvas camera={{ position: cameraPos, fov }} dpr={[1, quality.dpr]} gl={{ antialias: quality.antialias }}>
+                <FpsRecorder />
                 <ProgressReporter />
                 <Suspense fallback={null}>
                     <SceneContent controlsRef={controlsRef} />

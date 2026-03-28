@@ -1,6 +1,7 @@
 import { keplerPeriodDays } from "./planetOrbit";
+import { quality } from "@/app/store/qualityStore";
 
-export const KUIPER_COUNT = 1500;
+export const KUIPER_COUNT = quality.kuiperCount;
 
 export const INNER_RADIUS = 37.5;
 export const OUTER_RADIUS = 48.0;

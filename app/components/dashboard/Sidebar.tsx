@@ -3,7 +3,8 @@
 import { useState } from "react"
 import { orbitron, poppins } from "@/app/fonts"
 import { FaBars, FaTimes } from "react-icons/fa"
-import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon, ChevronDown, ChevronRight, SlidersVertical, X, Monitor, Smartphone, Moon } from "lucide-react"
+import { Orbit, Satellite, Sparkle, Stars, LoaderPinwheelIcon, ChevronDown, ChevronRight, SlidersVertical, X, Monitor, Smartphone, Moon, Cpu } from "lucide-react"
+import SystemInfoCard from "./SystemInfoCard"
 import { useSelectionStore } from "@/app/store/selectionStore"
 import { spaceObjects } from "@/app/data/spaceObjects"
 
@@ -136,6 +137,7 @@ export default function Sidebar() {
     const [moonsExpanded, setMoonsExpanded] = useState(false)
     const [cometsExpanded, setCometsExpanded] = useState(false)
     const [controlsModalOpen, setControlsModalOpen] = useState(false)
+    const [systemInfoExpanded, setSystemInfoExpanded] = useState(false)
     const selectObject = useSelectionStore((state) => state.selectObject)
     const selectedId = useSelectionStore((state) => state.selectedId)
     const setShowAllOrbits = useSelectionStore((state) => state.setShowAllOrbits)
@@ -420,6 +422,24 @@ export default function Sidebar() {
                     <SlidersVertical size={20} strokeWidth={1.5} />
                     <span>Controls</span>
                 </button>
+
+                {/* System Info Toggle */}
+                <button
+                    onClick={() => setSystemInfoExpanded(!systemInfoExpanded)}
+                    className={`
+                        flex items-center gap-3 w-full px-3 py-2
+                        rounded-lg font-medium transition-all duration-300 cursor-pointer
+                        text-white/60 hover:text-white hover:bg-white/5
+                        hover:border-white/10 border border-transparent
+                        mt-1
+                        ${poppins.className}
+                    `}
+                >
+                    <Cpu size={20} strokeWidth={1.5} />
+                    <span className="flex-1 text-left text-sm">System Info</span>
+                    {systemInfoExpanded ? <ChevronDown size={16} className="text-white/60" /> : <ChevronRight size={16} className="text-white/60" />}
+                </button>
+                {systemInfoExpanded && <SystemInfoCard />}
             </aside>
 
             {/* 🖥 Desktop (lg and up) */}
@@ -460,6 +480,28 @@ export default function Sidebar() {
                     />
                     <span>Controls</span>
                 </button>
+
+                {/* System Info Toggle */}
+                <button
+                    onClick={() => setSystemInfoExpanded(!systemInfoExpanded)}
+                    className={`
+                        group flex items-center gap-3 w-full px-3 py-2
+                        rounded-lg font-medium transition-all duration-300 cursor-pointer
+                        text-white/60 hover:text-white hover:bg-white/5
+                        hover:border-white/10 border border-transparent
+                        mt-1
+                        ${poppins.className}
+                    `}
+                >
+                    <Cpu
+                        size={20}
+                        strokeWidth={1.5}
+                        className="transition-all duration-300 group-hover:text-white"
+                    />
+                    <span className="flex-1 text-left text-sm">System Info</span>
+                    {systemInfoExpanded ? <ChevronDown size={16} className="text-white/60" /> : <ChevronRight size={16} className="text-white/60" />}
+                </button>
+                {systemInfoExpanded && <SystemInfoCard />}
             </aside>
 
             {/* Controls Modal */}

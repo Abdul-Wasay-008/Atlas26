@@ -1,6 +1,7 @@
 import { keplerPeriodDays } from "./planetOrbit";
+import { quality } from "@/app/store/qualityStore";
 
-export const ASTEROID_COUNT = 5000;
+export const ASTEROID_COUNT = quality.asteroidCount;
 
 export const INNER_RADIUS = 13.5;
 export const OUTER_RADIUS = 16.5;
