@@ -52,11 +52,10 @@ function getISSVelocity(date: Date): THREE.Vector3 | null {
         const satrec = satellite.twoline2satrec(currentTLE.line1, currentTLE.line2);
         const positionAndVelocity = satellite.propagate(satrec, date);
         
-        if (positionAndVelocity.error) {
+        if (!positionAndVelocity || (positionAndVelocity as any).error) {
             return null;
         }
-        
-        // Velocity is in km/s in ECI coordinates
+
         const velocityEci = positionAndVelocity.velocity;
         if (!velocityEci) {
             return null;
@@ -108,7 +107,7 @@ export function useISSTelemetry(): ISSTelemetry {
                 const satrec = satellite.twoline2satrec(currentTLE.line1, currentTLE.line2);
                 const positionAndVelocity = satellite.propagate(satrec, currentDate);
                 
-                if (!positionAndVelocity.error && positionAndVelocity.position) {
+                if (positionAndVelocity && !(positionAndVelocity as any).error && positionAndVelocity.position) {
                     const positionEciKm = positionAndVelocity.position;
                     const gmst = getGreenwichSiderealTime(currentDate);
                     

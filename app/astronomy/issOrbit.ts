@@ -69,15 +69,11 @@ export function getISSPosition(date: Date): THREE.Vector3 {
     // Propagate satellite position using SGP4
     const positionAndVelocity = satellite.propagate(satrec, date);
     
-    // Check for propagation errors
-    if (positionAndVelocity.error) {
-        console.warn("SGP4 propagation error:", positionAndVelocity.error);
-        // Return a default position (above Earth's equator) if propagation fails
+    if (!positionAndVelocity || (positionAndVelocity as any).error) {
+        console.warn("SGP4 propagation error");
         return new THREE.Vector3(0.85, 0, 0);
     }
-    
-    // Get position in ECI (Earth-Centered Inertial) coordinates
-    // Position is in kilometers
+
     const positionEciKm = positionAndVelocity.position;
     
     if (!positionEciKm) {

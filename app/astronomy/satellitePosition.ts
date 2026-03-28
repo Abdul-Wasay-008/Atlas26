@@ -84,14 +84,11 @@ export function computeSatelliteEcefFromTle(
     // Propagate satellite position using SGP4
     const positionAndVelocity = satellite.propagate(satrec, date);
     
-    // Check for propagation errors
-    if (positionAndVelocity.error) {
-        console.warn(`SGP4 propagation error for ${cacheKey}:`, positionAndVelocity.error);
-        // Return a default position (above Earth's equator) if propagation fails
+    if (!positionAndVelocity || (positionAndVelocity as any).error) {
+        console.warn(`SGP4 propagation error for ${cacheKey}`);
         return new THREE.Vector3(0.85, 0, 0);
     }
-    
-    // Get position in ECI (Earth-Centered Inertial) coordinates (kilometers)
+
     const positionEciKm = positionAndVelocity.position;
     
     if (!positionEciKm) {
@@ -158,10 +155,10 @@ export function ecefToLatLonAlt(
     const satrec = getSatRecFromTLE(tle, cacheKey);
     const positionAndVelocity = satellite.propagate(satrec, date);
     
-    if (positionAndVelocity.error || !positionAndVelocity.position) {
+    if (!positionAndVelocity || (positionAndVelocity as any).error || !positionAndVelocity.position) {
         return { latDeg: 0, lonDeg: 0, altKm: 0 };
     }
-    
+
     const positionEciKm = positionAndVelocity.position;
     const gmst = getGreenwichSiderealTime(date);
     

@@ -187,6 +187,7 @@ export default function ISSGroundTrack() {
     return (
         <group ref={groupRef} position={[0, 0, 0]}>
             {/* Past track (cyan) - Earth-fixed coordinates, inherits Earth's rotation */}
+            {/* @ts-expect-error R3F overrides <line> to THREE.Line */}
             <line ref={pastLineRef}>
                 <bufferGeometry ref={pastGeometryRef} attach="geometry" />
                 <lineBasicMaterial
@@ -197,6 +198,7 @@ export default function ISSGroundTrack() {
             </line>
 
             {/* Future track (magenta) - Earth-fixed coordinates, inherits Earth's rotation */}
+            {/* @ts-expect-error R3F overrides <line> to THREE.Line */}
             <line ref={futureLineRef}>
                 <bufferGeometry ref={futureGeometryRef} attach="geometry" />
                 <lineBasicMaterial
